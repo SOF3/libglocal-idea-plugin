@@ -1,0 +1,40 @@
+{
+	parserClass="io.github.sof3.libglocal.idea.LibglocalParser"
+	extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+	psiClassPrefix="Libglocal"
+	psiImplClassSuffix="Impl"
+	psiPackage="io.github.sof3.libglocal.idea.psi"
+	psiImplPackage="io.github.sof3.libglocal.idea.psi.impl"
+	elementTypeHolderClass="io.github.sof3.libglocal.idea.LibglocalTokens"
+	elementTypeClass="io.github.sof3.libglocal.idea.LibglocalElementType"
+	tokenTypeClass="io.github.sof3.libglocal.idea.LibglocalTokenType"
+}
+
+root ::= (comment | emptyLine | (langType | messageHeader | messageEntry | entryModifier) terminator)*
+comment ::= LINE_COMMENT | BLOCK_COMMENT
+
+emptyLine ::= (WHITE_SPACE | INDENT) terminator
+terminator ::= <<eof>> | EOL
+
+langType ::= (BASE_KEYWORD WHITE_SPACE?)? LANG_KEYWORD WHITE_SPACE LANG_NAME (WHITE_SPACE | LANG_LOCAL)?
+
+messageHeader ::= MESSAGES_KEYWORD
+
+messageEntry ::= INDENT MESSAGE_ID WHITE_SPACE? messageValue?
+
+messageValue ::= LITERAL | ESCAPE | argRef | span | messageRef
+argRef ::= DOLLAR_OPEN ARG_NAME CLOSE_BRACE
+messageRef ::= HASH_OPEN MESSAGE_ID messageRefArgs? CLOSE_BRACE
+messageRefArgs ::= OPEN_PAREN messageRefArg (ARGS_SEPARATOR messageRefArg)* CLOSE_PAREN
+messageRefArg ::= ARG_NAME ARG_EQUALS argValue
+span ::= PERCENT_OPEN SPAN_NAME WHITE_SPACE messageValue CLOSE_BRACE
+
+entryModifier ::= INDENT (argModifier | docModifier | sinceModifier | updatedModifier)
+argModifier ::= ARG_KEYWORD ARG_NAME WHITE_SPACE ARG_TYPE argDefault?
+argDefault ::= ARG_EQUALS argValue
+docModifier ::= DOC_KEYWORD DOC_VALUE
+sinceModifier ::= SINCE_KEYWORD VERSION_VALUE
+updatedModifier ::= UPDATED_KEYWORD VERSION_VALUE
+
+argValue ::= stringLiteral | NUMBER_LITERAL | ARG_NAME
+stringLiteral ::= OPEN_QUOTE (LITERAL | ESCAPE) CLOSE_QUOTE // TODO LITERAL -> messageValue

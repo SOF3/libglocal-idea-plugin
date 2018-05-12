@@ -1,0 +1,33 @@
+<idea-plugin>
+	<id>io.github.sof3.libglocal.idea</id>
+	<name>libglocal Language File Support</name>
+	<version>0.2.0</version>
+	<vendor email="sofe2038@gmail.com" url="https://github.com/SOF3">SOFe</vendor>
+
+	<description><![CDATA[
+		Edit libglocal language files in your IDE
+		]]></description>
+
+	<change-notes><![CDATA[
+		<b>0.2.0</b>
+		<ul>
+		</ul>
+		]]>
+  </change-notes>
+
+	<!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+	<idea-version since-build="173.0"/>
+
+	<depends>com.intellij.modules.platform</depends>
+	<depends>com.intellij.modules.lang</depends>
+
+	<extensions defaultExtensionNs="com.intellij">
+		<fileTypeFactory implementation="io.github.sof3.libglocal.idea.LibglocalFileTypeFactory"/>
+		<lang.parserDefinition language="libglocal-lang"
+		                       implementationClass="io.github.sof3.libglocal.idea.LibglocalParserDefinition"/>
+	</extensions>
+
+	<actions>
+	</actions>
+
+</idea-plugin>
