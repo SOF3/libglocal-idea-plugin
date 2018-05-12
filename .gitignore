@@ -4,10 +4,10 @@
 out/
 
 ### Java template
-# Compiled class file
+# Compiled class lang
 *.class
 
-# Log file
+# Log lang
 *.log
 
 # BlueJ files

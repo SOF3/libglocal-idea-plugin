@@ -10,6 +10,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
+import io.github.sof3.libglocal.idea.lang.LibglocalFile;
 import org.jetbrains.annotations.NotNull;
 
 public class LibglocalParserDefinition implements ParserDefinition{

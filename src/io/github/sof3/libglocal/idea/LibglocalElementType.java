@@ -1,6 +1,7 @@
 package io.github.sof3.libglocal.idea;
 
 import com.intellij.psi.tree.IElementType;
+import io.github.sof3.libglocal.idea.lang.LibglocalLanguage;
 import org.jetbrains.annotations.NotNull;
 
 public class LibglocalElementType extends IElementType{

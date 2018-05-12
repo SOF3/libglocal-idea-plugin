@@ -127,13 +127,13 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // DOLLAR_OPEN ARG_NAME CLOSE_BRACE
+  // DOLLAR_OPEN ARG_NAME DOLLAR_CLOSE
   public static boolean argRef(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "argRef")) return false;
     if (!nextTokenIs(b, DOLLAR_OPEN)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, DOLLAR_OPEN, ARG_NAME, CLOSE_BRACE);
+    r = consumeTokens(b, 0, DOLLAR_OPEN, ARG_NAME, DOLLAR_CLOSE);
     exit_section_(b, m, ARG_REF, r);
     return r;
   }
@@ -324,7 +324,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // HASH_OPEN MESSAGE_ID messageRefArgs? CLOSE_BRACE
+  // HASH_OPEN MESSAGE_ID messageRefArgs? HASH_CLOSE
   public static boolean messageRef(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "messageRef")) return false;
     if (!nextTokenIs(b, HASH_OPEN)) return false;
@@ -332,7 +332,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, HASH_OPEN, MESSAGE_ID);
     r = r && messageRef_2(b, l + 1);
-    r = r && consumeToken(b, CLOSE_BRACE);
+    r = r && consumeToken(b, HASH_CLOSE);
     exit_section_(b, m, MESSAGE_REF, r);
     return r;
   }
@@ -472,7 +472,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PERCENT_OPEN SPAN_NAME WHITE_SPACE messageValue CLOSE_BRACE
+  // PERCENT_OPEN SPAN_NAME WHITE_SPACE messageValue PERCENT_CLOSE
   public static boolean span(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "span")) return false;
     if (!nextTokenIs(b, PERCENT_OPEN)) return false;
@@ -480,7 +480,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, PERCENT_OPEN, SPAN_NAME, WHITE_SPACE);
     r = r && messageValue(b, l + 1);
-    r = r && consumeToken(b, CLOSE_BRACE);
+    r = r && consumeToken(b, PERCENT_CLOSE);
     exit_section_(b, m, SPAN, r);
     return r;
   }

@@ -1,4 +1,4 @@
-package io.github.sof3.libglocal.idea;
+package io.github.sof3.libglocal.idea.util;
 
 import java.util.Deque;
 import java.util.LinkedList;

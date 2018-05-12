@@ -22,9 +22,13 @@
 	<depends>com.intellij.modules.lang</depends>
 
 	<extensions defaultExtensionNs="com.intellij">
-		<fileTypeFactory implementation="io.github.sof3.libglocal.idea.LibglocalFileTypeFactory"/>
-		<lang.parserDefinition language="libglocal-lang"
-		                       implementationClass="io.github.sof3.libglocal.idea.LibglocalParserDefinition"/>
+		<fileTypeFactory implementation="io.github.sof3.libglocal.idea.lang.LibglocalFileTypeFactory"/>
+		<lang.parserDefinition
+				language="libglocal-lang"
+				implementationClass="io.github.sof3.libglocal.idea.LibglocalParserDefinition"/>
+		<lang.syntaxHighlighterFactory
+				language="libglocal-lang"
+				implementationClass="io.github.sof3.libglocal.idea.hl.LibglocalSyntaxHighlighterFactory"/>
 	</extensions>
 
 	<actions>

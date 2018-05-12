@@ -36,14 +36,15 @@ public interface LibglocalTokens {
   IElementType ARG_TYPE = new LibglocalTokenType("ARG_TYPE");
   IElementType BASE_KEYWORD = new LibglocalTokenType("BASE_KEYWORD");
   IElementType BLOCK_COMMENT = new LibglocalTokenType("BLOCK_COMMENT");
-  IElementType CLOSE_BRACE = new LibglocalTokenType("CLOSE_BRACE");
   IElementType CLOSE_PAREN = new LibglocalTokenType("CLOSE_PAREN");
   IElementType CLOSE_QUOTE = new LibglocalTokenType("CLOSE_QUOTE");
   IElementType DOC_KEYWORD = new LibglocalTokenType("DOC_KEYWORD");
   IElementType DOC_VALUE = new LibglocalTokenType("DOC_VALUE");
+  IElementType DOLLAR_CLOSE = new LibglocalTokenType("DOLLAR_CLOSE");
   IElementType DOLLAR_OPEN = new LibglocalTokenType("DOLLAR_OPEN");
   IElementType EOL = new LibglocalTokenType("EOL");
   IElementType ESCAPE = new LibglocalTokenType("ESCAPE");
+  IElementType HASH_CLOSE = new LibglocalTokenType("HASH_CLOSE");
   IElementType HASH_OPEN = new LibglocalTokenType("HASH_OPEN");
   IElementType INDENT = new LibglocalTokenType("INDENT");
   IElementType LANG_KEYWORD = new LibglocalTokenType("LANG_KEYWORD");
@@ -56,6 +57,7 @@ public interface LibglocalTokens {
   IElementType NUMBER_LITERAL = new LibglocalTokenType("NUMBER_LITERAL");
   IElementType OPEN_PAREN = new LibglocalTokenType("OPEN_PAREN");
   IElementType OPEN_QUOTE = new LibglocalTokenType("OPEN_QUOTE");
+  IElementType PERCENT_CLOSE = new LibglocalTokenType("PERCENT_CLOSE");
   IElementType PERCENT_OPEN = new LibglocalTokenType("PERCENT_OPEN");
   IElementType SINCE_KEYWORD = new LibglocalTokenType("SINCE_KEYWORD");
   IElementType SPAN_NAME = new LibglocalTokenType("SPAN_NAME");

@@ -1,4 +1,4 @@
-package io.github.sof3.libglocal.idea;
+package io.github.sof3.libglocal.idea.lang;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import org.jetbrains.annotations.NotNull;
@@ -20,13 +20,13 @@ public class LibglocalFileType extends LanguageFileType{
 	@NotNull
 	@Override
 	public String getName(){
-		return "libglocal language file";
+		return "libglocal language lang";
 	}
 
 	@NotNull
 	@Override
 	public String getDescription(){
-		return "Declaration file for libglocal files";
+		return "Declaration lang for libglocal files";
 	}
 
 	@NotNull

@@ -23,11 +23,11 @@ messageHeader ::= MESSAGES_KEYWORD
 messageEntry ::= INDENT MESSAGE_ID WHITE_SPACE? messageValue?
 
 messageValue ::= LITERAL | ESCAPE | argRef | span | messageRef
-argRef ::= DOLLAR_OPEN ARG_NAME CLOSE_BRACE
-messageRef ::= HASH_OPEN MESSAGE_ID messageRefArgs? CLOSE_BRACE
+argRef ::= DOLLAR_OPEN ARG_NAME DOLLAR_CLOSE
+messageRef ::= HASH_OPEN MESSAGE_ID messageRefArgs? HASH_CLOSE
 messageRefArgs ::= OPEN_PAREN messageRefArg (ARGS_SEPARATOR messageRefArg)* CLOSE_PAREN
 messageRefArg ::= ARG_NAME ARG_EQUALS argValue
-span ::= PERCENT_OPEN SPAN_NAME WHITE_SPACE messageValue CLOSE_BRACE
+span ::= PERCENT_OPEN SPAN_NAME WHITE_SPACE messageValue PERCENT_CLOSE
 
 entryModifier ::= INDENT (argModifier | docModifier | sinceModifier | updatedModifier)
 argModifier ::= ARG_KEYWORD ARG_NAME WHITE_SPACE ARG_TYPE argDefault?

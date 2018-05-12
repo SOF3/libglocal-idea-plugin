@@ -5,6 +5,7 @@ import java.io.Reader;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.TokenType;
+import io.github.sof3.libglocal.idea.util.StringStack;
 
 %%
 %public
@@ -92,21 +93,21 @@ COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 	{EOL} { yybegin(S_TREE_SOL); return EOL; }
 	[^\r\n\\#\$%\}]+ { return LITERAL; }
 	\\[#\$%n] { return ESCAPE; }
-	"}" { return CLOSE_BRACE; }
+	"}" { return PERCENT_CLOSE; }
 	"${" { yybegin(S_TREE_REF_ARG); return DOLLAR_OPEN; }
 	"#{" { yybegin(S_TREE_REF_MESSAGE); return HASH_OPEN; }
 	"%{" { yybegin(S_TREE_REF_SPAN_START); return PERCENT_OPEN; }
 }
 <S_TREE_REF_ARG> {
 	{IDENTIFIER} { return ARG_NAME; }
-	"}" { yybegin(S_TREE_MESSAGE); return CLOSE_BRACE; }
+	"}" { yybegin(S_TREE_MESSAGE); return DOLLAR_CLOSE; }
 }
 <S_TREE_REF_MESSAGE> {
 	{IDENTIFIER} { yybegin(S_TREE_REF_MESSAGE_ARGS); return MESSAGE_ID; }
 }
 <S_TREE_REF_MESSAGE_ARGS> {
 	"(" { yybegin(S_TREE_REF_MESSAGE_START_ARG); return OPEN_PAREN; }
-	"}" { yybegin(S_TREE_MESSAGE); return CLOSE_BRACE; }
+	"}" { yybegin(S_TREE_MESSAGE); return HASH_CLOSE; }
 }
 <S_TREE_REF_MESSAGE_START_ARG> {
 	{IDENTIFIER} { yybegin(S_TREE_REF_MESSAGE_EQUAL_ARG); return ARG_NAME; }
@@ -136,6 +137,7 @@ COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 <S_TREE_REF_SPAN_SPACE> {
 	{WHITE_SPACE}+ { yybegin(S_TREE_MESSAGE); return WHITE_SPACE; }
 }
+
 <S_TREE_ARG> {
 	{IDENTIFIER} { yybegin(S_TREE_ARG_NAMED); return ARG_NAME; }
 }
@@ -165,11 +167,11 @@ COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 }
 <S_TREE_DOC> {
 	{EOL} { yybegin(S_TREE_SOL); return EOL; }
-	[^] { return DOC_VALUE; }
+	[^\r\n]+ { return DOC_VALUE; }
 }
 <S_TREE_VERSION> {
 	{EOL} { yybegin(S_TREE_SOL); return EOL; }
 	{IDENTIFIER} { return VERSION_VALUE; }
 }
 
-[^] { throw new RuntimeException("Unexpected value '" + yytext() + "' at state " + yystate()); }
+[^] { return TokenType.BAD_CHARACTER; }
