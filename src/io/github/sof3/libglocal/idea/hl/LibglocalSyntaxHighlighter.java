@@ -1,7 +1,6 @@
 package io.github.sof3.libglocal.idea.hl;
 
 import com.intellij.lexer.Lexer;
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
@@ -9,33 +8,9 @@ import io.github.sof3.libglocal.idea.LibglocalFlexAdapter;
 import io.github.sof3.libglocal.idea.LibglocalTokens;
 import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.openapi.editor.DefaultLanguageHighlighterColors.*;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
-public class LibglocalSyntaxHighlighter extends SyntaxHighlighterBase implements LibglocalTokens{
-	public final static TextAttributesKey ATT_LINE_COMMENT = createTextAttributesKey("LIBGLOCAL_LINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-	public final static TextAttributesKey ATT_BLOCK_COMMENT = createTextAttributesKey("LIBGLOCAL_BLOCK_COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT);
-	public final static TextAttributesKey ATT_DOC_VALUE = createTextAttributesKey("LIBGLOCAL_BLOCK_COMMENT", DOC_COMMENT);
-	public final static TextAttributesKey ATT_KEYWORD = createTextAttributesKey("LIBGLOCAL_KEYWORD", KEYWORD);
-	public final static TextAttributesKey ATT_ARG_TYPE = createTextAttributesKey("LIBGLOCAL_ARG_NAME", CLASS_REFERENCE);
-	public final static TextAttributesKey ATT_LANG_NAME = createTextAttributesKey("LIBGLOCAL_LANG_NAME", MARKUP_ATTRIBUTE);
-	public final static TextAttributesKey ATT_MESSAGE_ID = createTextAttributesKey("LIBGLOCAL_MESSAGE_ID", MARKUP_ATTRIBUTE);
-	public final static TextAttributesKey ATT_ARG_NAME = createTextAttributesKey("LIBGLOCAL_ARG_NAME", LOCAL_VARIABLE);
-	public final static TextAttributesKey ATT_LITERAL = createTextAttributesKey("LIBGLOCAL_STRING_LITERAL", STRING);
-	public final static TextAttributesKey ATT_LANG_LOCAL = createTextAttributesKey("LIBGLOCAL_LANG_LOCAL", ATT_LITERAL);
-	public final static TextAttributesKey ATT_AUTHOR_NAME = createTextAttributesKey("LIBGLOCAL_AUTHOR_NAME", ATT_LITERAL);
-	public final static TextAttributesKey ATT_NUMBER_LITERAL = createTextAttributesKey("LIBGLOCAL_NUMBER_LITERAL", NUMBER);
-	public final static TextAttributesKey ATT_VERSION_VALUE = createTextAttributesKey("LIBGLOCAL_VERSION_VALUE", NUMBER);
-	public final static TextAttributesKey ATT_LITERAL_ESCAPE = createTextAttributesKey("LIBGLOCAL_STRING_LITERAL_ESCAPE", VALID_STRING_ESCAPE);
-	public final static TextAttributesKey ATT_SPAN_NAME = createTextAttributesKey("LIBGLOCAL_SPAN_NAME", PREDEFINED_SYMBOL);
-	public final static TextAttributesKey ATT_SPAN_STYLE = createTextAttributesKey("LIBGLOCAL_SPAN_STYLE", PREDEFINED_SYMBOL);
-	public final static TextAttributesKey ATT_ARG_TYPE_MODIFIER = createTextAttributesKey("LIBGLOCAL_ARG_EQUALS", INSTANCE_FIELD);
-	public final static TextAttributesKey ATT_DOLLAR_BRACES = createTextAttributesKey("LIBGLOCAL_DOLLAR_BRACES", BRACES);
-	public final static TextAttributesKey ATT_HASH_BRACES = createTextAttributesKey("LIBGLOCAL_HASH_BRACES", BRACES);
-	public final static TextAttributesKey ATT_PERCENT_BRACES = createTextAttributesKey("LIBGLOCAL_PERCENT_BRACES", BRACES);
-	public final static TextAttributesKey ATT_PARENTHESES = createTextAttributesKey("LIBGLOCAL_PARENTHESES", PARENTHESES);
-	public final static TextAttributesKey ATT_COMMA = createTextAttributesKey("LIBGLOCAL_COMMA", COMMA);
-	public final static TextAttributesKey ATT_ARG_EQUALS = createTextAttributesKey("LIBGLOCAL_ARG_EQUALS", OPERATION_SIGN);
+public class LibglocalSyntaxHighlighter extends SyntaxHighlighterBase implements LibglocalTokens, AttributesKeys{
 
 	public final static TextAttributesKey[] ATT_ARR_EMPTY = new TextAttributesKey[0];
 

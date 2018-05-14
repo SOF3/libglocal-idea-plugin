@@ -11,6 +11,7 @@
 	<change-notes><![CDATA[
 		<b>0.2.0</b>
 		<ul>
+			<li>.lang file type and syntax highlighting</li>
 		</ul>
 		]]>
   </change-notes>
@@ -29,6 +30,7 @@
 		<lang.syntaxHighlighterFactory
 				language="libglocal-lang"
 				implementationClass="io.github.sof3.libglocal.idea.hl.LibglocalSyntaxHighlighterFactory"/>
+		<colorSettingsPage implementation="io.github.sof3.libglocal.idea.hl.LibglocalColorSettingsPage"/>
 	</extensions>
 
 	<actions>

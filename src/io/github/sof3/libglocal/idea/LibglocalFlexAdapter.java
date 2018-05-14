@@ -27,7 +27,7 @@ public class LibglocalFlexAdapter extends FlexAdapter{
 	public LibglocalFlexAdapter(){
 		super(new LibglocalLexer(){
 			@Override
-			public IElementType advance() throws IOException{
+			public IElementType advance(){
 				int oldState = yystate();
 				try{
 					IElementType token = super.advance();
