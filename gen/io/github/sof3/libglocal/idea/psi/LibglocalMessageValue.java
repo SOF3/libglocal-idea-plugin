@@ -7,13 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface LibglocalMessageValue extends PsiElement {
 
-  @Nullable
-  LibglocalArgRef getArgRef();
+  @NotNull
+  List<LibglocalArgRef> getArgRefList();
 
-  @Nullable
-  LibglocalMessageRef getMessageRef();
+  @NotNull
+  List<LibglocalMessageRef> getMessageRefList();
 
-  @Nullable
-  LibglocalSpan getSpan();
+  @NotNull
+  List<LibglocalSpan> getSpanList();
 
 }

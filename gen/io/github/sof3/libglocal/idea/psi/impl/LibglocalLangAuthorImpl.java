@@ -11,25 +11,19 @@ import static io.github.sof3.libglocal.idea.LibglocalTokens.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.sof3.libglocal.idea.psi.*;
 
-public class LibglocalSpanImpl extends ASTWrapperPsiElement implements LibglocalSpan {
+public class LibglocalLangAuthorImpl extends ASTWrapperPsiElement implements LibglocalLangAuthor {
 
-  public LibglocalSpanImpl(ASTNode node) {
+  public LibglocalLangAuthorImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull LibglocalVisitor visitor) {
-    visitor.visitSpan(this);
+    visitor.visitLangAuthor(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof LibglocalVisitor) accept((LibglocalVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public LibglocalMessageValue getMessageValue() {
-    return findChildByClass(LibglocalMessageValue.class);
   }
 
 }

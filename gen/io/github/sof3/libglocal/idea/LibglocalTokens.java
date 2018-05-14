@@ -16,7 +16,9 @@ public interface LibglocalTokens {
   IElementType DOC_MODIFIER = new LibglocalElementType("DOC_MODIFIER");
   IElementType EMPTY_LINE = new LibglocalElementType("EMPTY_LINE");
   IElementType ENTRY_MODIFIER = new LibglocalElementType("ENTRY_MODIFIER");
+  IElementType LANG_AUTHOR = new LibglocalElementType("LANG_AUTHOR");
   IElementType LANG_TYPE = new LibglocalElementType("LANG_TYPE");
+  IElementType LANG_VERSION = new LibglocalElementType("LANG_VERSION");
   IElementType MESSAGE_ENTRY = new LibglocalElementType("MESSAGE_ENTRY");
   IElementType MESSAGE_HEADER = new LibglocalElementType("MESSAGE_HEADER");
   IElementType MESSAGE_REF = new LibglocalElementType("MESSAGE_REF");
@@ -34,6 +36,10 @@ public interface LibglocalTokens {
   IElementType ARG_KEYWORD = new LibglocalTokenType("ARG_KEYWORD");
   IElementType ARG_NAME = new LibglocalTokenType("ARG_NAME");
   IElementType ARG_TYPE = new LibglocalTokenType("ARG_TYPE");
+  IElementType ARG_TYPE_MODIFIER = new LibglocalTokenType("ARG_TYPE_MODIFIER");
+  IElementType AUTHOR_KEYWORD = new LibglocalTokenType("AUTHOR_KEYWORD");
+  IElementType AUTHOR_NAME = new LibglocalTokenType("AUTHOR_NAME");
+  IElementType AUTHOR_SEPARATOR = new LibglocalTokenType("AUTHOR_SEPARATOR");
   IElementType BASE_KEYWORD = new LibglocalTokenType("BASE_KEYWORD");
   IElementType BLOCK_COMMENT = new LibglocalTokenType("BLOCK_COMMENT");
   IElementType CLOSE_PAREN = new LibglocalTokenType("CLOSE_PAREN");
@@ -61,7 +67,9 @@ public interface LibglocalTokens {
   IElementType PERCENT_OPEN = new LibglocalTokenType("PERCENT_OPEN");
   IElementType SINCE_KEYWORD = new LibglocalTokenType("SINCE_KEYWORD");
   IElementType SPAN_NAME = new LibglocalTokenType("SPAN_NAME");
+  IElementType SPAN_STYLE = new LibglocalTokenType("SPAN_STYLE");
   IElementType UPDATED_KEYWORD = new LibglocalTokenType("UPDATED_KEYWORD");
+  IElementType VERSION_KEYWORD = new LibglocalTokenType("VERSION_KEYWORD");
   IElementType VERSION_VALUE = new LibglocalTokenType("VERSION_VALUE");
   IElementType WHITE_SPACE = new LibglocalTokenType("WHITE_SPACE");
 
@@ -92,8 +100,14 @@ public interface LibglocalTokens {
       else if (type == ENTRY_MODIFIER) {
         return new LibglocalEntryModifierImpl(node);
       }
+      else if (type == LANG_AUTHOR) {
+        return new LibglocalLangAuthorImpl(node);
+      }
       else if (type == LANG_TYPE) {
         return new LibglocalLangTypeImpl(node);
+      }
+      else if (type == LANG_VERSION) {
+        return new LibglocalLangVersionImpl(node);
       }
       else if (type == MESSAGE_ENTRY) {
         return new LibglocalMessageEntryImpl(node);

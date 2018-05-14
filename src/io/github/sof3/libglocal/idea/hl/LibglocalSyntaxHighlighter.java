@@ -23,15 +23,18 @@ public class LibglocalSyntaxHighlighter extends SyntaxHighlighterBase implements
 	public final static TextAttributesKey ATT_ARG_NAME = createTextAttributesKey("LIBGLOCAL_ARG_NAME", LOCAL_VARIABLE);
 	public final static TextAttributesKey ATT_LITERAL = createTextAttributesKey("LIBGLOCAL_STRING_LITERAL", STRING);
 	public final static TextAttributesKey ATT_LANG_LOCAL = createTextAttributesKey("LIBGLOCAL_LANG_LOCAL", ATT_LITERAL);
+	public final static TextAttributesKey ATT_AUTHOR_NAME = createTextAttributesKey("LIBGLOCAL_AUTHOR_NAME", ATT_LITERAL);
 	public final static TextAttributesKey ATT_NUMBER_LITERAL = createTextAttributesKey("LIBGLOCAL_NUMBER_LITERAL", NUMBER);
 	public final static TextAttributesKey ATT_VERSION_VALUE = createTextAttributesKey("LIBGLOCAL_VERSION_VALUE", NUMBER);
 	public final static TextAttributesKey ATT_LITERAL_ESCAPE = createTextAttributesKey("LIBGLOCAL_STRING_LITERAL_ESCAPE", VALID_STRING_ESCAPE);
-	public final static TextAttributesKey ATT_SPAN_NAME = createTextAttributesKey("LIBGLOCAL_SPAN_NAME", CONSTANT);
+	public final static TextAttributesKey ATT_SPAN_NAME = createTextAttributesKey("LIBGLOCAL_SPAN_NAME", PREDEFINED_SYMBOL);
+	public final static TextAttributesKey ATT_SPAN_STYLE = createTextAttributesKey("LIBGLOCAL_SPAN_STYLE", PREDEFINED_SYMBOL);
+	public final static TextAttributesKey ATT_ARG_TYPE_MODIFIER = createTextAttributesKey("LIBGLOCAL_ARG_EQUALS", INSTANCE_FIELD);
 	public final static TextAttributesKey ATT_DOLLAR_BRACES = createTextAttributesKey("LIBGLOCAL_DOLLAR_BRACES", BRACES);
 	public final static TextAttributesKey ATT_HASH_BRACES = createTextAttributesKey("LIBGLOCAL_HASH_BRACES", BRACES);
 	public final static TextAttributesKey ATT_PERCENT_BRACES = createTextAttributesKey("LIBGLOCAL_PERCENT_BRACES", BRACES);
 	public final static TextAttributesKey ATT_PARENTHESES = createTextAttributesKey("LIBGLOCAL_PARENTHESES", PARENTHESES);
-	public final static TextAttributesKey ATT_ARG_SEPARATOR = createTextAttributesKey("LIBGLOCAL_ARG_SEPARATOR", COMMA);
+	public final static TextAttributesKey ATT_COMMA = createTextAttributesKey("LIBGLOCAL_COMMA", COMMA);
 	public final static TextAttributesKey ATT_ARG_EQUALS = createTextAttributesKey("LIBGLOCAL_ARG_EQUALS", OPERATION_SIGN);
 
 	public final static TextAttributesKey[] ATT_ARR_EMPTY = new TextAttributesKey[0];
@@ -46,7 +49,7 @@ public class LibglocalSyntaxHighlighter extends SyntaxHighlighterBase implements
 	@Override
 	public TextAttributesKey[] getTokenHighlights(IElementType tokenType){
 		if(tokenType == ARGS_SEPARATOR){
-			return new TextAttributesKey[]{ATT_ARG_SEPARATOR};
+			return new TextAttributesKey[]{ATT_COMMA};
 		}
 		if(tokenType == ARG_EQUALS){
 			return new TextAttributesKey[]{ATT_ARG_EQUALS};
@@ -59,6 +62,18 @@ public class LibglocalSyntaxHighlighter extends SyntaxHighlighterBase implements
 		}
 		if(tokenType == ARG_TYPE){
 			return new TextAttributesKey[]{ATT_ARG_TYPE};
+		}
+		if(tokenType == ARG_TYPE_MODIFIER){
+			return new TextAttributesKey[]{ATT_ARG_TYPE_MODIFIER};
+		}
+		if(tokenType == AUTHOR_KEYWORD){
+			return new TextAttributesKey[]{ATT_KEYWORD};
+		}
+		if(tokenType == AUTHOR_NAME){
+			return new TextAttributesKey[]{ATT_AUTHOR_NAME};
+		}
+		if(tokenType == AUTHOR_SEPARATOR){
+			return new TextAttributesKey[]{ATT_COMMA};
 		}
 		if(tokenType == BASE_KEYWORD){
 			return new TextAttributesKey[]{ATT_KEYWORD};
@@ -137,7 +152,13 @@ public class LibglocalSyntaxHighlighter extends SyntaxHighlighterBase implements
 		if(tokenType == SPAN_NAME){
 			return new TextAttributesKey[]{ATT_SPAN_NAME};
 		}
+		if(tokenType == SPAN_STYLE){
+			return new TextAttributesKey[]{ATT_SPAN_STYLE};
+		}
 		if(tokenType == UPDATED_KEYWORD){
+			return new TextAttributesKey[]{ATT_KEYWORD};
+		}
+		if(tokenType == VERSION_KEYWORD){
 			return new TextAttributesKey[]{ATT_KEYWORD};
 		}
 		if(tokenType == VERSION_VALUE){

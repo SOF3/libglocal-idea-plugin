@@ -47,8 +47,14 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     else if (t == ENTRY_MODIFIER) {
       r = entryModifier(b, 0);
     }
+    else if (t == LANG_AUTHOR) {
+      r = langAuthor(b, 0);
+    }
     else if (t == LANG_TYPE) {
       r = langType(b, 0);
+    }
+    else if (t == LANG_VERSION) {
+      r = langVersion(b, 0);
     }
     else if (t == MESSAGE_ENTRY) {
       r = messageEntry(b, 0);
@@ -107,21 +113,48 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ARG_KEYWORD ARG_NAME WHITE_SPACE ARG_TYPE argDefault?
+  // ARG_KEYWORD ARG_NAME (WHITE_SPACE ARG_TYPE_MODIFIER? ARG_TYPE argDefault?)?
   public static boolean argModifier(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "argModifier")) return false;
     if (!nextTokenIs(b, ARG_KEYWORD)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, ARG_KEYWORD, ARG_NAME, WHITE_SPACE, ARG_TYPE);
-    r = r && argModifier_4(b, l + 1);
+    r = consumeTokens(b, 0, ARG_KEYWORD, ARG_NAME);
+    r = r && argModifier_2(b, l + 1);
     exit_section_(b, m, ARG_MODIFIER, r);
     return r;
   }
 
+  // (WHITE_SPACE ARG_TYPE_MODIFIER? ARG_TYPE argDefault?)?
+  private static boolean argModifier_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "argModifier_2")) return false;
+    argModifier_2_0(b, l + 1);
+    return true;
+  }
+
+  // WHITE_SPACE ARG_TYPE_MODIFIER? ARG_TYPE argDefault?
+  private static boolean argModifier_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "argModifier_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, WHITE_SPACE);
+    r = r && argModifier_2_0_1(b, l + 1);
+    r = r && consumeToken(b, ARG_TYPE);
+    r = r && argModifier_2_0_3(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ARG_TYPE_MODIFIER?
+  private static boolean argModifier_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "argModifier_2_0_1")) return false;
+    consumeToken(b, ARG_TYPE_MODIFIER);
+    return true;
+  }
+
   // argDefault?
-  private static boolean argModifier_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "argModifier_4")) return false;
+  private static boolean argModifier_2_0_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "argModifier_2_0_3")) return false;
     argDefault(b, l + 1);
     return true;
   }
@@ -177,10 +210,9 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (WHITE_SPACE | INDENT) terminator
+  // (WHITE_SPACE | INDENT)? terminator
   public static boolean emptyLine(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "emptyLine")) return false;
-    if (!nextTokenIs(b, "<empty line>", INDENT, WHITE_SPACE)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, EMPTY_LINE, "<empty line>");
     r = emptyLine_0(b, l + 1);
@@ -189,9 +221,16 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // WHITE_SPACE | INDENT
+  // (WHITE_SPACE | INDENT)?
   private static boolean emptyLine_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "emptyLine_0")) return false;
+    emptyLine_0_0(b, l + 1);
+    return true;
+  }
+
+  // WHITE_SPACE | INDENT
+  private static boolean emptyLine_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "emptyLine_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, WHITE_SPACE);
@@ -227,15 +266,67 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (BASE_KEYWORD WHITE_SPACE?)? LANG_KEYWORD WHITE_SPACE LANG_NAME (WHITE_SPACE | LANG_LOCAL)?
+  // AUTHOR_KEYWORD AUTHOR_NAME (AUTHOR_SEPARATOR WHITE_SPACE? AUTHOR_NAME WHITE_SPACE?)*
+  public static boolean langAuthor(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "langAuthor")) return false;
+    if (!nextTokenIs(b, AUTHOR_KEYWORD)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, AUTHOR_KEYWORD, AUTHOR_NAME);
+    r = r && langAuthor_2(b, l + 1);
+    exit_section_(b, m, LANG_AUTHOR, r);
+    return r;
+  }
+
+  // (AUTHOR_SEPARATOR WHITE_SPACE? AUTHOR_NAME WHITE_SPACE?)*
+  private static boolean langAuthor_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "langAuthor_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!langAuthor_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "langAuthor_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // AUTHOR_SEPARATOR WHITE_SPACE? AUTHOR_NAME WHITE_SPACE?
+  private static boolean langAuthor_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "langAuthor_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, AUTHOR_SEPARATOR);
+    r = r && langAuthor_2_0_1(b, l + 1);
+    r = r && consumeToken(b, AUTHOR_NAME);
+    r = r && langAuthor_2_0_3(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // WHITE_SPACE?
+  private static boolean langAuthor_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "langAuthor_2_0_1")) return false;
+    consumeToken(b, WHITE_SPACE);
+    return true;
+  }
+
+  // WHITE_SPACE?
+  private static boolean langAuthor_2_0_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "langAuthor_2_0_3")) return false;
+    consumeToken(b, WHITE_SPACE);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // (BASE_KEYWORD WHITE_SPACE?)? LANG_KEYWORD LANG_NAME (WHITE_SPACE | LANG_LOCAL)?
   public static boolean langType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "langType")) return false;
     if (!nextTokenIs(b, "<lang type>", BASE_KEYWORD, LANG_KEYWORD)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LANG_TYPE, "<lang type>");
     r = langType_0(b, l + 1);
-    r = r && consumeTokens(b, 0, LANG_KEYWORD, WHITE_SPACE, LANG_NAME);
-    r = r && langType_4(b, l + 1);
+    r = r && consumeTokens(b, 0, LANG_KEYWORD, LANG_NAME);
+    r = r && langType_3(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -266,20 +357,32 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   // (WHITE_SPACE | LANG_LOCAL)?
-  private static boolean langType_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "langType_4")) return false;
-    langType_4_0(b, l + 1);
+  private static boolean langType_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "langType_3")) return false;
+    langType_3_0(b, l + 1);
     return true;
   }
 
   // WHITE_SPACE | LANG_LOCAL
-  private static boolean langType_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "langType_4_0")) return false;
+  private static boolean langType_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "langType_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, WHITE_SPACE);
     if (!r) r = consumeToken(b, LANG_LOCAL);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // VERSION_KEYWORD VERSION_VALUE
+  public static boolean langVersion(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "langVersion")) return false;
+    if (!nextTokenIs(b, VERSION_KEYWORD)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, VERSION_KEYWORD, VERSION_VALUE);
+    exit_section_(b, m, LANG_VERSION, r);
     return r;
   }
 
@@ -396,22 +499,38 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LITERAL | ESCAPE | argRef | span | messageRef
+  // (LITERAL | ESCAPE | argRef | span | messageRef)+
   public static boolean messageValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "messageValue")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, MESSAGE_VALUE, "<message value>");
+    r = messageValue_0(b, l + 1);
+    int c = current_position_(b);
+    while (r) {
+      if (!messageValue_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "messageValue", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // LITERAL | ESCAPE | argRef | span | messageRef
+  private static boolean messageValue_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "messageValue_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, LITERAL);
     if (!r) r = consumeToken(b, ESCAPE);
     if (!r) r = argRef(b, l + 1);
     if (!r) r = span(b, l + 1);
     if (!r) r = messageRef(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // (comment | emptyLine | (langType | messageHeader | messageEntry | entryModifier) terminator)*
+  // (comment | emptyLine | (langType | langVersion | langAuthor | messageHeader | messageEntry | entryModifier) terminator)*
   static boolean root(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "root")) return false;
     int c = current_position_(b);
@@ -423,7 +542,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // comment | emptyLine | (langType | messageHeader | messageEntry | entryModifier) terminator
+  // comment | emptyLine | (langType | langVersion | langAuthor | messageHeader | messageEntry | entryModifier) terminator
   private static boolean root_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "root_0")) return false;
     boolean r;
@@ -435,7 +554,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (langType | messageHeader | messageEntry | entryModifier) terminator
+  // (langType | langVersion | langAuthor | messageHeader | messageEntry | entryModifier) terminator
   private static boolean root_0_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "root_0_2")) return false;
     boolean r;
@@ -446,12 +565,14 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // langType | messageHeader | messageEntry | entryModifier
+  // langType | langVersion | langAuthor | messageHeader | messageEntry | entryModifier
   private static boolean root_0_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "root_0_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = langType(b, l + 1);
+    if (!r) r = langVersion(b, l + 1);
+    if (!r) r = langAuthor(b, l + 1);
     if (!r) r = messageHeader(b, l + 1);
     if (!r) r = messageEntry(b, l + 1);
     if (!r) r = entryModifier(b, l + 1);
@@ -472,17 +593,70 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PERCENT_OPEN SPAN_NAME WHITE_SPACE messageValue PERCENT_CLOSE
+  // PERCENT_OPEN WHITE_SPACE? (SPAN_NAME WHITE_SPACE messageValue | SPAN_STYLE WHITE_SPACE*) PERCENT_CLOSE
   public static boolean span(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "span")) return false;
     if (!nextTokenIs(b, PERCENT_OPEN)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, PERCENT_OPEN, SPAN_NAME, WHITE_SPACE);
-    r = r && messageValue(b, l + 1);
+    r = consumeToken(b, PERCENT_OPEN);
+    r = r && span_1(b, l + 1);
+    r = r && span_2(b, l + 1);
     r = r && consumeToken(b, PERCENT_CLOSE);
     exit_section_(b, m, SPAN, r);
     return r;
+  }
+
+  // WHITE_SPACE?
+  private static boolean span_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "span_1")) return false;
+    consumeToken(b, WHITE_SPACE);
+    return true;
+  }
+
+  // SPAN_NAME WHITE_SPACE messageValue | SPAN_STYLE WHITE_SPACE*
+  private static boolean span_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "span_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = span_2_0(b, l + 1);
+    if (!r) r = span_2_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SPAN_NAME WHITE_SPACE messageValue
+  private static boolean span_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "span_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, SPAN_NAME, WHITE_SPACE);
+    r = r && messageValue(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // SPAN_STYLE WHITE_SPACE*
+  private static boolean span_2_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "span_2_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, SPAN_STYLE);
+    r = r && span_2_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // WHITE_SPACE*
+  private static boolean span_2_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "span_2_1_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!consumeToken(b, WHITE_SPACE)) break;
+      if (!empty_element_parsed_guard_(b, "span_2_1_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
   }
 
   /* ********************************************************** */

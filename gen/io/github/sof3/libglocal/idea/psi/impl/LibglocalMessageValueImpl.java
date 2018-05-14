@@ -27,21 +27,21 @@ public class LibglocalMessageValueImpl extends ASTWrapperPsiElement implements L
   }
 
   @Override
-  @Nullable
-  public LibglocalArgRef getArgRef() {
-    return findChildByClass(LibglocalArgRef.class);
+  @NotNull
+  public List<LibglocalArgRef> getArgRefList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalArgRef.class);
   }
 
   @Override
-  @Nullable
-  public LibglocalMessageRef getMessageRef() {
-    return findChildByClass(LibglocalMessageRef.class);
+  @NotNull
+  public List<LibglocalMessageRef> getMessageRefList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalMessageRef.class);
   }
 
   @Override
-  @Nullable
-  public LibglocalSpan getSpan() {
-    return findChildByClass(LibglocalSpan.class);
+  @NotNull
+  public List<LibglocalSpan> getSpanList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalSpan.class);
   }
 
 }

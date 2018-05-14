@@ -39,7 +39,15 @@ public class LibglocalVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitLangAuthor(@NotNull LibglocalLangAuthor o) {
+    visitPsiElement(o);
+  }
+
   public void visitLangType(@NotNull LibglocalLangType o) {
+    visitPsiElement(o);
+  }
+
+  public void visitLangVersion(@NotNull LibglocalLangVersion o) {
     visitPsiElement(o);
   }
 

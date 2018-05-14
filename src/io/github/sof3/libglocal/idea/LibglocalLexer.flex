@@ -17,7 +17,8 @@ import io.github.sof3.libglocal.idea.util.StringStack;
 %ignorecase
 
 %{
-	private StringStack indentStack = new StringStack();
+//	private StringStack indentStack = new StringStack();
+	private int stateBeforeBlockComment = -1;
 
 	public LibglocalLexer(){
 		this((Reader) null);
@@ -26,7 +27,8 @@ import io.github.sof3.libglocal.idea.util.StringStack;
 
 %state S_LANG_UNNAMED
 %state S_LANG_NAMED
-%state S_MESSAGES
+%state S_AUTHORS
+%state S_VERSION
 %state S_TREE_SOL
 %state S_TREE_MESSAGE
 %state S_TREE_REF_ARG
@@ -38,6 +40,7 @@ import io.github.sof3.libglocal.idea.util.StringStack;
 %state S_TREE_REF_MESSAGE_END_ARG_STRING_LITERAL
 %state S_TREE_REF_MESSAGE_NEXT_ARG
 %state S_TREE_REF_SPAN_START
+%state S_TREE_REF_SPAN_STYLED
 %state S_TREE_REF_SPAN_SPACE
 %state S_TREE_REF_SPAN_VALUE
 %state S_TREE_ARG
@@ -49,17 +52,29 @@ import io.github.sof3.libglocal.idea.util.StringStack;
 %state S_TREE_ARG_DEFAULT_STRING_LITERAL
 %state S_TREE_DOC
 %state S_TREE_VERSION
+%state S_C_STYLE_COMMENT
 
 WHITE_SPACE=[ \t]
 EOL={WHITE_SPACE}*(\r|\n|\r\n)
 IDENTIFIER=[\w.-]+
-COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
+LINE_COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 
 %%
 
+{LINE_COMMENT} { return LINE_COMMENT; }
+{WHITE_SPACE}*\/\* { stateBeforeBlockComment = yystate(); yybegin(S_C_STYLE_COMMENT); return BLOCK_COMMENT; }
+
+<S_C_STYLE_COMMENT> {
+	"*/" { yybegin(stateBeforeBlockComment); return BLOCK_COMMENT; }
+	[^] { return BLOCK_COMMENT; }
+}
+
 <YYINITIAL> {
-	"base" { return BASE_KEYWORD; }
-	"lang" { yybegin(S_LANG_UNNAMED); return LANG_KEYWORD; }
+	"base"{WHITE_SPACE}* { return BASE_KEYWORD; }
+	"lang"{WHITE_SPACE}* { yybegin(S_LANG_UNNAMED); return LANG_KEYWORD; }
+	"messages" { yybegin(S_TREE_SOL); return MESSAGES_KEYWORD; }
+	"author"{WHITE_SPACE}+ { yybegin(S_AUTHORS); return AUTHOR_KEYWORD; }
+	"version"{WHITE_SPACE}+ { yybegin(S_VERSION); return VERSION_KEYWORD; }
 	{WHITE_SPACE}*{EOL} { return EOL; }
 	{WHITE_SPACE}+ { return WHITE_SPACE; }
 }
@@ -67,20 +82,26 @@ COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 <S_LANG_UNNAMED> {
 	{WHITE_SPACE}+ { return WHITE_SPACE; }
 	\w+ { yybegin(S_LANG_NAMED); return LANG_NAME; }
-	{EOL} { yybegin(S_MESSAGES); return EOL; }
+	{EOL} { yybegin(YYINITIAL); return EOL; }
 }
 <S_LANG_NAMED> {
-	[^\r\n]+ { return LANG_LOCAL; }
-	{EOL} { yybegin(S_MESSAGES); return EOL; }
+	[^\r\n\/]+(\/[^\r\n\/]+)* { return LANG_LOCAL; }
+	{EOL} { yybegin(YYINITIAL); return EOL; }
 }
 
-<S_MESSAGES> {
-	"messages" { yybegin(S_TREE_SOL); return MESSAGES_KEYWORD; }
-	{WHITE_SPACE}*{EOL} { return EOL; }
+<S_AUTHORS> {
+	{WHITE_SPACE}+ { return WHITE_SPACE; }
+	[^\r\n,\/]+ { return AUTHOR_NAME; }
+	"," { return AUTHOR_SEPARATOR; }
+	{EOL} { yybegin(YYINITIAL); return EOL; }
+}
+<S_VERSION> {
+	{WHITE_SPACE}+ { return WHITE_SPACE; }
+	{EOL} { yybegin(YYINITIAL); return EOL; }
+	{IDENTIFIER} { return VERSION_VALUE; }
 }
 
 <S_TREE_SOL> {
-	{COMMENT} { return COMMENT; }
 	{WHITE_SPACE}+ { return INDENT; }
 	"arg"{WHITE_SPACE}+ { yybegin(S_TREE_ARG); return ARG_KEYWORD; }
 	"doc"{WHITE_SPACE}+ { yybegin(S_TREE_DOC); return DOC_KEYWORD; }
@@ -91,8 +112,9 @@ COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 }
 <S_TREE_MESSAGE> {
 	{EOL} { yybegin(S_TREE_SOL); return EOL; }
-	[^\r\n\\#\$%\}]+ { return LITERAL; }
-	\\[#\$%n] { return ESCAPE; }
+	[^\r\n\\#\$%\}/]+ { return LITERAL; }
+	\/ { return LITERAL; } // the comment would have already been captured if it is one
+	\\[#\$%n\/\}] { return ESCAPE; }
 	"}" { return PERCENT_CLOSE; }
 	"${" { yybegin(S_TREE_REF_ARG); return DOLLAR_OPEN; }
 	"#{" { yybegin(S_TREE_REF_MESSAGE); return HASH_OPEN; }
@@ -123,7 +145,7 @@ COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 	"\"" { yybegin(S_TREE_REF_MESSAGE_END_ARG_STRING_LITERAL); return OPEN_QUOTE; }
 }
 <S_TREE_REF_MESSAGE_END_ARG_STRING_LITERAL> {
-	[^\\\"\r\n] { return LITERAL; }
+	[^\\\"\r\n]+ { return LITERAL; }
 	\\\" { return ESCAPE; }
 	"\"" { yybegin(S_TREE_REF_MESSAGE_NEXT_ARG); return CLOSE_QUOTE; }
 }
@@ -132,7 +154,13 @@ COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 	")" { yybegin(S_TREE_REF_MESSAGE_ARGS); return CLOSE_PAREN; }
 }
 <S_TREE_REF_SPAN_START> {
+	{WHITE_SPACE}+ { return WHITE_SPACE; }
 	hl[1-4]|[bius] { yybegin(S_TREE_REF_SPAN_SPACE); return SPAN_NAME; }
+	"info" | "success" | "notice" | "warn" | "error" { yybegin(S_TREE_REF_SPAN_STYLED); return SPAN_STYLE; }
+}
+<S_TREE_REF_SPAN_STYLED> {
+	{WHITE_SPACE}+ { return WHITE_SPACE; }
+	"}" { yybegin(S_TREE_MESSAGE); return PERCENT_CLOSE; }
 }
 <S_TREE_REF_SPAN_SPACE> {
 	{WHITE_SPACE}+ { yybegin(S_TREE_MESSAGE); return WHITE_SPACE; }
@@ -143,8 +171,10 @@ COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 }
 <S_TREE_ARG_NAMED> {
 	{WHITE_SPACE}+ { yybegin(S_TREE_ARG_UNTYPED); return WHITE_SPACE; }
+	{EOL} { yybegin(S_TREE_SOL); return EOL; }
 }
 <S_TREE_ARG_UNTYPED> {
+	{IDENTIFIER}: { return ARG_TYPE_MODIFIER; }
 	{IDENTIFIER} { yybegin(S_TREE_ARG_TYPED); return ARG_TYPE; }
 }
 <S_TREE_ARG_TYPED> {

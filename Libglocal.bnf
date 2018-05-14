@@ -10,27 +10,29 @@
 	tokenTypeClass="io.github.sof3.libglocal.idea.LibglocalTokenType"
 }
 
-root ::= (comment | emptyLine | (langType | messageHeader | messageEntry | entryModifier) terminator)*
+root ::= (comment | emptyLine | (langType | langVersion | langAuthor | messageHeader | messageEntry | entryModifier) terminator)*
 comment ::= LINE_COMMENT | BLOCK_COMMENT
 
-emptyLine ::= (WHITE_SPACE | INDENT) terminator
+emptyLine ::= (WHITE_SPACE | INDENT)? terminator
 terminator ::= <<eof>> | EOL
 
-langType ::= (BASE_KEYWORD WHITE_SPACE?)? LANG_KEYWORD WHITE_SPACE LANG_NAME (WHITE_SPACE | LANG_LOCAL)?
+langType ::= (BASE_KEYWORD WHITE_SPACE?)? LANG_KEYWORD LANG_NAME (WHITE_SPACE | LANG_LOCAL)?
+langAuthor ::= AUTHOR_KEYWORD AUTHOR_NAME (AUTHOR_SEPARATOR WHITE_SPACE? AUTHOR_NAME WHITE_SPACE?)*
+langVersion ::= VERSION_KEYWORD VERSION_VALUE
 
 messageHeader ::= MESSAGES_KEYWORD
 
 messageEntry ::= INDENT MESSAGE_ID WHITE_SPACE? messageValue?
 
-messageValue ::= LITERAL | ESCAPE | argRef | span | messageRef
+messageValue ::= (LITERAL | ESCAPE | argRef | span | messageRef)+
 argRef ::= DOLLAR_OPEN ARG_NAME DOLLAR_CLOSE
 messageRef ::= HASH_OPEN MESSAGE_ID messageRefArgs? HASH_CLOSE
 messageRefArgs ::= OPEN_PAREN messageRefArg (ARGS_SEPARATOR messageRefArg)* CLOSE_PAREN
 messageRefArg ::= ARG_NAME ARG_EQUALS argValue
-span ::= PERCENT_OPEN SPAN_NAME WHITE_SPACE messageValue PERCENT_CLOSE
+span ::= PERCENT_OPEN WHITE_SPACE? (SPAN_NAME WHITE_SPACE messageValue | SPAN_STYLE WHITE_SPACE*) PERCENT_CLOSE
 
 entryModifier ::= INDENT (argModifier | docModifier | sinceModifier | updatedModifier)
-argModifier ::= ARG_KEYWORD ARG_NAME WHITE_SPACE ARG_TYPE argDefault?
+argModifier ::= ARG_KEYWORD ARG_NAME (WHITE_SPACE ARG_TYPE_MODIFIER? ARG_TYPE argDefault?)?
 argDefault ::= ARG_EQUALS argValue
 docModifier ::= DOC_KEYWORD DOC_VALUE
 sinceModifier ::= SINCE_KEYWORD VERSION_VALUE
