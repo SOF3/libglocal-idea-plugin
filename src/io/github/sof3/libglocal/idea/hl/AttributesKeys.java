@@ -1,6 +1,5 @@
 package io.github.sof3.libglocal.idea.hl;
 
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 
 import static com.intellij.openapi.editor.DefaultLanguageHighlighterColors.*;
@@ -21,6 +20,7 @@ public interface AttributesKeys{
 	TextAttributesKey ATT_NUMBER_LITERAL = createTextAttributesKey("LIBGLOCAL_NUMBER_LITERAL", NUMBER);
 	TextAttributesKey ATT_VERSION_VALUE = createTextAttributesKey("LIBGLOCAL_VERSION_VALUE", NUMBER);
 	TextAttributesKey ATT_LITERAL_ESCAPE = createTextAttributesKey("LIBGLOCAL_STRING_LITERAL_ESCAPE", VALID_STRING_ESCAPE);
+	TextAttributesKey ATT_LITERAL_ESCAPE_ILLEGAL = createTextAttributesKey("LIBGLOCAL_STRING_LITERAL_ESCAPE_ILLEGAL", INVALID_STRING_ESCAPE);
 	TextAttributesKey ATT_SPAN_NAME = createTextAttributesKey("LIBGLOCAL_SPAN_NAME", PREDEFINED_SYMBOL);
 	TextAttributesKey ATT_SPAN_STYLE = createTextAttributesKey("LIBGLOCAL_SPAN_STYLE", PREDEFINED_SYMBOL);
 	TextAttributesKey ATT_ARG_TYPE_MODIFIER = createTextAttributesKey("LIBGLOCAL_ARG_EQUALS", INSTANCE_FIELD);

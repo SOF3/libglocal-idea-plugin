@@ -1,14 +1,4 @@
-{
-	parserClass="io.github.sof3.libglocal.idea.LibglocalParser"
-	extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
-	psiClassPrefix="Libglocal"
-	psiImplClassSuffix="Impl"
-	psiPackage="io.github.sof3.libglocal.idea.psi"
-	psiImplPackage="io.github.sof3.libglocal.idea.psi.impl"
-	elementTypeHolderClass="io.github.sof3.libglocal.idea.LibglocalTokens"
-	elementTypeClass="io.github.sof3.libglocal.idea.LibglocalElementType"
-	tokenTypeClass="io.github.sof3.libglocal.idea.LibglocalTokenType"
-}
+(this is an intentional error line so that this file will not be accidentally compiled)
 
 root ::= (comment | emptyLine | (langType | langVersion | langAuthor | messageHeader | messageEntry | entryModifier) terminator)*
 comment ::= LINE_COMMENT | BLOCK_COMMENT
@@ -27,7 +17,7 @@ messageEntry ::= INDENT MESSAGE_ID WHITE_SPACE? messageValue?
 messageValue ::= (LITERAL | ESCAPE | argRef | span | messageRef)+
 argRef ::= DOLLAR_OPEN ARG_NAME DOLLAR_CLOSE
 messageRef ::= HASH_OPEN MESSAGE_ID messageRefArgs? HASH_CLOSE
-messageRefArgs ::= OPEN_PAREN messageRefArg (ARGS_SEPARATOR messageRefArg)* CLOSE_PAREN
+messageRefArgs ::= (messageRefArg | ARGS_SEPARATOR)*
 messageRefArg ::= ARG_NAME ARG_EQUALS argValue
 span ::= PERCENT_OPEN WHITE_SPACE? (SPAN_NAME WHITE_SPACE messageValue | SPAN_STYLE WHITE_SPACE*) PERCENT_CLOSE
 

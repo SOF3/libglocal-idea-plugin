@@ -8,4 +8,13 @@ public class LibglocalTokenType extends IElementType{
 	public LibglocalTokenType(@NotNull String debugName){
 		super(debugName, LibglocalLanguage.getInstance());
 	}
+
+	@Override
+	public String toString(){
+		String s = super.toString();
+		if(s.endsWith("_KEYWORD")){
+			return '\'' + s.substring(0, s.length() - 8).toLowerCase() + '\'';
+		}
+		return s;
+	}
 }

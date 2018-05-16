@@ -1,10 +1,8 @@
 package io.github.sof3.libglocal.idea;
 
-import com.intellij.ide.plugins.PluginManager;
 import com.intellij.lexer.FlexAdapter;
 import com.intellij.psi.tree.IElementType;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +29,7 @@ public class LibglocalFlexAdapter extends FlexAdapter{
 				int oldState = yystate();
 				try{
 					IElementType token = super.advance();
-					System.out.println("Lexer.advance() text " + yytext() + ", state: " + states.get(oldState) + " => " + states.get(yystate()) + ", token = " + token);
+//					System.out.println("Lexer.advance() text " + yytext() + ", state: " + states.get(oldState) + " => " + states.get(yystate()) + ", token = " + token);
 					return token;
 				}catch(Exception e){
 					System.err.println("Lexer.advance() text " + yytext() + ", state: " + states.get(oldState) + " => " + states.get(yystate()) + ", exception: " + e.getMessage());

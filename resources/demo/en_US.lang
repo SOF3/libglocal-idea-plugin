@@ -1,5 +1,5 @@
 base lang en_US English (US)
-author SOFe, SOF3, Iron(II) Sulphite
+author SOFe, SOF3, Iron(II) Sulphite,
 version 2.0 // current version name. For non-base lang files, this should be the targetted base lang version.
 
 messages
@@ -14,7 +14,7 @@ messages
         error
             // %{...} are spans.
             // 5 "style" spans: info, success, notice, warn, error, which are color codes white, green, aqua, yellow and red.
-            // Style spans will change the color of the rest of the string (except inside stack spans) until the next style span is encountered, similar to Minecraft or ANSIcolor codes
+            // Style spans will change the color of the rest of the string (except inside stack spans) until the next style span is encountered, similar to Minecraft or ANSI color codes
             // 8 "stack" spans:
             //   hl1, hl2, hl3, hl4, represented as light purple, gold (red if the base color is yellow), aqua (yellow if the base color is already aqua), green (red if the base color is already green).
             //   b, i, u, s, represented as bold, italic, underline, strikethrough.
@@ -29,14 +29,14 @@ messages
         list %{info}Your friends are: ${friends}
             arg friends list:string
     // #{lorem.ipsum} interpolates the message lorem.ipsum into this message. Parentheses can be added behind the message to pass arguments. Integer literals, string literals and direct references (to arguments of this message) can be used.
-    ordinalTest %{warn}Test for the #{internal.ordinal(ord = times)} time
+    ordinalTest %{warn}Test for the #{internal.ordinal ord=times} time
         arg times int
-	internal
-		ordinal ${ord}
-			doc Convert a quantity into an ordinal number
-			since 1.0 // The earliest version that added this message. Not sure why this is needed though... TODO decide whether to remove this
-			updated 2.0 // The last version this message was updated. If base lang has a more updated version, this means the base lang expects this message to mean something else, and the message in the base lang will be used.
-			arg ord quantity // TODO create quantity syntax
+    internal
+        ordinal ${ord}
+            doc Convert a quantity into an ordinal number
+            since 1.0 // The earliest version that added this message. Not sure why this is needed though... TODO decide whether to remove this
+            updated 2.0 // The last version this message was updated. If base lang has a more updated version, this means the base lang expects this message to mean something else, and the message in the base lang will be used.
+            arg ord quantity // TODO create quantity syntax
     trivia
         escape-sequence This a literal \${\} dollar sign with curly braces.
             doc Note that close brace } also needs escaping, to distinguish from the close braces of spans

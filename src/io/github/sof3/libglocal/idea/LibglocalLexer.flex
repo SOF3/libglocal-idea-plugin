@@ -6,6 +6,7 @@ import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.TokenType;
 import io.github.sof3.libglocal.idea.util.StringStack;
+import io.github.sof3.libglocal.idea.psi.LibglocalTokens;
 
 %%
 %public
@@ -34,11 +35,9 @@ import io.github.sof3.libglocal.idea.util.StringStack;
 %state S_TREE_REF_ARG
 %state S_TREE_REF_MESSAGE
 %state S_TREE_REF_MESSAGE_ARGS
-%state S_TREE_REF_MESSAGE_START_ARG
 %state S_TREE_REF_MESSAGE_EQUAL_ARG
 %state S_TREE_REF_MESSAGE_END_ARG
 %state S_TREE_REF_MESSAGE_END_ARG_STRING_LITERAL
-%state S_TREE_REF_MESSAGE_NEXT_ARG
 %state S_TREE_REF_SPAN_START
 %state S_TREE_REF_SPAN_STYLED
 %state S_TREE_REF_SPAN_SPACE
@@ -128,30 +127,25 @@ LINE_COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 	{IDENTIFIER} { yybegin(S_TREE_REF_MESSAGE_ARGS); return MESSAGE_ID; }
 }
 <S_TREE_REF_MESSAGE_ARGS> {
-	"(" { yybegin(S_TREE_REF_MESSAGE_START_ARG); return OPEN_PAREN; }
+	{WHITE_SPACE}+ { return WHITE_SPACE; }
+	"," { return ARGS_SEPARATOR; }
 	"}" { yybegin(S_TREE_MESSAGE); return HASH_CLOSE; }
-}
-<S_TREE_REF_MESSAGE_START_ARG> {
 	{IDENTIFIER} { yybegin(S_TREE_REF_MESSAGE_EQUAL_ARG); return ARG_NAME; }
-	")" { yybegin(S_TREE_REF_MESSAGE_ARGS); return CLOSE_PAREN; }
 }
 <S_TREE_REF_MESSAGE_EQUAL_ARG> {
 	{WHITE_SPACE}*"="{WHITE_SPACE}* { yybegin(S_TREE_REF_MESSAGE_END_ARG); return ARG_EQUALS; }
-
 }
 <S_TREE_REF_MESSAGE_END_ARG> {
-	-?[0-9]+(\.[0-9]+)? { yybegin(S_TREE_REF_MESSAGE_NEXT_ARG); return NUMBER_LITERAL; }
-	{IDENTIFIER} { yybegin(S_TREE_REF_MESSAGE_NEXT_ARG); return ARG_NAME; }
+	-?[0-9]+(\.[0-9]+)? { yybegin(S_TREE_REF_MESSAGE_ARGS); return NUMBER_LITERAL; }
+	{IDENTIFIER} { yybegin(S_TREE_REF_MESSAGE_ARGS); return ARG_NAME; }
 	"\"" { yybegin(S_TREE_REF_MESSAGE_END_ARG_STRING_LITERAL); return OPEN_QUOTE; }
 }
 <S_TREE_REF_MESSAGE_END_ARG_STRING_LITERAL> {
+	{EOL} { return EOL; }
+	"\"" { yybegin(S_TREE_REF_MESSAGE_ARGS); return CLOSE_QUOTE; }
+	\\[\"rn] { return ESCAPE; }
+	\\[^] { return ESCAPE_ILLEGAL; }
 	[^\\\"\r\n]+ { return LITERAL; }
-	\\\" { return ESCAPE; }
-	"\"" { yybegin(S_TREE_REF_MESSAGE_NEXT_ARG); return CLOSE_QUOTE; }
-}
-<S_TREE_REF_MESSAGE_NEXT_ARG> {
-	"," { yybegin(S_TREE_REF_MESSAGE_START_ARG); return ARGS_SEPARATOR; }
-	")" { yybegin(S_TREE_REF_MESSAGE_ARGS); return CLOSE_PAREN; }
 }
 <S_TREE_REF_SPAN_START> {
 	{WHITE_SPACE}+ { return WHITE_SPACE; }

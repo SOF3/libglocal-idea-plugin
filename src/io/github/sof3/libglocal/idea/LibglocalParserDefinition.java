@@ -11,6 +11,9 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import io.github.sof3.libglocal.idea.lang.LibglocalFile;
+import io.github.sof3.libglocal.idea.psi.LibglocalParser;
+import io.github.sof3.libglocal.idea.psi.LibglocalTokens;
+import io.github.sof3.libglocal.idea.psi.LibglocalTypes;
 import org.jetbrains.annotations.NotNull;
 
 public class LibglocalParserDefinition implements ParserDefinition{
@@ -48,7 +51,7 @@ public class LibglocalParserDefinition implements ParserDefinition{
 	@NotNull
 	@Override
 	public PsiElement createElement(ASTNode node){
-		return LibglocalTokens.Factory.createElement(node);
+		return LibglocalTypes.createElement(node);
 	}
 
 	@Override
