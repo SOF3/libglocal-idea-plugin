@@ -5,6 +5,8 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.options.colors.AttributesDescriptor;
 import com.intellij.openapi.options.colors.ColorDescriptor;
 import com.intellij.openapi.options.colors.ColorSettingsPage;
+import io.github.sof3.libglocal.idea.LibglocalIcon;
+import io.github.sof3.libglocal.idea.annotator.SpanAttributes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +18,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Map;
 
-public class LibglocalColorSettingsPage implements ColorSettingsPage, AttributesKeys{
+public class LibglocalColorSettingsPage implements ColorSettingsPage, AttributesKeys, SpanAttributes{
 	private static final AttributesDescriptor[] ATTRIBUTE_DESCRIPTORS = new AttributesDescriptor[]{
 			new AttributesDescriptor("Line comment", ATT_LINE_COMMENT),
 			new AttributesDescriptor("Block comment", ATT_BLOCK_COMMENT),
@@ -41,6 +43,22 @@ public class LibglocalColorSettingsPage implements ColorSettingsPage, Attributes
 			new AttributesDescriptor("Documentation text", ATT_DOC_VALUE),
 			new AttributesDescriptor("Parentheses", ATT_PARENTHESES),
 			new AttributesDescriptor("Comma", ATT_COMMA),
+			new AttributesDescriptor("Style (only affects editor display): info", STYLE_INFO),
+			new AttributesDescriptor("Style (only affects editor display): success", STYLE_SUCCESS),
+			new AttributesDescriptor("Style (only affects editor display): notice", STYLE_NOTICE),
+			new AttributesDescriptor("Style (only affects editor display): warn", STYLE_WARN),
+			new AttributesDescriptor("Style (only affects editor display): error", STYLE_ERROR),
+			new AttributesDescriptor("Stack span (only affects editor display): highlight 1", STACK_HL1),
+			new AttributesDescriptor("Stack span (only affects editor display): highlight 2", STACK_HL2),
+			new AttributesDescriptor("Stack span (only affects editor display): highlight 2", STACK_HL2_ALT),
+			new AttributesDescriptor("Stack span (only affects editor display): highlight 3", STACK_HL3),
+			new AttributesDescriptor("Stack span (only affects editor display): highlight 3", STACK_HL3_ALT),
+			new AttributesDescriptor("Stack span (only affects editor display): highlight 4", STACK_HL4),
+			new AttributesDescriptor("Stack span (only affects editor display): highlight 4", STACK_HL4_ALT),
+			new AttributesDescriptor("Stack span (only affects editor display): bold", STACK_BOLD),
+			new AttributesDescriptor("Stack span (only affects editor display): italic", STACK_ITALIC),
+			new AttributesDescriptor("Stack span (only affects editor display): underlined", STACK_UNDERLINED),
+			new AttributesDescriptor("Stack span (only affects editor display): strikethrough", STACK_STRIKETHROUGH),
 	};
 
 	private final static String DEMO_TEXT;
@@ -61,7 +79,7 @@ public class LibglocalColorSettingsPage implements ColorSettingsPage, Attributes
 	@Nullable
 	@Override
 	public Icon getIcon(){
-		return null;
+		return LibglocalIcon.LIBGLOCAL_16;
 	}
 
 	@NotNull

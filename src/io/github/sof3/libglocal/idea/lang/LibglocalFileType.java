@@ -1,6 +1,7 @@
 package io.github.sof3.libglocal.idea.lang;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import io.github.sof3.libglocal.idea.LibglocalIcon;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +39,6 @@ public class LibglocalFileType extends LanguageFileType{
 	@Nullable
 	@Override
 	public Icon getIcon(){
-		return null;
+		return LibglocalIcon.LIBGLOCAL_16;
 	}
 }

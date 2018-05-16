@@ -1,4 +1,4 @@
-package io.github.sof3.libglocal.idea;
+package io.github.sof3.libglocal.idea.parser;
 
 import java.io.Reader;
 
@@ -31,6 +31,7 @@ import io.github.sof3.libglocal.idea.psi.LibglocalTokens;
 %state S_AUTHORS
 %state S_VERSION
 %state S_TREE_SOL
+%state S_TREE_PRE_MESSAGE
 %state S_TREE_MESSAGE
 %state S_TREE_REF_ARG
 %state S_TREE_REF_MESSAGE
@@ -106,8 +107,12 @@ LINE_COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 	"doc"{WHITE_SPACE}+ { yybegin(S_TREE_DOC); return DOC_KEYWORD; }
 	"since"{WHITE_SPACE}+ { yybegin(S_TREE_VERSION); return SINCE_KEYWORD; }
 	"updated"{WHITE_SPACE}+ { yybegin(S_TREE_VERSION); return UPDATED_KEYWORD; }
-	{IDENTIFIER} { yybegin(S_TREE_MESSAGE); return MESSAGE_ID; }
+	{IDENTIFIER} { yybegin(S_TREE_PRE_MESSAGE); return MESSAGE_ID; }
 	{EOL} { return EOL; }
+}
+<S_TREE_PRE_MESSAGE> {
+	{WHITE_SPACE}+ { yybegin(S_TREE_MESSAGE); return WHITE_SPACE; }
+	{EOL} { yybegin(S_TREE_SOL); return EOL; }
 }
 <S_TREE_MESSAGE> {
 	{EOL} { yybegin(S_TREE_SOL); return EOL; }

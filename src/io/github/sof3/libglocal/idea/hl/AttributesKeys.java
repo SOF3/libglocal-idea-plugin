@@ -15,8 +15,8 @@ public interface AttributesKeys{
 	TextAttributesKey ATT_ARG_NAME = createTextAttributesKey("LIBGLOCAL_ARG_NAME", LOCAL_VARIABLE);
 	TextAttributesKey ATT_ARG_TYPE = createTextAttributesKey("LIBGLOCAL_ARG_TYPE", CLASS_REFERENCE);
 	TextAttributesKey ATT_LITERAL = createTextAttributesKey("LIBGLOCAL_STRING_LITERAL", STRING);
-	TextAttributesKey ATT_AUTHOR_NAME = createTextAttributesKey("LIBGLOCAL_AUTHOR_NAME", ATT_LITERAL);
-	TextAttributesKey ATT_LANG_LOCAL = createTextAttributesKey("LIBGLOCAL_LANG_LOCAL", ATT_LITERAL);
+	TextAttributesKey ATT_AUTHOR_NAME = createTextAttributesKey("LIBGLOCAL_AUTHOR_NAME", STRING);
+	TextAttributesKey ATT_LANG_LOCAL = createTextAttributesKey("LIBGLOCAL_LANG_LOCAL", STRING);
 	TextAttributesKey ATT_NUMBER_LITERAL = createTextAttributesKey("LIBGLOCAL_NUMBER_LITERAL", NUMBER);
 	TextAttributesKey ATT_VERSION_VALUE = createTextAttributesKey("LIBGLOCAL_VERSION_VALUE", NUMBER);
 	TextAttributesKey ATT_LITERAL_ESCAPE = createTextAttributesKey("LIBGLOCAL_STRING_LITERAL_ESCAPE", VALID_STRING_ESCAPE);

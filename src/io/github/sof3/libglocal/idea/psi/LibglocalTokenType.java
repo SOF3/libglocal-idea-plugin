@@ -1,4 +1,4 @@
-package io.github.sof3.libglocal.idea;
+package io.github.sof3.libglocal.idea.psi;
 
 import com.intellij.psi.tree.IElementType;
 import io.github.sof3.libglocal.idea.lang.LibglocalLanguage;

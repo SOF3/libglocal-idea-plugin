@@ -1,7 +1,6 @@
 package io.github.sof3.libglocal.idea.psi;
 
 import com.intellij.psi.tree.IElementType;
-import io.github.sof3.libglocal.idea.LibglocalElementType;
 
 public interface LibglocalElements{
 	// [base] lang langName langLocal

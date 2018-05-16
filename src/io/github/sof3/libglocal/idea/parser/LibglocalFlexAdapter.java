@@ -1,7 +1,8 @@
-package io.github.sof3.libglocal.idea;
+package io.github.sof3.libglocal.idea.parser;
 
 import com.intellij.lexer.FlexAdapter;
 import com.intellij.psi.tree.IElementType;
+import io.github.sof3.libglocal.idea.parser.LibglocalLexer;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

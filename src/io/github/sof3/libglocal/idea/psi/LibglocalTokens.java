@@ -2,7 +2,6 @@ package io.github.sof3.libglocal.idea.psi;
 
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
-import io.github.sof3.libglocal.idea.LibglocalTokenType;
 
 public interface LibglocalTokens extends TokenType{
 	IElementType ARGS_SEPARATOR = new LibglocalTokenType("ARGS_SEPARATOR");

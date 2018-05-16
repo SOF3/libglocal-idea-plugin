@@ -1,9 +1,10 @@
-package io.github.sof3.libglocal.idea.psi;
+package io.github.sof3.libglocal.idea.parser;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.psi.tree.IElementType;
+import io.github.sof3.libglocal.idea.psi.LibglocalTypes;
 import io.github.sof3.libglocal.idea.util.StringStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -158,7 +159,7 @@ public final class LibglocalParser implements PsiParser, LibglocalTypes{
 				// MESSAGE_GROUP
 				next(); // skip EOL
 
-				while(current() == INDENT && indentStack.isPrefixOf(currentText())){
+				while(current() == INDENT && indentStack.isStrictlyPrefixOf(currentText())){
 					tryReadMessage();
 				}
 
@@ -167,14 +168,23 @@ public final class LibglocalParser implements PsiParser, LibglocalTypes{
 				// MESSAGE_ENTRY
 				readMessageValue(false); // EOL consumed
 
-				while(current() == INDENT && indentStack.isPrefixOf(currentText())){
-					String indent = currentText();
-					next();
-					if(readArgMod(indent) || readDocMod(indent) || readVersionMod(indent)){
+				while(true){
+					if(current() == EOL){
+						next();
 						continue;
 					}
 
-					errExpect("arg", "doc", "since", "updated");
+					if(current() == INDENT && indentStack.isStrictlyPrefixOf(currentText())){
+						String indent = currentText();
+						next();
+						if(readArgMod(indent) || readDocMod(indent) || readVersionMod(indent)){
+							continue;
+						}
+
+						errExpect("arg", "doc", "since", "updated");
+						continue;
+					}
+					break;
 				}
 				endMarker(marker, MESSAGE_ENTRY, "messageEntry: " + text);
 			}
@@ -199,7 +209,7 @@ public final class LibglocalParser implements PsiParser, LibglocalTypes{
 		PsiBuilder.Marker marker = startMarker("messageValue");
 
 		IElementType messageToken;
-		while((messageToken = consumeCurrent(EOL, LITERAL, ESCAPE, ESCAPE_ILLEGAL, DOLLAR_OPEN, PERCENT_OPEN, HASH_OPEN, PERCENT_CLOSE)) != EOL){
+		while((messageToken = expectCurrent(EOL, LITERAL, ESCAPE, ESCAPE_ILLEGAL, DOLLAR_OPEN, PERCENT_OPEN, HASH_OPEN, PERCENT_CLOSE)) != EOL){
 			if(messageToken == PERCENT_CLOSE){
 				if(!stacked){
 					throw new LineLocalException("Unexpected closing brace: not in a span");
@@ -207,37 +217,50 @@ public final class LibglocalParser implements PsiParser, LibglocalTypes{
 				}
 
 				endMarker(marker, MESSAGE_VALUE);
+				next();
 				return;
 			}
 
 			if(messageToken == DOLLAR_OPEN){
-				PsiBuilder.Marker argMarker = startMarker("argRef");
-				consumeCurrent(ARG_NAME);
-				consumeCurrent(DOLLAR_CLOSE);
-				endMarker(argMarker, ARG_REF);
+				readArgRef();
 			}else if(messageToken == PERCENT_OPEN){
-				PsiBuilder.Marker spanMarker = startMarker("spanRef");
-				IElementType spanType = consumeCurrent(SPAN_NAME, SPAN_STYLE);
-				if(spanType == SPAN_STYLE){
-					consumeCurrent(PERCENT_CLOSE);
-					endMarker(spanMarker, STYLE_SPAN);
-				}else{
-					assert spanType == SPAN_NAME;
-					readMessageValue(true); // PERCENT_CLOSE consumed
-					endMarker(spanMarker, STACK_SPAN);
-				}
+				readSpan();
 			}else if(messageToken == HASH_OPEN){
 				readMessageRef();
 			}else{
 				assert messageToken == LITERAL || messageToken == ESCAPE || messageToken == ESCAPE_ILLEGAL;
+				next();
 			}
 		}
 
 		endMarker(marker, MESSAGE_VALUE);
 	}
 
+	private void readArgRef() throws LineLocalException{
+		PsiBuilder.Marker argMarker = startMarker("argRef");
+		next();
+		consumeCurrent(ARG_NAME);
+		consumeCurrent(DOLLAR_CLOSE);
+		endMarker(argMarker, ARG_REF);
+	}
+
+	private void readSpan() throws LineLocalException{
+		PsiBuilder.Marker spanMarker = startMarker("spanRef");
+		next();
+		IElementType spanType = consumeCurrent(SPAN_NAME, SPAN_STYLE);
+		if(spanType == SPAN_STYLE){
+			consumeCurrent(PERCENT_CLOSE);
+			endMarker(spanMarker, STYLE_SPAN);
+		}else{
+			assert spanType == SPAN_NAME;
+			readMessageValue(true); // PERCENT_CLOSE consumed
+			endMarker(spanMarker, STACK_SPAN);
+		}
+	}
+
 	private void readMessageRef() throws LineLocalException{
 		PsiBuilder.Marker messageRefMarker = startMarker("messageRef");
+		next();
 
 		consumeCurrent(MESSAGE_ID);
 		if(current() != HASH_CLOSE){
@@ -293,9 +316,8 @@ public final class LibglocalParser implements PsiParser, LibglocalTypes{
 			endMarker(defaultMarker, ARG_DEFAULT);
 		}
 
-		if(consumeCurrent(ARG_TYPE_MODIFIER, ARG_TYPE) == ARG_TYPE_MODIFIER){
-			consumeCurrent(ARG_TYPE);
-		}
+		consumeEol();
+
 		endMarker(arg, ARG_MODIFIER);
 		return true;
 	}
@@ -411,7 +433,7 @@ public final class LibglocalParser implements PsiParser, LibglocalTypes{
 
 
 	private PsiBuilder.Marker startMarker(@SuppressWarnings("unused") String debugName){
-		System.err.println("startMarker " + debugName);
+//		System.out.println("startMarker " + debugName);
 		PsiBuilder.Marker marker = builder.mark();
 		markers.addLast(marker);
 		return marker;
@@ -422,7 +444,7 @@ public final class LibglocalParser implements PsiParser, LibglocalTypes{
 	}
 
 	private void endMarker(PsiBuilder.Marker marker, IElementType type, String debugName){
-		System.err.println("endMarker   " + debugName);
+//		System.out.println("endMarker   " + debugName);
 		PsiBuilder.Marker pop = markers.pollLast();
 		assert marker == pop : "Attempt to end " + debugName + " when the stack top is something else";
 		marker.done(type);
@@ -432,7 +454,7 @@ public final class LibglocalParser implements PsiParser, LibglocalTypes{
 		public LineLocalException(String message){
 			super();
 			builder.error(message);
-			System.err.println("Constructed LineLocalException: " + message);
+//			System.err.println("Constructed LineLocalException: " + message);
 		}
 	}
 }

@@ -4,7 +4,7 @@ import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
-import io.github.sof3.libglocal.idea.LibglocalFlexAdapter;
+import io.github.sof3.libglocal.idea.parser.LibglocalFlexAdapter;
 import io.github.sof3.libglocal.idea.psi.LibglocalTokens;
 import io.github.sof3.libglocal.idea.psi.LibglocalTypes;
 import org.jetbrains.annotations.NotNull;
@@ -77,7 +77,7 @@ public class LibglocalSyntaxHighlighter extends SyntaxHighlighterBase implements
 		if(tokenType == LibglocalTokens.ESCAPE){
 			return new TextAttributesKey[]{ATT_LITERAL_ESCAPE};
 		}
-		if(tokenType == LibglocalTokens.ESCAPE){
+		if(tokenType == LibglocalTokens.ESCAPE_ILLEGAL){
 			return new TextAttributesKey[]{ATT_LITERAL_ESCAPE_ILLEGAL};
 		}
 		if(tokenType == LibglocalTokens.HASH_CLOSE){

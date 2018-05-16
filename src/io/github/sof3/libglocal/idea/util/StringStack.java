@@ -23,8 +23,8 @@ public class StringStack{
 		return buffer.toString().equals(string);
 	}
 
-	public boolean isPrefixOf(String string){
-		return string.startsWith(buffer.toString());
+	public boolean isStrictlyPrefixOf(String string){
+		return string.length() > buffer.length() && string.startsWith(buffer.toString());
 	}
 
 	public void fill(String string){

@@ -1,6 +1,7 @@
 <idea-plugin>
 	<id>io.github.sof3.libglocal.idea</id>
 	<name>libglocal Language File Support</name>
+
 	<version>0.2.0</version>
 	<vendor email="sofe2038@gmail.com" url="https://github.com/SOF3">SOFe</vendor>
 
@@ -26,11 +27,15 @@
 		<fileTypeFactory implementation="io.github.sof3.libglocal.idea.lang.LibglocalFileTypeFactory"/>
 		<lang.parserDefinition
 				language="libglocal-lang"
-				implementationClass="io.github.sof3.libglocal.idea.LibglocalParserDefinition"/>
+				implementationClass="io.github.sof3.libglocal.idea.parser.LibglocalParserDefinition"/>
 		<lang.syntaxHighlighterFactory
 				language="libglocal-lang"
 				implementationClass="io.github.sof3.libglocal.idea.hl.LibglocalSyntaxHighlighterFactory"/>
 		<colorSettingsPage implementation="io.github.sof3.libglocal.idea.hl.LibglocalColorSettingsPage"/>
+		<additionalTextAttributes scheme="Default" file="colorSchemes/default.xml"/>
+		<additionalTextAttributes scheme="Dracula" file="colorSchemes/dracula.xml"/>
+		<annotator language="libglocal-lang"
+		           implementationClass="io.github.sof3.libglocal.idea.annotator.SpanAnnotator"/>
 	</extensions>
 
 	<actions>
