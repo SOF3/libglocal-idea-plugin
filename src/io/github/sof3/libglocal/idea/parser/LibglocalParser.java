@@ -150,6 +150,9 @@ public final class LibglocalParser implements PsiParser, LibglocalTypes{
 		}
 		String text = currentText();
 		PsiBuilder.Marker marker = startMarker("message (group|entry): " + text);
+		if(current() == PRIVATE_KEYWORD){
+			consumeCurrent(PRIVATE_KEYWORD);
+		}
 		consumeCurrent(MESSAGE_ID);
 
 		indentStack.fill(indentText);

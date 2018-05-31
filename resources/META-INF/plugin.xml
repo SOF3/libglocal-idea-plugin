@@ -22,6 +22,7 @@
 
 	<depends>com.intellij.modules.platform</depends>
 	<depends>com.intellij.modules.lang</depends>
+	<depends>com.jetbrains.php</depends>
 
 	<extensions defaultExtensionNs="com.intellij">
 		<fileTypeFactory implementation="io.github.sof3.libglocal.idea.lang.LibglocalFileTypeFactory"/>
@@ -33,12 +34,18 @@
 				implementationClass="io.github.sof3.libglocal.idea.hl.LibglocalSyntaxHighlighterFactory"/>
 		<colorSettingsPage implementation="io.github.sof3.libglocal.idea.hl.LibglocalColorSettingsPage"/>
 		<additionalTextAttributes scheme="Default" file="colorSchemes/default.xml"/>
-		<additionalTextAttributes scheme="Dracula" file="colorSchemes/dracula.xml"/>
-		<annotator language="libglocal-lang"
-		           implementationClass="io.github.sof3.libglocal.idea.annotator.SpanAnnotator"/>
+		<!--<additionalTextAttributes scheme="Dracula" file="colorSchemes/dracula.xml"/>-->
+		<annotator
+				language="libglocal-lang"
+				implementationClass="io.github.sof3.libglocal.idea.annotator.SpanAnnotator"/>
+		<psi.referenceContributor
+				language="libglocal-lang"
+				implementation="io.github.sof3.libglocal.idea.ref.LibglocalReferenceContributor"/>
+		<completion.contributor
+			language="libglocal-lang"
+			implementationClass="io.github.sof3.libglocal.idea.ref.LibglocalCompletionContributor"/>
 	</extensions>
 
 	<actions>
 	</actions>
-
 </idea-plugin>

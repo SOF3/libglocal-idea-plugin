@@ -7,4 +7,8 @@ public class LibglocalLangDeclaration extends LibglocalElement{
 	public LibglocalLangDeclaration(@NotNull ASTNode node){
 		super(node);
 	}
+
+	public boolean isBase(){
+		return getNode().findChildByType(BASE_KEYWORD) != null;
+	}
 }

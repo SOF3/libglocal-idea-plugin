@@ -107,6 +107,7 @@ LINE_COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 	"doc"{WHITE_SPACE}+ { yybegin(S_TREE_DOC); return DOC_KEYWORD; }
 	"since"{WHITE_SPACE}+ { yybegin(S_TREE_VERSION); return SINCE_KEYWORD; }
 	"updated"{WHITE_SPACE}+ { yybegin(S_TREE_VERSION); return UPDATED_KEYWORD; }
+	"private:" { return PRIVATE_KEYWORD; }
 	{IDENTIFIER} { yybegin(S_TREE_PRE_MESSAGE); return MESSAGE_ID; }
 	{EOL} { return EOL; }
 }
@@ -118,7 +119,7 @@ LINE_COMMENT={WHITE_SPACE}*\/\/[^\r\n]*
 	{EOL} { yybegin(S_TREE_SOL); return EOL; }
 	[^\r\n\\#\$%\}/]+ { return LITERAL; }
 	\/ { return LITERAL; } // the comment would have already been captured if it is one
-	\\[#\$%n\/\}] { return ESCAPE; }
+	\\[#\$%n\/\}0\\s] { return ESCAPE; }
 	"}" { return PERCENT_CLOSE; }
 	"${" { yybegin(S_TREE_REF_ARG); return DOLLAR_OPEN; }
 	"#{" { yybegin(S_TREE_REF_MESSAGE); return HASH_OPEN; }

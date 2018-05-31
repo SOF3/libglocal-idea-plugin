@@ -39,6 +39,7 @@ public interface LibglocalTokens extends TokenType{
 	IElementType OPEN_QUOTE = new LibglocalTokenType("OPEN_QUOTE");
 	IElementType PERCENT_CLOSE = new LibglocalTokenType("PERCENT_CLOSE");
 	IElementType PERCENT_OPEN = new LibglocalTokenType("PERCENT_OPEN");
+	IElementType PRIVATE_KEYWORD = new LibglocalTokenType("PRIVATE_KEYWORD");
 	IElementType SINCE_KEYWORD = new LibglocalTokenType("SINCE_KEYWORD");
 	IElementType SPAN_NAME = new LibglocalTokenType("SPAN_NAME");
 	IElementType SPAN_STYLE = new LibglocalTokenType("SPAN_STYLE");

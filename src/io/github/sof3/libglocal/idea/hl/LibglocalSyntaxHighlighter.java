@@ -123,6 +123,9 @@ public class LibglocalSyntaxHighlighter extends SyntaxHighlighterBase implements
 		if(tokenType == LibglocalTokens.PERCENT_OPEN){
 			return new TextAttributesKey[]{ATT_PERCENT_BRACES};
 		}
+		if(tokenType == LibglocalTokens.PRIVATE_KEYWORD){
+			return new TextAttributesKey[]{ATT_KEYWORD};
+		}
 		if(tokenType == LibglocalTokens.SINCE_KEYWORD){
 			return new TextAttributesKey[]{ATT_KEYWORD};
 		}
