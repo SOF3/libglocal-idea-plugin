@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<list>
+	<option name="LIBGLOCAL_STRING_LITERAL">
+		<value>
+			<option name="FOREGROUND" value="000000"/>
+			<option name="BACKGROUND" value="ffffff"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STACK_BOLD">
+		<value>
+			<option name="FONT_TYPE" value="1"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STACK_ITALIC">
+		<value>
+			<option name="FONT_TYPE" value="2"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STACK_UNDERLINED">
+		<value>
+			<option name="EFFECT_TYPE" value="1"/>
+			<option name="EFFECT_COLOR" value="000000"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STACK_STRIKETHROUGH">
+		<value>
+			<option name="EFFECT_TYPE" value="3"/>
+			<option name="EFFECT_COLOR" value="000000"/>
+		</value>
+	</option>
+
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STYLE_INFO">
+		<value>
+			<option name="FOREGROUND" value="000000"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STYLE_SUCCESS">
+		<value>
+			<option name="FOREGROUND" value="55ff55"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STYLE_NOTICE">
+		<value>
+			<option name="FOREGROUND" value="55ffff"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STYLE_WARN">
+		<value>
+			<option name="FOREGROUND" value="cccc22"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STYLE_ERROR">
+		<value>
+			<option name="FOREGROUND" value="ff5555"/>
+		</value>
+	</option>
+
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STACK_HL1">
+		<value>
+			<option name="FOREGROUND" value="ff55ff"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STACK_HL2">
+		<value>
+			<option name="FOREGROUND" value="ffaa00"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STACK_HL2_ALT">
+		<value>
+			<option name="FOREGROUND" value="cccc22"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STACK_HL3">
+		<value>
+			<option name="FOREGROUND" value="55ffff"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STACK_HL3_ALT">
+		<value>
+			<option name="FOREGROUND" value="cccc22"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STACK_HL4">
+		<value>
+			<option name="FOREGROUND" value="55ff55"/>
+		</value>
+	</option>
+	<option baseAttributes="LIBGLOCAL_STRING_LITERAL" name="LIBGLOCAL_STACK_HL4_ALT">
+		<value>
+			<option name="FOREGROUND" value="ff5555"/>
+		</value>
+	</option>
+</list>

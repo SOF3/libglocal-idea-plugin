@@ -1,0 +1,78 @@
+{
+	parserClass="io.github.sof3.libglocal.idea.psi.LibglocalParser"
+	extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+	psiClassPrefix="Libglocal"
+	psiImplClassSuffix="Impl"
+	psiPackage="io.github.sof3.libglocal.idea.psi"
+	psiImplPackage="io.github.sof3.libglocal.idea.psi.impl"
+
+	elementTypeHolderClass="io.github.sof3.libglocal.idea.psi.LibglocalElements"
+	elementTypeClass="io.github.sof3.libglocal.idea.LibglocalElementType"
+	tokenTypeClass="io.github.sof3.libglocal.idea.LibglocalTokenType"
+
+	tokens=[
+		T_EMPTY_LINE="empty line"
+		T_COMMENT="comment"
+		T_INDENT_INDENT="increase indent"
+		T_INDENT_DEDENT="decrease indent"
+		T_INDENT_INHERIT="indent"
+		T_INDENT_INVALID="invalid indent"
+		T_LITERAL_INVALID_ESCAPE="invalid literal escape"
+		T_EOL="newline"
+
+		T_IDENTIFIER="identifier"
+		T_MODIFIER_ARG="$"
+		T_MODIFIER_DOC="*"
+		T_MODIFIER_VERSION="~"
+		T_ARG_REF_START="${"
+		T_MESSAGE_REF_START="#{"
+		T_SPAN_START="%{"
+		T_OPEN_BRACE="{" // only used in open brace
+		T_CLOSE_BRACE="}"
+
+		T_SPAN_TYPE="span type"
+		T_EQUALS="="
+		T_NUMBER="number"
+	]
+}
+
+/*
+About indentation:
+The lexer marks the indent of each non-cont line (including 0-byte indents) as a T_INDENT_INHERIT token.
+In addition, the lexer inserts T_INDENT_INDENT and pseudo_dedent tokens *before* the T_INDENT_INHERIT token to reflect
+the change in indentation level, where these two tokens are equivalent to '{' and '}' in JSON.
+ */
+
+libglocal_file ::= (block_lang | block_author | block_version)+ block_messages
+
+private pseudo_dedent ::= T_INDENT_DEDENT | <<eof>>
+private line_delim ::= T_EOL | <<eof>>
+
+block_lang ::= (K_BASE_LANG | K_LANG) T_IDENTIFIER element_literal_static line_delim
+block_author ::= K_AUTHOR element_literal_static line_delim
+block_version ::= K_VERSION T_IDENTIFIER line_delim
+block_messages ::= K_MESSAGES line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent]
+
+block_message_group ::= T_IDENTIFIER line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent]
+block_message ::= T_IDENTIFIER element_literal line_delim [T_INDENT_INDENT (block_modifier)* pseudo_dedent]
+block_modifier ::= modifier_content line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent]
+block_constraint ::= T_IDENTIFIER [element_literal_static] line_delim
+
+private modifier_content ::= (element_modifier_arg | element_modifier_doc | element_modifier_version)
+element_modifier_arg ::= T_MODIFIER_ARG T_IDENTIFIER [T_IDENTIFIER]
+element_modifier_doc ::= T_MODIFIER_DOC element_literal_static
+element_modifier_version ::= T_MODIFIER_VERSION T_IDENTIFIER
+
+element_literal ::= (literal_token)+
+private literal_token ::= literal_token_static | element_arg_ref | element_message_ref | element_span
+element_literal_static ::= (literal_token_static)+
+private literal_token_static ::= T_LITERAL_STRING | T_LITERAL_ESCAPE | T_CONT_NEWLINE | T_CONT_SPACE | T_CONT_CONCAT
+
+element_arg_ref ::= T_ARG_REF_START T_IDENTIFIER T_CLOSE_BRACE
+element_message_ref ::= T_MESSAGE_REF_START T_IDENTIFIER element_args_supplier T_CLOSE_BRACE
+element_args_supplier ::= element_args_entry*
+element_args_entry ::= T_IDENTIFIER T_EQUALS element_args_value
+element_args_value ::= T_NUMBER | T_IDENTIFIER | element_args_value_string
+element_args_value_string ::= T_OPEN_BRACE element_literal T_CLOSE_BRACE
+element_span ::= T_SPAN_START T_SPAN_TYPE element_literal T_CLOSE_BRACE

@@ -1,0 +1,51 @@
+<idea-plugin>
+	<id>io.github.sof3.libglocal.idea</id>
+	<name>libglocal Language File Support</name>
+
+	<version>0.2.0</version>
+	<vendor email="sofe2038@gmail.com" url="https://github.com/SOF3">SOFe</vendor>
+
+	<description><![CDATA[
+		Edit libglocal language files in your IDE
+		]]></description>
+
+	<change-notes><![CDATA[
+		<b>0.2.0</b>
+		<ul>
+			<li>.lang file type and syntax highlighting</li>
+		</ul>
+		]]>
+  </change-notes>
+
+	<!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+	<idea-version since-build="173.0"/>
+
+	<depends>com.intellij.modules.platform</depends>
+	<depends>com.intellij.modules.lang</depends>
+	<depends>com.jetbrains.php</depends>
+
+	<extensions defaultExtensionNs="com.intellij">
+		<fileTypeFactory implementation="io.github.sof3.libglocal.idea.LibglocalFileTypeFactory"/>
+		<lang.parserDefinition
+				language="libglocal"
+				implementationClass="io.github.sof3.libglocal.idea.LibglocalParserDefinition"/>
+		<!--<lang.syntaxHighlighterFactory-->
+				<!--language="libglocal"-->
+				<!--implementationClass="io.github.sof3.libglocal.idea.hl.LibglocalSyntaxHighlighterFactory"/>-->
+		<!--<colorSettingsPage implementation="io.github.sof3.libglocal.idea.hl.LibglocalColorSettingsPage"/>-->
+		<!--<additionalTextAttributes scheme="Default" file="colorSchemes/default.xml"/>-->
+		<!--<additionalTextAttributes scheme="Dracula" file="colorSchemes/dracula.xml"/>-->
+		<!--<annotator-->
+				<!--language="libglocal"-->
+				<!--implementationClass="io.github.sof3.libglocal.idea.annotator.SpanAnnotator"/>-->
+		<!--<psi.referenceContributor-->
+				<!--language="libglocal"-->
+				<!--implementation="io.github.sof3.libglocal.idea.ref.LibglocalReferenceContributor"/>-->
+		<!--<completion.contributor-->
+			<!--language="libglocal"-->
+			<!--implementationClass="io.github.sof3.libglocal.idea.ref.LibglocalCompletionContributor"/>-->
+	</extensions>
+
+	<actions>
+	</actions>
+</idea-plugin>
