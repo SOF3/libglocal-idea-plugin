@@ -32,4 +32,9 @@ public class LibglocalBlockConstraintImpl extends ASTWrapperPsiElement implement
     return findChildByClass(LibglocalElementLiteralStatic.class);
   }
 
+  @NotNull
+  public List<LibglocalBlockElement> getChildBlocks() {
+    return Utils.getChildBlocks(this);
+  }
+
 }

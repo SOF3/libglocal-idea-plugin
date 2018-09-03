@@ -10,6 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.sof3.libglocal.idea.psi.LibglocalElements.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.sof3.libglocal.idea.psi.*;
+import com.intellij.ide.projectView.PresentationData;
 
 public class LibglocalBlockMessagesImpl extends ASTWrapperPsiElement implements LibglocalBlockMessages {
 
@@ -36,6 +37,26 @@ public class LibglocalBlockMessagesImpl extends ASTWrapperPsiElement implements 
   @NotNull
   public List<LibglocalBlockMessageGroup> getBlockMessageGroupList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalBlockMessageGroup.class);
+  }
+
+  @NotNull
+  public List<LibglocalBlockElement> getChildBlocks() {
+    return Utils.getChildBlocks(this);
+  }
+
+  @NotNull
+  public List<LibglocalBlockMessage> getMessages() {
+    return Utils.getMessages(this);
+  }
+
+  @NotNull
+  public String getName() {
+    return Utils.getName(this);
+  }
+
+  @NotNull
+  public PresentationData getPresentation() {
+    return Utils.getPresentation(this);
   }
 
 }

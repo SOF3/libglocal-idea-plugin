@@ -32,4 +32,14 @@ public class LibglocalBlockAuthorImpl extends ASTWrapperPsiElement implements Li
     return findNotNullChildByClass(LibglocalElementLiteralStatic.class);
   }
 
+  @NotNull
+  public List<LibglocalBlockElement> getChildBlocks() {
+    return Utils.getChildBlocks(this);
+  }
+
+  @NotNull
+  public String getName() {
+    return Utils.getName(this);
+  }
+
 }

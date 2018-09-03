@@ -11,41 +11,19 @@ import static io.github.sof3.libglocal.idea.psi.LibglocalElements.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.sof3.libglocal.idea.psi.*;
 
-public class LibglocalBlockLangImpl extends ASTWrapperPsiElement implements LibglocalBlockLang {
+public class LibglocalElementMessageIdImpl extends ASTWrapperPsiElement implements LibglocalElementMessageId {
 
-  public LibglocalBlockLangImpl(@NotNull ASTNode node) {
+  public LibglocalElementMessageIdImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull LibglocalVisitor visitor) {
-    visitor.visitBlockLang(this);
+    visitor.visitElementMessageId(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof LibglocalVisitor) accept((LibglocalVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public LibglocalElementLangId getElementLangId() {
-    return findNotNullChildByClass(LibglocalElementLangId.class);
-  }
-
-  @Override
-  @NotNull
-  public LibglocalElementLangName getElementLangName() {
-    return findNotNullChildByClass(LibglocalElementLangName.class);
-  }
-
-  @NotNull
-  public List<LibglocalBlockElement> getChildBlocks() {
-    return Utils.getChildBlocks(this);
-  }
-
-  @NotNull
-  public String getName() {
-    return Utils.getName(this);
   }
 
 }

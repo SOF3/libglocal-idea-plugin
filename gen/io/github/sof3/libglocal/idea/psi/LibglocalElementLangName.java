@@ -5,12 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LibglocalBlockConstraint extends LibglocalBlockElement {
-
-  @Nullable
-  LibglocalElementLiteralStatic getElementLiteralStatic();
+public interface LibglocalElementLangName extends PsiElement {
 
   @NotNull
-  List<LibglocalBlockElement> getChildBlocks();
+  LibglocalElementLiteralStatic getElementLiteralStatic();
 
 }

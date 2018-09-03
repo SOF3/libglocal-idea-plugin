@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LibglocalBlockModifier extends PsiElement {
+public interface LibglocalBlockModifier extends LibglocalBlockElement {
 
   @NotNull
   List<LibglocalBlockConstraint> getBlockConstraintList();
@@ -18,5 +18,11 @@ public interface LibglocalBlockModifier extends PsiElement {
 
   @Nullable
   LibglocalElementModifierVersion getElementModifierVersion();
+
+  @NotNull
+  List<LibglocalBlockElement> getChildBlocks();
+
+  @NotNull
+  List<LibglocalBlockConstraint> getConstraints();
 
 }

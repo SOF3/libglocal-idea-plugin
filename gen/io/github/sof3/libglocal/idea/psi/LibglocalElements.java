@@ -23,8 +23,11 @@ public interface LibglocalElements {
   IElementType ELEMENT_ARGS_VALUE = new LibglocalElementType("ELEMENT_ARGS_VALUE");
   IElementType ELEMENT_ARGS_VALUE_STRING = new LibglocalElementType("ELEMENT_ARGS_VALUE_STRING");
   IElementType ELEMENT_ARG_REF = new LibglocalElementType("ELEMENT_ARG_REF");
+  IElementType ELEMENT_LANG_ID = new LibglocalElementType("ELEMENT_LANG_ID");
+  IElementType ELEMENT_LANG_NAME = new LibglocalElementType("ELEMENT_LANG_NAME");
   IElementType ELEMENT_LITERAL = new LibglocalElementType("ELEMENT_LITERAL");
   IElementType ELEMENT_LITERAL_STATIC = new LibglocalElementType("ELEMENT_LITERAL_STATIC");
+  IElementType ELEMENT_MESSAGE_ID = new LibglocalElementType("ELEMENT_MESSAGE_ID");
   IElementType ELEMENT_MESSAGE_REF = new LibglocalElementType("ELEMENT_MESSAGE_REF");
   IElementType ELEMENT_MODIFIER_ARG = new LibglocalElementType("ELEMENT_MODIFIER_ARG");
   IElementType ELEMENT_MODIFIER_DOC = new LibglocalElementType("ELEMENT_MODIFIER_DOC");
@@ -104,11 +107,20 @@ public interface LibglocalElements {
       else if (type == ELEMENT_ARG_REF) {
         return new LibglocalElementArgRefImpl(node);
       }
+      else if (type == ELEMENT_LANG_ID) {
+        return new LibglocalElementLangIdImpl(node);
+      }
+      else if (type == ELEMENT_LANG_NAME) {
+        return new LibglocalElementLangNameImpl(node);
+      }
       else if (type == ELEMENT_LITERAL) {
         return new LibglocalElementLiteralImpl(node);
       }
       else if (type == ELEMENT_LITERAL_STATIC) {
         return new LibglocalElementLiteralStaticImpl(node);
+      }
+      else if (type == ELEMENT_MESSAGE_ID) {
+        return new LibglocalElementMessageIdImpl(node);
       }
       else if (type == ELEMENT_MESSAGE_REF) {
         return new LibglocalElementMessageRefImpl(node);

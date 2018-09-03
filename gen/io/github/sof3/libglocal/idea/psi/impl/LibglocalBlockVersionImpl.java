@@ -26,4 +26,14 @@ public class LibglocalBlockVersionImpl extends ASTWrapperPsiElement implements L
     else super.accept(visitor);
   }
 
+  @NotNull
+  public List<LibglocalBlockElement> getChildBlocks() {
+    return Utils.getChildBlocks(this);
+  }
+
+  @NotNull
+  public String getName() {
+    return Utils.getName(this);
+  }
+
 }

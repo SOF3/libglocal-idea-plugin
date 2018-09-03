@@ -62,11 +62,20 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     else if (t == ELEMENT_ARGS_VALUE_STRING) {
       r = element_args_value_string(b, 0);
     }
+    else if (t == ELEMENT_LANG_ID) {
+      r = element_lang_id(b, 0);
+    }
+    else if (t == ELEMENT_LANG_NAME) {
+      r = element_lang_name(b, 0);
+    }
     else if (t == ELEMENT_LITERAL) {
       r = element_literal(b, 0);
     }
     else if (t == ELEMENT_LITERAL_STATIC) {
       r = element_literal_static(b, 0);
+    }
+    else if (t == ELEMENT_MESSAGE_ID) {
+      r = element_message_id(b, 0);
     }
     else if (t == ELEMENT_MESSAGE_REF) {
       r = element_message_ref(b, 0);
@@ -129,15 +138,15 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (K_BASE_LANG | K_LANG) T_IDENTIFIER element_literal_static line_delim
+  // (K_BASE_LANG | K_LANG) element_lang_id element_lang_name line_delim
   public static boolean block_lang(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_lang")) return false;
     if (!nextTokenIs(b, "<block lang>", K_BASE_LANG, K_LANG)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, BLOCK_LANG, "<block lang>");
     r = block_lang_0(b, l + 1);
-    r = r && consumeToken(b, T_IDENTIFIER);
-    r = r && element_literal_static(b, l + 1);
+    r = r && element_lang_id(b, l + 1);
+    r = r && element_lang_name(b, l + 1);
     r = r && line_delim(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -153,13 +162,13 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // T_IDENTIFIER element_literal line_delim [T_INDENT_INDENT (block_modifier)* pseudo_dedent]
+  // element_message_id element_literal line_delim [T_INDENT_INDENT (block_modifier)* pseudo_dedent]
   public static boolean block_message(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_message")) return false;
     if (!nextTokenIs(b, T_IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, T_IDENTIFIER);
+    r = element_message_id(b, l + 1);
     r = r && element_literal(b, l + 1);
     r = r && line_delim(b, l + 1);
     r = r && block_message_3(b, l + 1);
@@ -208,13 +217,13 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // T_IDENTIFIER line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent]
+  // element_message_id line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent]
   public static boolean block_message_group(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_message_group")) return false;
     if (!nextTokenIs(b, T_IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, T_IDENTIFIER);
+    r = element_message_id(b, l + 1);
     r = r && line_delim(b, l + 1);
     r = r && block_message_group_2(b, l + 1);
     exit_section_(b, m, BLOCK_MESSAGE_GROUP, r);
@@ -446,6 +455,29 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // T_IDENTIFIER
+  public static boolean element_lang_id(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_lang_id")) return false;
+    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, T_IDENTIFIER);
+    exit_section_(b, m, ELEMENT_LANG_ID, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // element_literal_static
+  public static boolean element_lang_name(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_lang_name")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, ELEMENT_LANG_NAME, "<element lang name>");
+    r = element_literal_static(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
   // (literal_token)+
   public static boolean element_literal(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "element_literal")) return false;
@@ -494,6 +526,18 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = literal_token_static(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // T_IDENTIFIER
+  public static boolean element_message_id(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_message_id")) return false;
+    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, T_IDENTIFIER);
+    exit_section_(b, m, ELEMENT_MESSAGE_ID, r);
     return r;
   }
 

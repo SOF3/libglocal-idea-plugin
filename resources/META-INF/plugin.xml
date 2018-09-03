@@ -1,6 +1,6 @@
 <idea-plugin>
 	<id>io.github.sof3.libglocal.idea</id>
-	<name>libglocal Language File Support</name>
+	<name>Libglocal .lang Support</name>
 
 	<version>0.2.0</version>
 	<vendor email="sofe2038@gmail.com" url="https://github.com/SOF3">SOFe</vendor>
@@ -15,7 +15,7 @@
 			<li>.lang file type and syntax highlighting</li>
 		</ul>
 		]]>
-  </change-notes>
+	</change-notes>
 
 	<!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
 	<idea-version since-build="173.0"/>
@@ -28,22 +28,25 @@
 		<fileTypeFactory implementation="io.github.sof3.libglocal.idea.LibglocalFileTypeFactory"/>
 		<lang.parserDefinition
 				language="libglocal"
-				implementationClass="io.github.sof3.libglocal.idea.LibglocalParserDefinition"/>
-		<!--<lang.syntaxHighlighterFactory-->
-				<!--language="libglocal"-->
-				<!--implementationClass="io.github.sof3.libglocal.idea.hl.LibglocalSyntaxHighlighterFactory"/>-->
-		<!--<colorSettingsPage implementation="io.github.sof3.libglocal.idea.hl.LibglocalColorSettingsPage"/>-->
+				implementationClass="io.github.sof3.libglocal.idea.parser.LibglocalParserDefinition"/>
+		<lang.syntaxHighlighterFactory
+				language="libglocal"
+				implementationClass="io.github.sof3.libglocal.idea.LibglocalHlFactory"/>
+		<colorSettingsPage implementation="io.github.sof3.libglocal.idea.LibglocalColorSettingsPage"/>
 		<!--<additionalTextAttributes scheme="Default" file="colorSchemes/default.xml"/>-->
 		<!--<additionalTextAttributes scheme="Dracula" file="colorSchemes/dracula.xml"/>-->
 		<!--<annotator-->
-				<!--language="libglocal"-->
-				<!--implementationClass="io.github.sof3.libglocal.idea.annotator.SpanAnnotator"/>-->
+		<!--language="libglocal"-->
+		<!--implementationClass="io.github.sof3.libglocal.idea.annotator.SpanAnnotator"/>-->
 		<!--<psi.referenceContributor-->
-				<!--language="libglocal"-->
-				<!--implementation="io.github.sof3.libglocal.idea.ref.LibglocalReferenceContributor"/>-->
+		<!--language="libglocal"-->
+		<!--implementation="io.github.sof3.libglocal.idea.ref.LibglocalReferenceContributor"/>-->
 		<!--<completion.contributor-->
-			<!--language="libglocal"-->
-			<!--implementationClass="io.github.sof3.libglocal.idea.ref.LibglocalCompletionContributor"/>-->
+		<!--language="libglocal"-->
+		<!--implementationClass="io.github.sof3.libglocal.idea.ref.LibglocalCompletionContributor"/>-->
+		<lang.psiStructureViewFactory
+				language="libglocal"
+				implementationClass="io.github.sof3.libglocal.idea.LibglocalSVFactory"/>
 	</extensions>
 
 	<actions>

@@ -1,46 +1,42 @@
 package io.github.sof3.libglocal.idea
 
 import com.intellij.extapi.psi.PsiFileBase
-import com.intellij.lang.Language
 import com.intellij.openapi.fileTypes.FileType
-import com.intellij.openapi.fileTypes.FileTypeConsumer
-import com.intellij.openapi.fileTypes.FileTypeFactory
-import com.intellij.openapi.fileTypes.LanguageFileType
 import com.intellij.psi.FileViewProvider
-import javax.swing.Icon
+import io.github.sof3.libglocal.idea.psi.*
 
-class LibglocalFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, LibglocalLanguage) {
+class LibglocalFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, LibglocalLanguage), LibglocalBlockElement {
+	override val childBlocks: List<LibglocalBlockElement>
+		get() {
+//			val list = mutableListOf<LibglocalBlockElement>()
+//			for (child in children) {
+//				if (child is LibglocalBlockElement) {
+//					list.add(child)
+//				}
+//			}
+//			return list
+			return listOfNotNull(messagesBlock)
+		}
+
+	val langBlock: LibglocalBlockLang?
+		get() {
+			val blocks = children.filterIsInstance(LibglocalBlockLang::class.java)
+			return if (blocks.isNotEmpty()) blocks[0] else null
+		}
+	val authorBlocks: List<LibglocalBlockAuthor>
+		get() = children.filterIsInstance(LibglocalBlockAuthor::class.java)
+	val versionBlock: LibglocalBlockVersion?
+		get() {
+			val blocks = children.filterIsInstance(LibglocalBlockVersion::class.java)
+			return if (blocks.isNotEmpty()) blocks[0] else null
+		}
+	val messagesBlock: LibglocalBlockMessages?
+		get() {
+			val blocks = children.filterIsInstance(LibglocalBlockMessages::class.java)
+			return if (blocks.isNotEmpty()) blocks[0] else null
+		}
+
 	override fun getFileType(): FileType {
 		return LibglocalFileType
-	}
-}
-
-object LibglocalFileType : LanguageFileType(LibglocalLanguage) {
-	override fun getName(): String {
-		return "libglocal lang"
-	}
-
-	override fun getDescription(): String {
-		return "Language files for libglocal"
-	}
-
-	override fun getDefaultExtension(): String {
-		return "lang"
-	}
-
-	override fun getIcon(): Icon? {
-		return ICON_16PX
-	}
-}
-
-class LibglocalFileTypeFactory : FileTypeFactory() {
-	override fun createFileTypes(consumer: FileTypeConsumer) {
-		consumer.consume(LibglocalFileType, "lang")
-	}
-}
-
-object LibglocalLanguage : Language("libglocal") {
-	override fun getDisplayName(): String {
-		return "libglocal language file"
 	}
 }

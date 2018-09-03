@@ -1,131 +1,7 @@
-package io.github.sof3.libglocal.idea
+package io.github.sof3.libglocal.idea.parser
 
-import com.intellij.lexer.LexerBase
 import com.intellij.psi.TokenType
-import com.intellij.psi.tree.IElementType
-import io.github.sof3.libglocal.idea.LibglocalLexer.Companion.badToken
 import io.github.sof3.libglocal.idea.psi.LibglocalElements
-
-class LibglocalLexer : LexerBase() {
-	data class WhitespaceResult(val whitespace: CharSequence, val trimmed: CharSequence)
-
-	companion object {
-		internal fun readWhitespace(string: CharSequence, charSet: CharArray = charArrayOf(' ', '\t')): WhitespaceResult {
-			val whiteSize = string.indexOfFirst { c -> !charSet.contains(c) }
-			try{
-				return WhitespaceResult(string.subSequence(0, whiteSize), string.subSequence(whiteSize, string.length))
-			}catch(e: IndexOutOfBoundsException){
-				println("whiteSize=$whiteSize, string.length=${string.length}")
-				throw e
-			}
-		}
-
-		internal fun badToken() = listOf(FutureToken(TokenType.BAD_CHARACTER, 1))
-	}
-
-	private var myState = LexerState.LINE_START
-	private var myTokenType: IElementType? = null
-	private var myTokenStart = 0
-	private var myTokenEnd = 0
-	private var myBuffer: CharSequence? = null
-	private var myBufferEnd = 0
-
-	internal var nextState = LexerState.LINE_START
-
-	var reachedMessages = false
-
-	var expectedIdentifiers = 0
-
-	val indentStack = mutableListOf<CharSequence>()
-	private val futureTokens = mutableListOf<FutureToken>()
-
-	private var hadError = false
-	private var complete = false
-
-	private fun realAdvance(): List<FutureToken> {
-		val buffer = myBuffer!!.subSequence(myTokenStart, myBufferEnd)
-
-		return nextState.advance(this, buffer)
-	}
-
-	override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
-		myTokenStart = startOffset
-		myTokenEnd = startOffset
-		myBufferEnd = endOffset
-
-		myState = LexerState.values()[initialState]
-		myBuffer = buffer
-		reset()
-
-		myTokenType = null
-	}
-
-	override fun advance() {
-		locateToken()
-		myTokenType = null
-	}
-
-	private fun reset() {
-		myTokenType = TokenType.BAD_CHARACTER
-	}
-
-	private fun locateToken() {
-		if (myTokenType != null) return
-		myTokenStart = myTokenEnd
-		if (hadError) return
-
-		myState = nextState
-		if (complete) return
-
-		if (futureTokens.size > 0) {
-			val (type, length) = futureTokens.removeAt(0)
-			myTokenType = type
-			myTokenEnd = myTokenStart + length
-			return
-		}
-
-		if (myTokenStart == myBufferEnd) {
-			complete = true
-			return
-		}
-
-		var tokens: List<FutureToken>
-		do {
-			tokens = realAdvance()
-		} while (tokens.isEmpty()) // empty return value implies retry
-		futureTokens.addAll(tokens)
-		if (futureTokens.size > 0) {
-			val (type, length) = futureTokens.removeAt(0)
-			myTokenType = type
-			myTokenEnd = myTokenStart + length
-		}
-	}
-
-	override fun getState(): Int {
-		locateToken()
-		return myState.ordinal
-	}
-
-	override fun getTokenStart(): Int {
-		locateToken()
-		return myTokenStart
-	}
-
-	override fun getTokenEnd(): Int {
-		locateToken()
-		return myTokenEnd
-	}
-
-	override fun getBufferEnd(): Int = myBufferEnd
-
-	override fun getBufferSequence(): CharSequence = myBuffer!!
-
-	override fun getTokenType(): IElementType? {
-		locateToken()
-		println("myTokenType = $myTokenType \"${tokenSequence.replace(Regex("\n"), "\\\\n")}\"")
-		return myTokenType
-	}
-}
 
 internal enum class LexerState {
 	LINE_START {
@@ -151,7 +27,7 @@ internal enum class LexerState {
 			}
 
 			// is an indent
-			lexer.nextState = LexerState.COMMAND
+			lexer.nextState = COMMAND
 
 			if (indentStack.isNotEmpty() && indent.toString() == indentStack.last().toString()) {
 				return listOf(FutureToken(LibglocalElements.T_INDENT_INHERIT, indent.length))
@@ -191,40 +67,40 @@ internal enum class LexerState {
 				var match: MatchResult? = LexerPatterns.BASE_LANG.find(buffer)
 				if (match != null) {
 					lexer.expectedIdentifiers = 1
-					lexer.nextState = LexerState.SEPARATOR
+					lexer.nextState = SEPARATOR
 					return listOf(FutureToken(LibglocalElements.K_BASE_LANG, match.value.length))
 				}
 				match = LexerPatterns.LANG.find(buffer)
 				if (match != null) {
 					lexer.expectedIdentifiers = 1
-					lexer.nextState = LexerState.SEPARATOR
+					lexer.nextState = SEPARATOR
 					return listOf(FutureToken(LibglocalElements.K_LANG, match.value.length))
 				}
 				match = LexerPatterns.AUTHOR.find(buffer)
 				if (match != null) {
-					lexer.nextState = LexerState.SEPARATOR
+					lexer.nextState = SEPARATOR
 					return listOf(FutureToken(LibglocalElements.K_AUTHOR, match.value.length))
 				}
 				match = LexerPatterns.VERSION.find(buffer)
 				if (match != null) {
 					lexer.expectedIdentifiers = 1
-					lexer.nextState = LexerState.SEPARATOR
+					lexer.nextState = SEPARATOR
 					return listOf(FutureToken(LibglocalElements.K_VERSION, match.value.length))
 				}
 				match = LexerPatterns.MESSAGES.find(buffer)
 				if (match != null) {
-					lexer.nextState = LexerState.SEPARATOR
+					lexer.nextState = SEPARATOR
 					lexer.reachedMessages = true
 					return listOf(FutureToken(LibglocalElements.K_MESSAGES, match.value.length))
 				}
 
-				return badToken()
+				return LibglocalLexer.badToken()
 			} else {
 				if (buffer[0] == '$') {
 					val argToken = FutureToken(LibglocalElements.T_MODIFIER_ARG, 1)
 					val (white, _) = LibglocalLexer.readWhitespace(buffer.subSequence(1, buffer.length))
 					lexer.expectedIdentifiers = 2
-					lexer.nextState = LexerState.IDENTIFIER
+					lexer.nextState = IDENTIFIER
 					return if (white.isNotEmpty())
 						listOf(argToken, FutureToken(TokenType.WHITE_SPACE, white.length))
 					else
@@ -233,7 +109,7 @@ internal enum class LexerState {
 				if (buffer[0] == '*') {
 					val argToken = FutureToken(LibglocalElements.T_MODIFIER_DOC, 1)
 					val (white, _) = LibglocalLexer.readWhitespace(buffer.subSequence(1, buffer.length))
-					lexer.nextState = LexerState.LITERAL
+					lexer.nextState = LITERAL
 					return if (white.isNotEmpty())
 						listOf(argToken, FutureToken(TokenType.WHITE_SPACE, white.length))
 					else
@@ -243,16 +119,16 @@ internal enum class LexerState {
 					val argToken = FutureToken(LibglocalElements.T_MODIFIER_VERSION, 1)
 					val (white, _) = LibglocalLexer.readWhitespace(buffer.subSequence(1, buffer.length))
 					lexer.expectedIdentifiers = 1
-					lexer.nextState = LexerState.IDENTIFIER
+					lexer.nextState = IDENTIFIER
 					return if (white.isNotEmpty())
 						listOf(argToken, FutureToken(TokenType.WHITE_SPACE, white.length))
 					else
 						listOf(argToken)
 				}
 
-				val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return badToken()
+				val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
 
-				lexer.nextState = LexerState.SEPARATOR
+				lexer.nextState = SEPARATOR
 				return listOf(FutureToken(LibglocalElements.T_IDENTIFIER, match.value.length))
 			}
 		}
@@ -263,23 +139,23 @@ internal enum class LexerState {
 			val (white, rem) = LibglocalLexer.readWhitespace(buffer)
 
 			if (rem.startsWith("\r\n") || rem[0] == '\n') {
-				lexer.nextState = LexerState.LINE_START
+				lexer.nextState = LINE_START
 				return listOf(FutureToken(LibglocalElements.T_EOL, white.length + (if (rem[0] == '\r') 2 else 1)))
 			}
 			if (white.isEmpty()) {
-				return badToken()
+				return LibglocalLexer.badToken()
 			}
 
-			lexer.nextState = if (lexer.expectedIdentifiers > 0) LexerState.IDENTIFIER else LexerState.LITERAL
+			lexer.nextState = if (lexer.expectedIdentifiers > 0) IDENTIFIER else LITERAL
 			return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 		}
 	},
 
 	IDENTIFIER {
 		override fun advance(lexer: LibglocalLexer, buffer: CharSequence): List<FutureToken> {
-			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return badToken()
+			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
 			lexer.expectedIdentifiers--
-			lexer.nextState = LexerState.SEPARATOR
+			lexer.nextState = SEPARATOR
 			return listOf(FutureToken(LibglocalElements.T_IDENTIFIER, match.value.length))
 		}
 	},
@@ -298,7 +174,7 @@ internal enum class LexerState {
 			if (strLen == -1) strLen = buffer.length
 			if (strLen == 0) {
 				if (buffer[0] == '\r' || buffer[0] == '\n') {
-					lexer.nextState = LexerState.LINE_START
+					lexer.nextState = LINE_START
 					return listOf(FutureToken(LibglocalElements.T_EOL, if (buffer[0] == '\r') 2 else 1))
 				}
 
@@ -327,7 +203,7 @@ internal enum class LexerState {
 						return listOf(FutureToken(LibglocalElements.T_LITERAL_STRING, 1))
 					}
 
-					lexer.nextState = LexerState.ARG_REF_NAME
+					lexer.nextState = ARG_REF_NAME
 					return listOf(FutureToken(LibglocalElements.T_ARG_REF_START, 2))
 				}
 
@@ -336,7 +212,7 @@ internal enum class LexerState {
 						return listOf(FutureToken(LibglocalElements.T_LITERAL_STRING, 1))
 					}
 
-					lexer.nextState = LexerState.MESSAGE_REF_NAME
+					lexer.nextState = MESSAGE_REF_NAME
 					return listOf(FutureToken(LibglocalElements.T_MESSAGE_REF_START, 2))
 				}
 
@@ -345,7 +221,7 @@ internal enum class LexerState {
 						return listOf(FutureToken(LibglocalElements.T_LITERAL_STRING, 1))
 					}
 
-					lexer.nextState = LexerState.SPAN_NAME
+					lexer.nextState = SPAN_NAME
 					return listOf(FutureToken(LibglocalElements.T_SPAN_START, 2))
 				}
 
@@ -364,8 +240,8 @@ internal enum class LexerState {
 				return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 			}
 
-			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return badToken()
-			lexer.nextState = LexerState.CLOSE_TO_LITERAL
+			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
+			lexer.nextState = CLOSE_TO_LITERAL
 			return listOf(FutureToken(LibglocalElements.T_IDENTIFIER, match.value.length))
 		}
 	},
@@ -375,8 +251,8 @@ internal enum class LexerState {
 			val (white, _) = LibglocalLexer.readWhitespace(buffer)
 			if (white.isNotEmpty()) return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 
-			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return badToken()
-			lexer.nextState = LexerState.ARG_LIST_RESET
+			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
+			lexer.nextState = ARG_LIST_RESET
 			return listOf(FutureToken(LibglocalElements.T_IDENTIFIER, match.value.length))
 		}
 	},
@@ -394,7 +270,7 @@ internal enum class LexerState {
 				lexer.nextState = ARG_LIST_VALUE
 				return listOf(FutureToken(LibglocalElements.T_EQUALS, 1))
 			}
-			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return badToken()
+			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
 			return listOf(FutureToken(LibglocalElements.T_IDENTIFIER, match.value.length))
 		}
 	},
@@ -420,7 +296,7 @@ internal enum class LexerState {
 				return listOf(FutureToken(LibglocalElements.T_OPEN_BRACE, 1))
 			}
 
-			return badToken()
+			return LibglocalLexer.badToken()
 		}
 	},
 
@@ -430,9 +306,9 @@ internal enum class LexerState {
 			if (white.isNotEmpty()) return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 
 
-			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return badToken()
+			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
 			lexer.expectedIdentifiers = 0
-			lexer.nextState = LexerState.SEPARATOR
+			lexer.nextState = SEPARATOR
 			return listOf(FutureToken(LibglocalElements.T_SPAN_TYPE, match.value.length))
 		}
 	},
@@ -443,10 +319,10 @@ internal enum class LexerState {
 			if (white.isNotEmpty()) return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 
 			if (buffer[0] != '}') {
-				return badToken()
+				return LibglocalLexer.badToken()
 			}
 
-			lexer.nextState = LexerState.LITERAL
+			lexer.nextState = LITERAL
 			return listOf(FutureToken(LibglocalElements.T_CLOSE_BRACE, 1))
 		}
 	},
@@ -464,5 +340,3 @@ internal object LexerPatterns {
 	val IDENTIFIER = Regex("^[A-Za-z0-9_:\\-\\.]+")
 	val NUMBER = Regex("^-?[0-9]+(\\.[0-9]+)?")
 }
-
-internal data class FutureToken(val type: IElementType, val length: Int)
