@@ -43,6 +43,9 @@
 		<!--<completion.contributor-->
 		<!--language="libglocal"-->
 		<!--implementationClass="io.github.sof3.libglocal.idea.ref.LibglocalCompletionContributor"/>-->
+		<lang.braceMatcher
+				language="libglocal"
+				implementationClass="io.github.sof3.libglocal.idea.LibglocalPairedBraceMatcher"/>
 		<lang.psiStructureViewFactory
 				language="libglocal"
 				implementationClass="io.github.sof3.libglocal.idea.LibglocalSVFactory"/>
