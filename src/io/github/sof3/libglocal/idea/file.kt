@@ -21,7 +21,5 @@ class LibglocalFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, 
 	val messagesBlock: LibglocalBlockMessages?
 		get() = PsiTreeUtil.getChildOfType(this, LibglocalBlockMessages::class.java)
 
-	override fun getFileType(): FileType {
-		return LibglocalFileType
-	}
+	override fun getFileType(): FileType = LibglocalFileType
 }

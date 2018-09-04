@@ -5,7 +5,7 @@ import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import io.github.sof3.libglocal.idea.psi.LibglocalElements
 
-class LibglocalLexer : LexerBase() {
+class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
 	data class WhitespaceResult(val whitespace: CharSequence, val trimmed: CharSequence)
 
 	companion object {
@@ -95,6 +95,11 @@ class LibglocalLexer : LexerBase() {
 		do {
 			tokens = realAdvance()
 		} while (tokens.isEmpty()) // empty return value implies retry
+
+		if (highlightingLexer) {
+			tokens = tokens.filter { it.length > 0 }
+		}
+
 		futureTokens.addAll(tokens)
 		if (futureTokens.size > 0) {
 			val (type, length) = futureTokens.removeAt(0)
@@ -124,7 +129,7 @@ class LibglocalLexer : LexerBase() {
 
 	override fun getTokenType(): IElementType? {
 		locateToken()
-//		println("myTokenType = $myTokenType \"${tokenSequence.replace(Regex("\n"), "\\\\n")}\"")
+		println("isHighlightingLexer: $highlightingLexer, myTokenType = $myTokenType \"${tokenSequence.replace(Regex("\n"), "\\\\n")}\"")
 		return myTokenType
 	}
 }

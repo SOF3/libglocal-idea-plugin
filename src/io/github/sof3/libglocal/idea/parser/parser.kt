@@ -24,7 +24,7 @@ class LibglocalParserDefinition : ParserDefinition {
 	private val myLiteralElements = TokenSet.create(LibglocalElements.ELEMENT_LITERAL)
 	private val myFileNodeType = IFileElementType(LibglocalLanguage)
 
-	override fun createLexer(project: Project?): Lexer = LibglocalLexer()
+	override fun createLexer(project: Project?): Lexer = LibglocalLexer(false)
 
 	override fun getWhitespaceTokens() = myWhitespaceTokens
 

@@ -3,18 +3,18 @@ package io.github.sof3.libglocal.idea.psi
 import com.intellij.psi.NavigatablePsiElement
 import com.intellij.psi.PsiElement
 
-interface LibglocalBlockElement: NavigatablePsiElement {
+interface LibglocalBlockElement : NavigatablePsiElement {
 	val childBlocks: List<LibglocalBlockElement>
 }
 
-interface LibglocalMessageParentElement: PsiElement {
+interface LibglocalMessageParentElement : PsiElement {
 	val messages: List<LibglocalBlockMessage>
 }
 
-interface LibglocalNamedBlockElement: PsiElement {
+interface LibglocalNamedBlockElement : PsiElement {
 	val name: String?
 }
 
-interface LibglocalModifierBlock: LibglocalBlockElement {
+interface LibglocalModifierBlock : LibglocalBlockElement {
 	val constraints: List<LibglocalBlockConstraint>
 }

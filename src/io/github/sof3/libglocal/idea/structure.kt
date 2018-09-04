@@ -13,23 +13,15 @@ import io.github.sof3.libglocal.idea.psi.LibglocalBlockElement
 import java.lang.Integer.min
 
 class LibglocalSVFactory : PsiStructureViewFactory {
-	override fun getStructureViewBuilder(file: PsiFile): StructureViewBuilder? {
-		return object : TreeBasedStructureViewBuilder() {
-			override fun createStructureViewModel(editor: Editor?): StructureViewModel {
-				return LibglocalSVModel(file)
-			}
-		}
+	override fun getStructureViewBuilder(file: PsiFile): StructureViewBuilder? = object : TreeBasedStructureViewBuilder() {
+		override fun createStructureViewModel(editor: Editor?): StructureViewModel = LibglocalSVModel(file)
 	}
 }
 
 class LibglocalSVModel(file: PsiFile) : StructureViewModelBase(file, LibglocalSVElement(file)), StructureViewModel.ElementInfoProvider {
-	override fun isAlwaysShowsPlus(element: StructureViewTreeElement?): Boolean {
-		return false
-	}
+	override fun isAlwaysShowsPlus(element: StructureViewTreeElement?) = false
 
-	override fun isAlwaysLeaf(element: StructureViewTreeElement?): Boolean {
-		return false
-	}
+	override fun isAlwaysLeaf(element: StructureViewTreeElement?) = false
 }
 
 class LibglocalSVElement(private val element: NavigatablePsiElement) : StructureViewTreeElement, SortableTreeElement {

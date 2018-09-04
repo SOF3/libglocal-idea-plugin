@@ -7,21 +7,13 @@ import com.intellij.openapi.fileTypes.LanguageFileType
 import javax.swing.Icon
 
 object LibglocalFileType : LanguageFileType(LibglocalLanguage) {
-	override fun getName(): String {
-		return "libglocal lang"
-	}
+	override fun getName() = "Libglocal lang"
 
-	override fun getDescription(): String {
-		return "Language files for libglocal"
-	}
+	override fun getDescription() = "Libglocal language file"
 
-	override fun getDefaultExtension(): String {
-		return "lang"
-	}
+	override fun getDefaultExtension() = "lang"
 
-	override fun getIcon(): Icon? {
-		return Icons.LIBGLOCAL_16PX
-	}
+	override fun getIcon(): Icon? = Icons.LIBGLOCAL_16PX
 }
 
 class LibglocalFileTypeFactory : FileTypeFactory() {
@@ -31,7 +23,5 @@ class LibglocalFileTypeFactory : FileTypeFactory() {
 }
 
 object LibglocalLanguage : Language("libglocal") {
-	override fun getDisplayName(): String {
-		return "libglocal language file"
-	}
+	override fun getDisplayName() = "libglocal language file"
 }

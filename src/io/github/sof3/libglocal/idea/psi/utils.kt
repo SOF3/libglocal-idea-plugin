@@ -7,21 +7,13 @@ import com.intellij.ide.projectView.PresentationData
 import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.util.PsiTreeUtil
 
-internal fun getMessages(e: LibglocalBlockMessages): List<LibglocalBlockMessage> {
-	return e.children.filterIsInstance(LibglocalBlockMessage::class.java)
-}
+internal fun getMessages(e: LibglocalBlockMessages): List<LibglocalBlockMessage> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalBlockMessage::class.java)
 
-internal fun getMessages(e: LibglocalBlockMessageGroup): List<LibglocalBlockMessage> {
-	return e.children.filterIsInstance(LibglocalBlockMessage::class.java)
-}
+internal fun getMessages(e: LibglocalBlockMessageGroup): List<LibglocalBlockMessage> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalBlockMessage::class.java)
 
-internal fun getModifiers(e: LibglocalBlockMessage): List<LibglocalModifierBlock> {
-	return PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalModifierBlock::class.java)
-}
+internal fun getModifiers(e: LibglocalBlockMessage): List<LibglocalModifierBlock> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalModifierBlock::class.java)
 
-internal fun getConstraints(e: LibglocalModifierBlock): List<LibglocalBlockConstraint> {
-	return e.children.filterIsInstance(LibglocalBlockConstraint::class.java)
-}
+internal fun getConstraints(e: LibglocalModifierBlock): List<LibglocalBlockConstraint> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalBlockConstraint::class.java)
 
 
 internal fun getChildBlocks(e: LibglocalBlockLang): List<LibglocalBlockElement> = emptyList()
@@ -58,6 +50,7 @@ internal fun getName(e: LibglocalBlockAuthor) = e.node.findChildByType(Libglocal
 
 internal fun getName(e: LibglocalBlockVersion) = e.node.findChildByType(LibglocalElements.T_IDENTIFIER)?.text
 		?: "???"
+
 internal fun getName(e: LibglocalBlockRequire) = e.node.findChildByType(LibglocalElements.T_IDENTIFIER)?.text
 		?: "???"
 

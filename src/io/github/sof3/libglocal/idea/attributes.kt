@@ -8,9 +8,7 @@ import io.github.sof3.libglocal.idea.psi.LibglocalElements as E
 
 
 object Attributes {
-	private fun create(name: String, fallback: TextAttributesKey?): TextAttributesKey {
-		return TextAttributesKey.createTextAttributesKey(name, fallback)
-	}
+	private fun create(name: String, fallback: TextAttributesKey?) = TextAttributesKey.createTextAttributesKey(name, fallback)
 
 	val COMMENT = create("LIBGLOCAL_COMMENT", D.LINE_COMMENT)
 	val KEYWORD = create("LIBGLOCAL_KEYWORD", D.KEYWORD)
@@ -42,43 +40,41 @@ object Attributes {
 
 	)
 
-	fun tokenMap(tokenType: IElementType?): TextAttributesKey? {
-		return when (tokenType) {
-			E.T_COMMENT -> COMMENT
+	fun tokenMap(tokenType: IElementType?): TextAttributesKey? = when (tokenType) {
+		E.T_COMMENT -> COMMENT
 
-			E.K_BASE_LANG -> KEYWORD
-			E.K_LANG -> KEYWORD
-			E.K_AUTHOR -> KEYWORD
-			E.K_VERSION -> KEYWORD
-			E.K_REQUIRE -> KEYWORD
-			E.K_MESSAGES -> KEYWORD
+		E.K_BASE_LANG -> KEYWORD
+		E.K_LANG -> KEYWORD
+		E.K_AUTHOR -> KEYWORD
+		E.K_VERSION -> KEYWORD
+		E.K_REQUIRE -> KEYWORD
+		E.K_MESSAGES -> KEYWORD
 
-			E.T_FLAG -> FLAG
-			E.T_IDENTIFIER -> IDENTIFIER
-			E.T_NUMBER -> NUMBER
+		E.T_FLAG -> FLAG
+		E.T_IDENTIFIER -> IDENTIFIER
+		E.T_NUMBER -> NUMBER
 
-			E.T_CONT_CONCAT -> CONT
-			E.T_CONT_NEWLINE -> CONT
-			E.T_CONT_SPACE -> CONT
+		E.T_CONT_CONCAT -> CONT
+		E.T_CONT_NEWLINE -> CONT
+		E.T_CONT_SPACE -> CONT
 
-			E.T_EQUALS -> EQUALS
+		E.T_EQUALS -> EQUALS
 
-			E.T_ARG_REF_START -> INTERPOLATION
-			E.T_MESSAGE_REF_START -> INTERPOLATION
-			E.T_SPAN_START -> INTERPOLATION
-			E.T_OPEN_BRACE -> INTERPOLATION
-			E.T_CLOSE_BRACE -> INTERPOLATION
+		E.T_ARG_REF_START -> INTERPOLATION
+		E.T_MESSAGE_REF_START -> INTERPOLATION
+		E.T_SPAN_START -> INTERPOLATION
+		E.T_OPEN_BRACE -> INTERPOLATION
+		E.T_CLOSE_BRACE -> INTERPOLATION
 
-			E.T_LITERAL_ESCAPE -> ESCAPE
-			E.T_LITERAL_INVALID_ESCAPE -> ESCAPE_INVALID
-			E.T_LITERAL_STRING -> LITERAL
-			E.T_MODIFIER_ARG -> MODIFIER
-			E.T_MODIFIER_DOC -> MODIFIER
-			E.T_MODIFIER_VERSION -> MODIFIER
+		E.T_LITERAL_ESCAPE -> ESCAPE
+		E.T_LITERAL_INVALID_ESCAPE -> ESCAPE_INVALID
+		E.T_LITERAL_STRING -> LITERAL
+		E.T_MODIFIER_ARG -> MODIFIER
+		E.T_MODIFIER_DOC -> MODIFIER
+		E.T_MODIFIER_VERSION -> MODIFIER
 
-			E.T_SPAN_TYPE -> SPAN_NAME
+		E.T_SPAN_TYPE -> SPAN_NAME
 
-			else -> null
-		}
+		else -> null
 	}
 }

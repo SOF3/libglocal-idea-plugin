@@ -6,7 +6,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IElementType
 import io.github.sof3.libglocal.idea.psi.LibglocalElements
 
-class LibglocalPairedBraceMatcher: PairedBraceMatcher{
+class LibglocalPairedBraceMatcher : PairedBraceMatcher {
 	companion object {
 		val PAIRS = arrayOf(
 				BracePair(LibglocalElements.T_OPEN_BRACE, LibglocalElements.T_CLOSE_BRACE, false),
@@ -16,13 +16,9 @@ class LibglocalPairedBraceMatcher: PairedBraceMatcher{
 		)
 	}
 
-	override fun getPairs(): Array<BracePair> {
-		return PAIRS
-	}
+	override fun getPairs() = PAIRS
 
 	override fun isPairedBracesAllowedBeforeType(lbrace: IElementType, context: IElementType?) = true
 
-	override fun getCodeConstructStart(file: PsiFile?, braceOffset: Int): Int {
-		return braceOffset
-	}
+	override fun getCodeConstructStart(file: PsiFile?, braceOffset: Int) = braceOffset
 }

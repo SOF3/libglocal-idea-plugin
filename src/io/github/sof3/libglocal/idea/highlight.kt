@@ -5,7 +5,6 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighter
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory
-import com.intellij.openapi.options.colors.AttributesDescriptor
 import com.intellij.openapi.options.colors.ColorDescriptor
 import com.intellij.openapi.options.colors.ColorSettingsPage
 import com.intellij.openapi.project.Project
@@ -17,15 +16,11 @@ import java.io.InputStreamReader
 import javax.swing.Icon
 
 class LibglocalHlFactory : SyntaxHighlighterFactory() {
-	override fun getSyntaxHighlighter(project: Project?, virtualFile: VirtualFile?): SyntaxHighlighter {
-		return LibglocalHighlighter()
-	}
+	override fun getSyntaxHighlighter(project: Project?, virtualFile: VirtualFile?): SyntaxHighlighter = LibglocalHighlighter()
 }
 
 class LibglocalHighlighter : SyntaxHighlighterBase() {
-	override fun getHighlightingLexer(): Lexer {
-		return LibglocalLexer()
-	}
+	override fun getHighlightingLexer(): Lexer = LibglocalLexer(true)
 
 	override fun getTokenHighlights(tokenType: IElementType?): Array<TextAttributesKey> {
 		val att = Attributes.tokenMap(tokenType)
@@ -52,31 +47,17 @@ class LibglocalColorSettingsPage : ColorSettingsPage {
 		}
 	}
 
-	override fun getDisplayName(): String {
-		return "Libglocal"
-	}
+	override fun getDisplayName() = "Libglocal"
 
-	override fun getIcon(): Icon? {
-		return Icons.LIBGLOCAL_16PX
-	}
+	override fun getIcon(): Icon? = Icons.LIBGLOCAL_16PX
 
-	override fun getHighlighter(): SyntaxHighlighter {
-		return LibglocalHighlighter()
-	}
+	override fun getHighlighter(): SyntaxHighlighter = LibglocalHighlighter()
 
-	override fun getDemoText(): String {
-		return DEMO_TEXT
-	}
+	override fun getDemoText() = DEMO_TEXT
 
-	override fun getAdditionalHighlightingTagToDescriptorMap(): MutableMap<String, TextAttributesKey>? {
-		return null
-	}
+	override fun getAdditionalHighlightingTagToDescriptorMap(): MutableMap<String, TextAttributesKey>? = null
 
-	override fun getAttributeDescriptors(): Array<AttributesDescriptor> {
-		return Attributes.DESCRIPTORS
-	}
+	override fun getAttributeDescriptors() = Attributes.DESCRIPTORS
 
-	override fun getColorDescriptors(): Array<ColorDescriptor> {
-		return emptyArray()
-	}
+	override fun getColorDescriptors(): Array<ColorDescriptor> = emptyArray()
 }
