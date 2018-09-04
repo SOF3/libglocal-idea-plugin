@@ -41,8 +41,8 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     else if (t == BLOCK_MESSAGES) {
       r = block_messages(b, 0);
     }
-    else if (t == BLOCK_MODIFIER) {
-      r = block_modifier(b, 0);
+    else if (t == BLOCK_REQUIRE) {
+      r = block_require(b, 0);
     }
     else if (t == BLOCK_VERSION) {
       r = block_version(b, 0);
@@ -165,14 +165,14 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   // element_message_id element_literal line_delim [T_INDENT_INDENT (block_modifier)* pseudo_dedent]
   public static boolean block_message(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_message")) return false;
-    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
+    if (!nextTokenIs(b, "<block message>", T_FLAG, T_IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, BLOCK_MESSAGE, "<block message>");
     r = element_message_id(b, l + 1);
     r = r && element_literal(b, l + 1);
     r = r && line_delim(b, l + 1);
     r = r && block_message_3(b, l + 1);
-    exit_section_(b, m, BLOCK_MESSAGE, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -220,13 +220,13 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   // element_message_id line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent]
   public static boolean block_message_group(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_message_group")) return false;
-    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
+    if (!nextTokenIs(b, "<block message group>", T_FLAG, T_IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, BLOCK_MESSAGE_GROUP, "<block message group>");
     r = element_message_id(b, l + 1);
     r = r && line_delim(b, l + 1);
     r = r && block_message_group_2(b, l + 1);
-    exit_section_(b, m, BLOCK_MESSAGE_GROUP, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -270,52 +270,53 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // K_MESSAGES line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent]
+  // K_MESSAGES element_message_id line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent]
   public static boolean block_messages(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_messages")) return false;
     if (!nextTokenIs(b, K_MESSAGES)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, K_MESSAGES);
+    r = r && element_message_id(b, l + 1);
     r = r && line_delim(b, l + 1);
-    r = r && block_messages_2(b, l + 1);
+    r = r && block_messages_3(b, l + 1);
     exit_section_(b, m, BLOCK_MESSAGES, r);
     return r;
   }
 
   // [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent]
-  private static boolean block_messages_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_messages_2")) return false;
-    block_messages_2_0(b, l + 1);
+  private static boolean block_messages_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_messages_3")) return false;
+    block_messages_3_0(b, l + 1);
     return true;
   }
 
   // T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent
-  private static boolean block_messages_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_messages_2_0")) return false;
+  private static boolean block_messages_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_messages_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, T_INDENT_INDENT);
-    r = r && block_messages_2_0_1(b, l + 1);
+    r = r && block_messages_3_0_1(b, l + 1);
     r = r && pseudo_dedent(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // (block_message_group | block_message)*
-  private static boolean block_messages_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_messages_2_0_1")) return false;
+  private static boolean block_messages_3_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_messages_3_0_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!block_messages_2_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "block_messages_2_0_1", c)) break;
+      if (!block_messages_3_0_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "block_messages_3_0_1", c)) break;
     }
     return true;
   }
 
   // block_message_group | block_message
-  private static boolean block_messages_2_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_messages_2_0_1_0")) return false;
+  private static boolean block_messages_3_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_messages_3_0_1_0")) return false;
     boolean r;
     r = block_message_group(b, l + 1);
     if (!r) r = block_message(b, l + 1);
@@ -324,14 +325,14 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // modifier_content line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent]
-  public static boolean block_modifier(PsiBuilder b, int l) {
+  static boolean block_modifier(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_modifier")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, BLOCK_MODIFIER, "<block modifier>");
+    Marker m = enter_section_(b);
     r = modifier_content(b, l + 1);
     r = r && line_delim(b, l + 1);
     r = r && block_modifier_2(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -372,6 +373,19 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = block_constraint(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // K_REQUIRE T_IDENTIFIER line_delim
+  public static boolean block_require(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_require")) return false;
+    if (!nextTokenIs(b, K_REQUIRE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, K_REQUIRE, T_IDENTIFIER);
+    r = r && line_delim(b, l + 1);
+    exit_section_(b, m, BLOCK_REQUIRE, r);
     return r;
   }
 
@@ -530,33 +544,54 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // T_IDENTIFIER
+  // T_FLAG* T_IDENTIFIER
   public static boolean element_message_id(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "element_message_id")) return false;
-    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
+    if (!nextTokenIs(b, "<element message id>", T_FLAG, T_IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, T_IDENTIFIER);
-    exit_section_(b, m, ELEMENT_MESSAGE_ID, r);
+    Marker m = enter_section_(b, l, _NONE_, ELEMENT_MESSAGE_ID, "<element message id>");
+    r = element_message_id_0(b, l + 1);
+    r = r && consumeToken(b, T_IDENTIFIER);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
+  // T_FLAG*
+  private static boolean element_message_id_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_message_id_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, T_FLAG)) break;
+      if (!empty_element_parsed_guard_(b, "element_message_id_0", c)) break;
+    }
+    return true;
+  }
+
   /* ********************************************************** */
-  // T_MESSAGE_REF_START T_IDENTIFIER element_args_supplier T_CLOSE_BRACE
+  // T_MESSAGE_REF_START T_DYNAMIC? T_IDENTIFIER element_args_supplier T_CLOSE_BRACE
   public static boolean element_message_ref(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "element_message_ref")) return false;
     if (!nextTokenIs(b, T_MESSAGE_REF_START)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, T_MESSAGE_REF_START, T_IDENTIFIER);
+    r = consumeToken(b, T_MESSAGE_REF_START);
+    r = r && element_message_ref_1(b, l + 1);
+    r = r && consumeToken(b, T_IDENTIFIER);
     r = r && element_args_supplier(b, l + 1);
     r = r && consumeToken(b, T_CLOSE_BRACE);
     exit_section_(b, m, ELEMENT_MESSAGE_REF, r);
     return r;
   }
 
+  // T_DYNAMIC?
+  private static boolean element_message_ref_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_message_ref_1")) return false;
+    consumeToken(b, T_DYNAMIC);
+    return true;
+  }
+
   /* ********************************************************** */
-  // T_MODIFIER_ARG T_IDENTIFIER [T_IDENTIFIER]
+  // T_MODIFIER_ARG T_IDENTIFIER [T_FLAG* T_IDENTIFIER]
   public static boolean element_modifier_arg(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "element_modifier_arg")) return false;
     if (!nextTokenIs(b, T_MODIFIER_ARG)) return false;
@@ -568,10 +603,32 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [T_IDENTIFIER]
+  // [T_FLAG* T_IDENTIFIER]
   private static boolean element_modifier_arg_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "element_modifier_arg_2")) return false;
-    consumeToken(b, T_IDENTIFIER);
+    element_modifier_arg_2_0(b, l + 1);
+    return true;
+  }
+
+  // T_FLAG* T_IDENTIFIER
+  private static boolean element_modifier_arg_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_modifier_arg_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = element_modifier_arg_2_0_0(b, l + 1);
+    r = r && consumeToken(b, T_IDENTIFIER);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // T_FLAG*
+  private static boolean element_modifier_arg_2_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_modifier_arg_2_0_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, T_FLAG)) break;
+      if (!empty_element_parsed_guard_(b, "element_modifier_arg_2_0_0", c)) break;
+    }
     return true;
   }
 
@@ -615,7 +672,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (block_lang | block_author | block_version)+ block_messages
+  // (block_lang | block_author | block_version | block_require)+ block_messages
   static boolean libglocal_file(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "libglocal_file")) return false;
     boolean r;
@@ -626,7 +683,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (block_lang | block_author | block_version)+
+  // (block_lang | block_author | block_version | block_require)+
   private static boolean libglocal_file_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "libglocal_file_0")) return false;
     boolean r;
@@ -641,13 +698,14 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // block_lang | block_author | block_version
+  // block_lang | block_author | block_version | block_require
   private static boolean libglocal_file_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "libglocal_file_0_0")) return false;
     boolean r;
     r = block_lang(b, l + 1);
     if (!r) r = block_author(b, l + 1);
     if (!r) r = block_version(b, l + 1);
+    if (!r) r = block_require(b, l + 1);
     return r;
   }
 

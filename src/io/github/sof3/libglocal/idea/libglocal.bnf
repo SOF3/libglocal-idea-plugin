@@ -21,12 +21,14 @@
 		T_LITERAL_INVALID_ESCAPE="invalid literal escape"
 		T_EOL="newline"
 
+		T_FLAG="identifier flag"
 		T_IDENTIFIER="identifier"
 		T_MODIFIER_ARG="$"
 		T_MODIFIER_DOC="*"
 		T_MODIFIER_VERSION="~"
 		T_ARG_REF_START="${"
 		T_MESSAGE_REF_START="#{"
+		T_DYNAMIC="$"
 		T_SPAN_START="%{"
 		T_OPEN_BRACE="{" // only used in open brace
 		T_CLOSE_BRACE="}"
@@ -41,6 +43,7 @@
 	implements("block_lang")=["LibglocalBlockElement"]
 	implements("block_author")=["LibglocalBlockElement"]
 	implements("block_version")=["LibglocalBlockElement"]
+	implements("block_require")=["LibglocalBlockElement"]
 	implements("block_messages")=["LibglocalBlockElement"]
 	implements("block_message_group")=["LibglocalBlockElement"]
 	implements("block_message")=["LibglocalBlockElement"]
@@ -55,7 +58,7 @@ In addition, the lexer inserts T_INDENT_INDENT and pseudo_dedent tokens *before*
 the change in indentation level, where these two tokens are equivalent to '{' and '}' in JSON.
  */
 
-libglocal_file ::= (block_lang | block_author | block_version)+ block_messages
+libglocal_file ::= (block_lang | block_author | block_version | block_require)+ block_messages
 
 private pseudo_dedent ::= T_INDENT_DEDENT | <<eof>>
 private line_delim ::= T_EOL | <<eof>>
@@ -72,32 +75,33 @@ block_author ::= K_AUTHOR element_literal_static line_delim {
 block_version ::= K_VERSION T_IDENTIFIER line_delim {
 	methods=[getChildBlocks getName]
 }
+block_require ::= K_REQUIRE T_IDENTIFIER line_delim {
+	methods=[getChildBlocks getName]
+}
 
-block_messages ::= K_MESSAGES line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent] {
-	implements=[LibglocalMessageParentElement]
+block_messages ::= K_MESSAGES element_message_id line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent] {
+	implements=[LibglocalMessageParentElement LibglocalNamedBlockElement]
 	methods=[getChildBlocks getMessages getName getPresentation]
 }
 block_message_group ::= element_message_id line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent] {
-	implements=[LibglocalMessageParentElement]
+	implements=[LibglocalMessageParentElement LibglocalNamedBlockElement]
 	methods=[getChildBlocks getMessages getName getFullName getPresentation]
 }
-element_message_id ::= T_IDENTIFIER
+element_message_id ::= T_FLAG* T_IDENTIFIER
 
 block_message ::= element_message_id element_literal line_delim [T_INDENT_INDENT (block_modifier)* pseudo_dedent] {
-	implements=[LibglocalBlockElement]
-	methods=[getChildBlocks getModifiers getName getFullName getPresentation]
+	implements=[LibglocalNamedBlockElement]
+	methods=[getModifiers getChildBlocks getName getFullName getPresentation]
 }
-block_modifier ::= modifier_content line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent] {
-	implements=[LibglocalBlockElement]
+private block_modifier ::= modifier_content line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent] {
 	methods=[getChildBlocks getConstraints]
 }
 block_constraint ::= T_IDENTIFIER [element_literal_static] line_delim {
-	implements=[LibglocalBlockElement]
 	methods=[getChildBlocks]
 }
 
 private modifier_content ::= (element_modifier_arg | element_modifier_doc | element_modifier_version)
-element_modifier_arg ::= T_MODIFIER_ARG T_IDENTIFIER [T_IDENTIFIER]
+element_modifier_arg ::= T_MODIFIER_ARG T_IDENTIFIER [T_FLAG* T_IDENTIFIER]
 element_modifier_doc ::= T_MODIFIER_DOC element_literal_static
 element_modifier_version ::= T_MODIFIER_VERSION T_IDENTIFIER
 
@@ -107,7 +111,7 @@ element_literal_static ::= (literal_token_static)+
 private literal_token_static ::= T_LITERAL_STRING | T_LITERAL_ESCAPE | T_CONT_NEWLINE | T_CONT_SPACE | T_CONT_CONCAT
 
 element_arg_ref ::= T_ARG_REF_START T_IDENTIFIER T_CLOSE_BRACE
-element_message_ref ::= T_MESSAGE_REF_START T_IDENTIFIER element_args_supplier T_CLOSE_BRACE
+element_message_ref ::= T_MESSAGE_REF_START T_DYNAMIC? T_IDENTIFIER element_args_supplier T_CLOSE_BRACE
 element_args_supplier ::= element_args_entry*
 element_args_entry ::= T_IDENTIFIER T_EQUALS element_args_value
 element_args_value ::= T_NUMBER | T_IDENTIFIER | element_args_value_string

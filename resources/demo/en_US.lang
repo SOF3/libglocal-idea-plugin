@@ -1,7 +1,7 @@
 base lang en_US English (US)
 author SOFe, SOF3, Iron(II) Sulphite
 version 2.0 // current version name. For non-base lang files, this should be the targetted base lang version.
-messages
+messages sample
     commands // identifier without message = namespace
         friends // subnamespace, called "commands.friends". indent = something belonging to the above element.
             usage /friend list|add|remove // The message "commands.friends.usage" with content "/friend list|add|remove"

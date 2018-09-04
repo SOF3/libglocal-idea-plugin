@@ -39,6 +39,12 @@ public class LibglocalBlockMessagesImpl extends ASTWrapperPsiElement implements 
     return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalBlockMessageGroup.class);
   }
 
+  @Override
+  @NotNull
+  public LibglocalElementMessageId getElementMessageId() {
+    return findNotNullChildByClass(LibglocalElementMessageId.class);
+  }
+
   @NotNull
   public List<LibglocalBlockElement> getChildBlocks() {
     return Utils.getChildBlocks(this);
@@ -49,7 +55,7 @@ public class LibglocalBlockMessagesImpl extends ASTWrapperPsiElement implements 
     return Utils.getMessages(this);
   }
 
-  @NotNull
+  @Nullable
   public String getName() {
     return Utils.getName(this);
   }

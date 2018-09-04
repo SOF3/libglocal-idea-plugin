@@ -29,8 +29,8 @@ public class LibglocalBlockMessageImpl extends ASTWrapperPsiElement implements L
 
   @Override
   @NotNull
-  public List<LibglocalBlockModifier> getBlockModifierList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalBlockModifier.class);
+  public List<LibglocalBlockConstraint> getBlockConstraintList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalBlockConstraint.class);
   }
 
   @Override
@@ -45,14 +45,32 @@ public class LibglocalBlockMessageImpl extends ASTWrapperPsiElement implements L
     return findNotNullChildByClass(LibglocalElementMessageId.class);
   }
 
+  @Override
   @NotNull
-  public List<LibglocalBlockElement> getChildBlocks() {
-    return Utils.getChildBlocks(this);
+  public List<LibglocalElementModifierArg> getElementModifierArgList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalElementModifierArg.class);
+  }
+
+  @Override
+  @NotNull
+  public List<LibglocalElementModifierDoc> getElementModifierDocList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalElementModifierDoc.class);
+  }
+
+  @Override
+  @NotNull
+  public List<LibglocalElementModifierVersion> getElementModifierVersionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalElementModifierVersion.class);
   }
 
   @NotNull
-  public List<LibglocalBlockModifier> getModifiers() {
+  public List<LibglocalModifierBlock> getModifiers() {
     return Utils.getModifiers(this);
+  }
+
+  @NotNull
+  public List<LibglocalBlockElement> getChildBlocks() {
+    return Utils.getChildBlocks(this);
   }
 
   @Nullable

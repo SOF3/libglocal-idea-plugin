@@ -10,3 +10,11 @@ interface LibglocalBlockElement: NavigatablePsiElement {
 interface LibglocalMessageParentElement: PsiElement {
 	val messages: List<LibglocalBlockMessage>
 }
+
+interface LibglocalNamedBlockElement: PsiElement {
+	val name: String?
+}
+
+interface LibglocalModifierBlock: LibglocalBlockElement {
+	val constraints: List<LibglocalBlockConstraint>
+}

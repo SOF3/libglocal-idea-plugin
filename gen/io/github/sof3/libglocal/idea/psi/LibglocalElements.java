@@ -16,7 +16,7 @@ public interface LibglocalElements {
   IElementType BLOCK_MESSAGE = new LibglocalElementType("BLOCK_MESSAGE");
   IElementType BLOCK_MESSAGES = new LibglocalElementType("BLOCK_MESSAGES");
   IElementType BLOCK_MESSAGE_GROUP = new LibglocalElementType("BLOCK_MESSAGE_GROUP");
-  IElementType BLOCK_MODIFIER = new LibglocalElementType("BLOCK_MODIFIER");
+  IElementType BLOCK_REQUIRE = new LibglocalElementType("BLOCK_REQUIRE");
   IElementType BLOCK_VERSION = new LibglocalElementType("BLOCK_VERSION");
   IElementType ELEMENT_ARGS_ENTRY = new LibglocalElementType("ELEMENT_ARGS_ENTRY");
   IElementType ELEMENT_ARGS_SUPPLIER = new LibglocalElementType("ELEMENT_ARGS_SUPPLIER");
@@ -38,6 +38,7 @@ public interface LibglocalElements {
   IElementType K_BASE_LANG = new LibglocalTokenType("K_BASE_LANG");
   IElementType K_LANG = new LibglocalTokenType("K_LANG");
   IElementType K_MESSAGES = new LibglocalTokenType("K_MESSAGES");
+  IElementType K_REQUIRE = new LibglocalTokenType("K_REQUIRE");
   IElementType K_VERSION = new LibglocalTokenType("K_VERSION");
   IElementType T_ARG_REF_START = new LibglocalTokenType("${");
   IElementType T_CLOSE_BRACE = new LibglocalTokenType("}");
@@ -45,9 +46,11 @@ public interface LibglocalElements {
   IElementType T_CONT_CONCAT = new LibglocalTokenType("T_CONT_CONCAT");
   IElementType T_CONT_NEWLINE = new LibglocalTokenType("T_CONT_NEWLINE");
   IElementType T_CONT_SPACE = new LibglocalTokenType("T_CONT_SPACE");
+  IElementType T_DYNAMIC = new LibglocalTokenType("$");
   IElementType T_EMPTY_LINE = new LibglocalTokenType("empty line");
   IElementType T_EOL = new LibglocalTokenType("newline");
   IElementType T_EQUALS = new LibglocalTokenType("=");
+  IElementType T_FLAG = new LibglocalTokenType("identifier flag");
   IElementType T_IDENTIFIER = new LibglocalTokenType("identifier");
   IElementType T_INDENT_DEDENT = new LibglocalTokenType("decrease indent");
   IElementType T_INDENT_INDENT = new LibglocalTokenType("increase indent");
@@ -57,7 +60,7 @@ public interface LibglocalElements {
   IElementType T_LITERAL_INVALID_ESCAPE = new LibglocalTokenType("invalid literal escape");
   IElementType T_LITERAL_STRING = new LibglocalTokenType("T_LITERAL_STRING");
   IElementType T_MESSAGE_REF_START = new LibglocalTokenType("#{");
-  IElementType T_MODIFIER_ARG = new LibglocalTokenType("$");
+  IElementType T_MODIFIER_ARG = new LibglocalTokenType("T_MODIFIER_ARG");
   IElementType T_MODIFIER_DOC = new LibglocalTokenType("*");
   IElementType T_MODIFIER_VERSION = new LibglocalTokenType("~");
   IElementType T_NUMBER = new LibglocalTokenType("number");
@@ -86,8 +89,8 @@ public interface LibglocalElements {
       else if (type == BLOCK_MESSAGE_GROUP) {
         return new LibglocalBlockMessageGroupImpl(node);
       }
-      else if (type == BLOCK_MODIFIER) {
-        return new LibglocalBlockModifierImpl(node);
+      else if (type == BLOCK_REQUIRE) {
+        return new LibglocalBlockRequireImpl(node);
       }
       else if (type == BLOCK_VERSION) {
         return new LibglocalBlockVersionImpl(node);

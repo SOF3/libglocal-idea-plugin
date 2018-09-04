@@ -2,20 +2,21 @@
 	<id>io.github.sof3.libglocal.idea</id>
 	<name>Libglocal .lang Support</name>
 
-	<version>0.2.0</version>
+	<version>0.3.0</version>
 	<vendor email="sofe2038@gmail.com" url="https://github.com/SOF3">SOFe</vendor>
 
 	<description><![CDATA[
-		Edit libglocal language files in your IDE
+		Libglocal is a translations library tuned for the PocketMine plugins lifecycle.
+		This plugin enables editing libglocal .lang files in plugins.
 		]]></description>
 
 	<change-notes><![CDATA[
-		<b>0.2.0</b>
+		<b>0.3.0: Initial version</b>
 		<ul>
-			<li>.lang file type and syntax highlighting</li>
+			<li>.lang syntax validation and highlighting</li>
+			<li>File structure view</li>
 		</ul>
-		]]>
-	</change-notes>
+		]]></change-notes>
 
 	<!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
 	<idea-version since-build="173.0"/>
@@ -33,8 +34,6 @@
 				language="libglocal"
 				implementationClass="io.github.sof3.libglocal.idea.LibglocalHlFactory"/>
 		<colorSettingsPage implementation="io.github.sof3.libglocal.idea.LibglocalColorSettingsPage"/>
-		<!--<additionalTextAttributes scheme="Default" file="colorSchemes/default.xml"/>-->
-		<!--<additionalTextAttributes scheme="Dracula" file="colorSchemes/dracula.xml"/>-->
 		<!--<annotator-->
 		<!--language="libglocal"-->
 		<!--implementationClass="io.github.sof3.libglocal.idea.annotator.SpanAnnotator"/>-->

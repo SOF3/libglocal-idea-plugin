@@ -3,6 +3,7 @@ package io.github.sof3.libglocal.idea.parser
 import com.intellij.lexer.LexerBase
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
+import io.github.sof3.libglocal.idea.psi.LibglocalElements
 
 class LibglocalLexer : LexerBase() {
 	data class WhitespaceResult(val whitespace: CharSequence, val trimmed: CharSequence)
@@ -10,14 +11,24 @@ class LibglocalLexer : LexerBase() {
 	companion object {
 		internal fun readWhitespace(string: CharSequence, charSet: CharArray = charArrayOf(' ', '\t')): WhitespaceResult {
 			val whiteSize = string.indexOfFirst { c -> !charSet.contains(c) }
-			try{
+			try {
 				return WhitespaceResult(string.subSequence(0, whiteSize), string.subSequence(whiteSize, string.length))
-			}catch(e: IndexOutOfBoundsException){
+			} catch (e: IndexOutOfBoundsException) {
 				throw e
 			}
 		}
 
 		internal fun badToken() = listOf(FutureToken(TokenType.BAD_CHARACTER, 1))
+
+		internal data class IdentifierRead(val list: List<FutureToken>, val read: Boolean, val error: Boolean)
+
+		internal fun readIdentifier(buffer: CharSequence, tokenType: IElementType = LibglocalElements.T_IDENTIFIER): IdentifierRead {
+			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return IdentifierRead(badToken(), false, true)
+			if (buffer.length > match.value.length && buffer[match.value.length] == ':') {
+				return IdentifierRead(listOf(FutureToken(LibglocalElements.T_FLAG, match.value.length + 1)), false, false)
+			}
+			return IdentifierRead(listOf(FutureToken(tokenType, match.value.length)), true, false)
+		}
 	}
 
 	private var myState = LexerState.LINE_START
@@ -111,7 +122,7 @@ class LibglocalLexer : LexerBase() {
 
 	override fun getTokenType(): IElementType? {
 		locateToken()
-//		println("myTokenType = $myTokenType \"${tokenSequence.replace(Regex("\n"), "\\\\n")}\"")
+		println("myTokenType = $myTokenType \"${tokenSequence.replace(Regex("\n"), "\\\\n")}\"")
 		return myTokenType
 	}
 }

@@ -87,8 +87,15 @@ internal enum class LexerState {
 					lexer.nextState = SEPARATOR
 					return listOf(FutureToken(LibglocalElements.K_VERSION, match.value.length))
 				}
+				match = LexerPatterns.REQUIRE.find(buffer)
+				if (match != null) {
+					lexer.expectedIdentifiers = 1
+					lexer.nextState = SEPARATOR
+					return listOf(FutureToken(LibglocalElements.K_REQUIRE, match.value.length))
+				}
 				match = LexerPatterns.MESSAGES.find(buffer)
 				if (match != null) {
+					lexer.expectedIdentifiers = 1
 					lexer.nextState = SEPARATOR
 					lexer.reachedMessages = true
 					return listOf(FutureToken(LibglocalElements.K_MESSAGES, match.value.length))
@@ -126,10 +133,9 @@ internal enum class LexerState {
 						listOf(argToken)
 				}
 
-				val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
-
-				lexer.nextState = SEPARATOR
-				return listOf(FutureToken(LibglocalElements.T_IDENTIFIER, match.value.length))
+				val (list, read, _) = LibglocalLexer.readIdentifier(buffer)
+				if (read) lexer.nextState = SEPARATOR
+				return list
 			}
 		}
 	},
@@ -153,10 +159,12 @@ internal enum class LexerState {
 
 	IDENTIFIER {
 		override fun advance(lexer: LibglocalLexer, buffer: CharSequence): List<FutureToken> {
-			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
-			lexer.expectedIdentifiers--
-			lexer.nextState = SEPARATOR
-			return listOf(FutureToken(LibglocalElements.T_IDENTIFIER, match.value.length))
+			val (list, read, _) = LibglocalLexer.readIdentifier(buffer)
+			if (read) {
+				lexer.expectedIdentifiers--
+				lexer.nextState = SEPARATOR
+			}
+			return list
 		}
 	},
 
@@ -240,9 +248,9 @@ internal enum class LexerState {
 				return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 			}
 
-			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
-			lexer.nextState = CLOSE_TO_LITERAL
-			return listOf(FutureToken(LibglocalElements.T_IDENTIFIER, match.value.length))
+			val (list, read, _) = LibglocalLexer.readIdentifier(buffer)
+			if (read) lexer.nextState = CLOSE_TO_LITERAL
+			return list
 		}
 	},
 
@@ -251,9 +259,11 @@ internal enum class LexerState {
 			val (white, _) = LibglocalLexer.readWhitespace(buffer)
 			if (white.isNotEmpty()) return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 
-			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
-			lexer.nextState = ARG_LIST_RESET
-			return listOf(FutureToken(LibglocalElements.T_IDENTIFIER, match.value.length))
+			if (buffer[0] == '$') return listOf(FutureToken(LibglocalElements.T_DYNAMIC, 1))
+
+			val (list, read, _) = LibglocalLexer.readIdentifier(buffer)
+			if (read) lexer.nextState = ARG_LIST_RESET
+			return list
 		}
 	},
 
@@ -270,8 +280,8 @@ internal enum class LexerState {
 				lexer.nextState = ARG_LIST_VALUE
 				return listOf(FutureToken(LibglocalElements.T_EQUALS, 1))
 			}
-			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
-			return listOf(FutureToken(LibglocalElements.T_IDENTIFIER, match.value.length))
+
+			return LibglocalLexer.readIdentifier(buffer).list
 		}
 	},
 	ARG_LIST_VALUE {
@@ -279,16 +289,18 @@ internal enum class LexerState {
 			val (white, _) = LibglocalLexer.readWhitespace(buffer, charArrayOf(' ', '\t', '\r', '\n'))
 			if (white.isNotEmpty()) return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 
-			var match = LexerPatterns.NUMBER.find(buffer)
+			val match = LexerPatterns.NUMBER.find(buffer)
 			if (match != null) {
 				lexer.nextState = ARG_LIST_RESET
 				return listOf(FutureToken(LibglocalElements.T_NUMBER, match.value.length))
 			}
 
-			match = LexerPatterns.IDENTIFIER.find(buffer)
-			if (match != null) {
-				lexer.nextState = ARG_LIST_RESET
-				return listOf(FutureToken(LibglocalElements.T_IDENTIFIER, match.value.length))
+			if (true) {
+				val (list, read, err) = LibglocalLexer.readIdentifier(buffer)
+				if (!err) {
+					if (read) lexer.nextState = ARG_LIST_RESET
+					return list
+				}
 			}
 
 			if (buffer[0] == '{') {
@@ -305,11 +317,12 @@ internal enum class LexerState {
 			val (white, _) = LibglocalLexer.readWhitespace(buffer)
 			if (white.isNotEmpty()) return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 
-
-			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return LibglocalLexer.badToken()
-			lexer.expectedIdentifiers = 0
-			lexer.nextState = SEPARATOR
-			return listOf(FutureToken(LibglocalElements.T_SPAN_TYPE, match.value.length))
+			val (list, read, _) = LibglocalLexer.readIdentifier(buffer, LibglocalElements.T_SPAN_TYPE)
+			if (read) {
+				lexer.expectedIdentifiers = 0
+				lexer.nextState = SEPARATOR
+			}
+			return list
 		}
 	},
 
@@ -336,7 +349,8 @@ internal object LexerPatterns {
 	val LANG = Regex("^lang\\b")
 	val AUTHOR = Regex("^author\\b")
 	val VERSION = Regex("^version\\b")
+	val REQUIRE = Regex("^require\\b")
 	val MESSAGES = Regex("^messages\\b")
-	val IDENTIFIER = Regex("^[A-Za-z0-9_:\\-\\.]+")
+	val IDENTIFIER = Regex("^[A-Za-z0-9_\\-\\.]+")
 	val NUMBER = Regex("^-?[0-9]+(\\.[0-9]+)?")
 }
