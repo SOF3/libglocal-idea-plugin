@@ -22,7 +22,7 @@ internal enum class LexerState {
 				}
 				return listOf(FutureToken(LibglocalElements.T_COMMENT, indent.length + until))
 			}
-			if (line.startsWith("\r\n") || line[0] == '\n') {
+			if (line.startsWith("\r\n") || line.isNotEmpty() && line[0] == '\n') {
 				return listOf(FutureToken(LibglocalElements.T_EMPTY_LINE, indent.length + (if (line[0] == '\r') 2 else 1)))
 			}
 
@@ -47,14 +47,14 @@ internal enum class LexerState {
 			var dedents = 0
 			while (indentStack.isNotEmpty()) {
 				if (indent.toString() == indentStack.last().toString()) {
-					return List(dedents) { _ -> FutureToken(LibglocalElements.T_INDENT_DEDENT, 0) } +
+					return List(dedents) { FutureToken(LibglocalElements.T_INDENT_DEDENT, 0) } +
 							listOf(FutureToken(LibglocalElements.T_INDENT_INHERIT, indent.length))
 				}
 				indentStack.removeAt(indentStack.lastIndex)
 				dedents++
 			}
 			if (indent.isEmpty()) {
-				return List(dedents) { _ -> FutureToken(LibglocalElements.T_INDENT_DEDENT, 0) } +
+				return List(dedents) { FutureToken(LibglocalElements.T_INDENT_DEDENT, 0) } +
 						listOf(FutureToken(LibglocalElements.T_INDENT_INHERIT, indent.length))
 			}
 			return listOf(FutureToken(LibglocalElements.T_INDENT_INVALID, indent.length))

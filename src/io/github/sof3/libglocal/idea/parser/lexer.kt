@@ -10,12 +10,9 @@ class LibglocalLexer : LexerBase() {
 
 	companion object {
 		internal fun readWhitespace(string: CharSequence, charSet: CharArray = charArrayOf(' ', '\t')): WhitespaceResult {
-			val whiteSize = string.indexOfFirst { c -> !charSet.contains(c) }
-			try {
-				return WhitespaceResult(string.subSequence(0, whiteSize), string.subSequence(whiteSize, string.length))
-			} catch (e: IndexOutOfBoundsException) {
-				throw e
-			}
+			var whiteSize = string.indexOfFirst { !charSet.contains(it) }
+			if (whiteSize == -1) whiteSize = string.length
+			return WhitespaceResult(string.subSequence(0, whiteSize), string.subSequence(whiteSize, string.length))
 		}
 
 		internal fun badToken() = listOf(FutureToken(TokenType.BAD_CHARACTER, 1))
@@ -62,8 +59,13 @@ class LibglocalLexer : LexerBase() {
 
 		myState = LexerState.values()[initialState]
 		myBuffer = buffer
-
 		myTokenType = null
+
+		nextState = myState
+		reachedMessages = false
+		expectedIdentifiers = 0
+		futureTokens.clear()
+		hadError = false
 	}
 
 	override fun advance() {
