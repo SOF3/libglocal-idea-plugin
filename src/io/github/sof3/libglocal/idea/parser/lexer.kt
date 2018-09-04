@@ -122,7 +122,7 @@ class LibglocalLexer : LexerBase() {
 
 	override fun getTokenType(): IElementType? {
 		locateToken()
-		println("myTokenType = $myTokenType \"${tokenSequence.replace(Regex("\n"), "\\\\n")}\"")
+//		println("myTokenType = $myTokenType \"${tokenSequence.replace(Regex("\n"), "\\\\n")}\"")
 		return myTokenType
 	}
 }
