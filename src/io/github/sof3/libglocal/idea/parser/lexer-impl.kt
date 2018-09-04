@@ -63,7 +63,11 @@ internal enum class LexerState {
 
 	COMMAND {
 		override fun advance(lexer: LibglocalLexer, buffer: CharSequence): List<FutureToken> {
-			if (!lexer.reachedMessages) {
+//			if (!lexer.reachedMessages) {
+			// FIXME: hack
+			// The proper way to fix this is to parse the whole buffer from offset 0 rather than startOffset as passed in onStart()
+			// This is not getting done yet due to the instability of the lexer right now
+			if (lexer.indentStack.isEmpty()) {
 				var match: MatchResult? = LexerPatterns.BASE_LANG.find(buffer)
 				if (match != null) {
 					lexer.expectedIdentifiers = 1

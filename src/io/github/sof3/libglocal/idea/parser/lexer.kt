@@ -53,6 +53,8 @@ class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
 	}
 
 	override fun start(buffer: CharSequence, startOffset: Int, endOffset: Int, initialState: Int) {
+//		println("Called start(buffer=[$buffer], startOffset=[$startOffset], endOffset=[$endOffset], initialState=[$initialState]")
+
 		myTokenStart = startOffset
 		myTokenEnd = startOffset
 		myBufferEnd = endOffset
@@ -69,12 +71,17 @@ class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
 	}
 
 	override fun advance() {
-		locateToken()
+		locateTokenLazy()
 		myTokenType = null
 	}
 
-	private fun locateToken() {
+	private fun locateTokenLazy() {
 		if (myTokenType != null) return
+		locateTokenImpl()
+//		println("isHighlightingLexer: $highlightingLexer, myTokenType = $myTokenType \"${myBuffer?.substring(myTokenStart, myTokenEnd)?.replace(Regex("\n"), "\\\\n")}\", nextState = ${nextState.name}, reachedMessages = $reachedMessages, expectedIdentifiers = $expectedIdentifiers, futureTokens.size = ${futureTokens.size}")
+	}
+
+	private fun locateTokenImpl() {
 		myTokenStart = myTokenEnd
 		if (hadError) return
 
@@ -94,11 +101,11 @@ class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
 		var tokens: List<FutureToken>
 		do {
 			tokens = realAdvance()
+			if (highlightingLexer) {
+				tokens = tokens.filter { it.length > 0 }
+			}
 		} while (tokens.isEmpty()) // empty return value implies retry
 
-		if (highlightingLexer) {
-			tokens = tokens.filter { it.length > 0 }
-		}
 
 		futureTokens.addAll(tokens)
 		if (futureTokens.size > 0) {
@@ -109,17 +116,17 @@ class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
 	}
 
 	override fun getState(): Int {
-		locateToken()
+		locateTokenLazy()
 		return myState.ordinal
 	}
 
 	override fun getTokenStart(): Int {
-		locateToken()
+		locateTokenLazy()
 		return myTokenStart
 	}
 
 	override fun getTokenEnd(): Int {
-		locateToken()
+		locateTokenLazy()
 		return myTokenEnd
 	}
 
@@ -128,8 +135,7 @@ class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
 	override fun getBufferSequence(): CharSequence = myBuffer!!
 
 	override fun getTokenType(): IElementType? {
-		locateToken()
-		println("isHighlightingLexer: $highlightingLexer, myTokenType = $myTokenType \"${tokenSequence.replace(Regex("\n"), "\\\\n")}\"")
+		locateTokenLazy()
 		return myTokenType
 	}
 }
