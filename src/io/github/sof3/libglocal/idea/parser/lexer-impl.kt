@@ -148,7 +148,7 @@ internal enum class LexerState {
 		override fun advance(lexer: LibglocalLexer, buffer: CharSequence): List<FutureToken> {
 			val (white, rem) = LibglocalLexer.readWhitespace(buffer)
 
-			if (rem.startsWith("\r\n") || rem[0] == '\n') {
+			if (rem.startsWith("\r\n") || rem.isNotEmpty() && rem[0] == '\n') {
 				lexer.nextState = LINE_START
 				return listOf(FutureToken(LibglocalElements.T_EOL, white.length + (if (rem[0] == '\r') 2 else 1)))
 			}
@@ -186,6 +186,19 @@ internal enum class LexerState {
 			if (strLen == -1) strLen = buffer.length
 			if (strLen == 0) {
 				if (buffer[0] == '\r' || buffer[0] == '\n') {
+					var match = LexerPatterns.CONT_NEWLINE.find(buffer)
+					if(match!=null){
+						return listOf(FutureToken(LibglocalElements.T_CONT_NEWLINE, match.value.length))
+					}
+					match = LexerPatterns.CONT_SPACE.find(buffer)
+					if(match!=null){
+						return listOf(FutureToken(LibglocalElements.T_CONT_SPACE, match.value.length))
+					}
+					match = LexerPatterns.CONT_CONCAT.find(buffer)
+					if(match!=null){
+						return listOf(FutureToken(LibglocalElements.T_CONT_CONCAT, match.value.length))
+					}
+
 					lexer.nextState = LINE_START
 					return listOf(FutureToken(LibglocalElements.T_EOL, if (buffer[0] == '\r') 2 else 1))
 				}
@@ -349,12 +362,15 @@ internal enum class LexerState {
 }
 
 internal object LexerPatterns {
-	val BASE_LANG = Regex("^base[ \t]+lang\\b")
+	val BASE_LANG = Regex("^base[ \\t]+lang\\b")
 	val LANG = Regex("^lang\\b")
 	val AUTHOR = Regex("^author\\b")
 	val VERSION = Regex("^version\\b")
 	val REQUIRE = Regex("^require\\b")
 	val MESSAGES = Regex("^messages\\b")
 	val IDENTIFIER = Regex("^[A-Za-z0-9_\\-\\.]+")
+	val CONT_NEWLINE = Regex("^\\r?\\n[ \\t]*!")
+	val CONT_SPACE = Regex("^\\r?\\n[ \\t]*\\|")
+	val CONT_CONCAT = Regex("^\\r?\\n[ \\t]*\\\\")
 	val NUMBER = Regex("^-?[0-9]+(\\.[0-9]+)?")
 }

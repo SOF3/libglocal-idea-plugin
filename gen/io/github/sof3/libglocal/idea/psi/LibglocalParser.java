@@ -591,7 +591,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // T_MODIFIER_ARG T_IDENTIFIER [T_FLAG* T_IDENTIFIER]
+  // T_MODIFIER_ARG T_IDENTIFIER [T_FLAG* T_IDENTIFIER [element_literal]]
   public static boolean element_modifier_arg(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "element_modifier_arg")) return false;
     if (!nextTokenIs(b, T_MODIFIER_ARG)) return false;
@@ -603,20 +603,21 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [T_FLAG* T_IDENTIFIER]
+  // [T_FLAG* T_IDENTIFIER [element_literal]]
   private static boolean element_modifier_arg_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "element_modifier_arg_2")) return false;
     element_modifier_arg_2_0(b, l + 1);
     return true;
   }
 
-  // T_FLAG* T_IDENTIFIER
+  // T_FLAG* T_IDENTIFIER [element_literal]
   private static boolean element_modifier_arg_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "element_modifier_arg_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = element_modifier_arg_2_0_0(b, l + 1);
     r = r && consumeToken(b, T_IDENTIFIER);
+    r = r && element_modifier_arg_2_0_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -629,6 +630,13 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
       if (!consumeToken(b, T_FLAG)) break;
       if (!empty_element_parsed_guard_(b, "element_modifier_arg_2_0_0", c)) break;
     }
+    return true;
+  }
+
+  // [element_literal]
+  private static boolean element_modifier_arg_2_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_modifier_arg_2_0_2")) return false;
+    element_literal(b, l + 1);
     return true;
   }
 

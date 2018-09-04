@@ -26,4 +26,14 @@ public class LibglocalElementModifierVersionImpl extends ASTWrapperPsiElement im
     else super.accept(visitor);
   }
 
+  @NotNull
+  public List<LibglocalBlockConstraint> getConstraints() {
+    return Utils.getConstraints(this);
+  }
+
+  @NotNull
+  public List<LibglocalBlockElement> getChildBlocks() {
+    return Utils.getChildBlocks(this);
+  }
+
 }

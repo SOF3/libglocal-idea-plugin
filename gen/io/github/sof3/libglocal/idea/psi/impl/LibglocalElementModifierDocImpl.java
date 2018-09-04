@@ -32,4 +32,14 @@ public class LibglocalElementModifierDocImpl extends ASTWrapperPsiElement implem
     return findNotNullChildByClass(LibglocalElementLiteralStatic.class);
   }
 
+  @NotNull
+  public List<LibglocalBlockConstraint> getConstraints() {
+    return Utils.getConstraints(this);
+  }
+
+  @NotNull
+  public List<LibglocalBlockElement> getChildBlocks() {
+    return Utils.getChildBlocks(this);
+  }
+
 }

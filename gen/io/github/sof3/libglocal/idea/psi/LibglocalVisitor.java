@@ -21,19 +21,16 @@ public class LibglocalVisitor extends PsiElementVisitor {
 
   public void visitBlockMessage(@NotNull LibglocalBlockMessage o) {
     visitNamedBlockElement(o);
-    // visitBlockElement(o);
   }
 
   public void visitBlockMessageGroup(@NotNull LibglocalBlockMessageGroup o) {
-    visitMessageParentElement(o);
-    // visitNamedBlockElement(o);
-    // visitBlockElement(o);
+    visitNamedBlockElement(o);
+    // visitMessageParentElement(o);
   }
 
   public void visitBlockMessages(@NotNull LibglocalBlockMessages o) {
-    visitMessageParentElement(o);
-    // visitNamedBlockElement(o);
-    // visitBlockElement(o);
+    visitNamedBlockElement(o);
+    // visitMessageParentElement(o);
   }
 
   public void visitBlockRequire(@NotNull LibglocalBlockRequire o) {
@@ -89,15 +86,15 @@ public class LibglocalVisitor extends PsiElementVisitor {
   }
 
   public void visitElementModifierArg(@NotNull LibglocalElementModifierArg o) {
-    visitPsiElement(o);
+    visitModifierBlock(o);
   }
 
   public void visitElementModifierDoc(@NotNull LibglocalElementModifierDoc o) {
-    visitPsiElement(o);
+    visitModifierBlock(o);
   }
 
   public void visitElementModifierVersion(@NotNull LibglocalElementModifierVersion o) {
-    visitPsiElement(o);
+    visitModifierBlock(o);
   }
 
   public void visitElementSpan(@NotNull LibglocalElementSpan o) {
@@ -108,7 +105,7 @@ public class LibglocalVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitMessageParentElement(@NotNull LibglocalMessageParentElement o) {
+  public void visitModifierBlock(@NotNull LibglocalModifierBlock o) {
     visitPsiElement(o);
   }
 

@@ -26,4 +26,20 @@ public class LibglocalElementModifierArgImpl extends ASTWrapperPsiElement implem
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public LibglocalElementLiteral getElementLiteral() {
+    return findChildByClass(LibglocalElementLiteral.class);
+  }
+
+  @NotNull
+  public List<LibglocalBlockConstraint> getConstraints() {
+    return Utils.getConstraints(this);
+  }
+
+  @NotNull
+  public List<LibglocalBlockElement> getChildBlocks() {
+    return Utils.getChildBlocks(this);
+  }
+
 }

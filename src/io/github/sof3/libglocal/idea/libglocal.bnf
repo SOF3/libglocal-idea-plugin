@@ -44,10 +44,9 @@
 	implements("block_author")=["LibglocalBlockElement"]
 	implements("block_version")=["LibglocalBlockElement"]
 	implements("block_require")=["LibglocalBlockElement"]
-	implements("block_messages")=["LibglocalBlockElement"]
-	implements("block_message_group")=["LibglocalBlockElement"]
-	implements("block_message")=["LibglocalBlockElement"]
-	implements("block_modifier")=["LibglocalBlockElement"]
+	implements("block_messages")=["LibglocalNamedBlockElement" "LibglocalMessageParentElement"]
+	implements("block_message_group")=["LibglocalNamedBlockElement" "LibglocalMessageParentElement"]
+	implements("block_message")=["LibglocalNamedBlockElement"]
 	implements("block_constraint")=["LibglocalBlockElement"]
 }
 
@@ -80,30 +79,36 @@ block_require ::= K_REQUIRE T_IDENTIFIER line_delim {
 }
 
 block_messages ::= K_MESSAGES element_message_id line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent] {
-	implements=[LibglocalMessageParentElement LibglocalNamedBlockElement]
 	methods=[getChildBlocks getMessages getName getPresentation]
 }
 block_message_group ::= element_message_id line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent] {
-	implements=[LibglocalMessageParentElement LibglocalNamedBlockElement]
 	methods=[getChildBlocks getMessages getName getFullName getPresentation]
 }
 element_message_id ::= T_FLAG* T_IDENTIFIER
 
 block_message ::= element_message_id element_literal line_delim [T_INDENT_INDENT (block_modifier)* pseudo_dedent] {
-	implements=[LibglocalNamedBlockElement]
 	methods=[getModifiers getChildBlocks getName getFullName getPresentation]
 }
 private block_modifier ::= modifier_content line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent] {
-	methods=[getChildBlocks getConstraints]
+	methods=[getChildBlocks]
 }
 block_constraint ::= T_IDENTIFIER [element_literal_static] line_delim {
 	methods=[getChildBlocks]
 }
 
 private modifier_content ::= (element_modifier_arg | element_modifier_doc | element_modifier_version)
-element_modifier_arg ::= T_MODIFIER_ARG T_IDENTIFIER [T_FLAG* T_IDENTIFIER]
-element_modifier_doc ::= T_MODIFIER_DOC element_literal_static
-element_modifier_version ::= T_MODIFIER_VERSION T_IDENTIFIER
+element_modifier_arg ::= T_MODIFIER_ARG T_IDENTIFIER [T_FLAG* T_IDENTIFIER [element_literal]] {
+	implements=["LibglocalModifierBlock"]
+	methods=[getConstraints getChildBlocks]
+}
+element_modifier_doc ::= T_MODIFIER_DOC element_literal_static {
+	implements=["LibglocalModifierBlock"]
+	methods=[getConstraints getChildBlocks]
+}
+element_modifier_version ::= T_MODIFIER_VERSION T_IDENTIFIER {
+	implements=["LibglocalModifierBlock"]
+	methods=[getConstraints getChildBlocks]
+}
 
 element_literal ::= (literal_token)+
 private literal_token ::= literal_token_static | element_arg_ref | element_message_ref | element_span

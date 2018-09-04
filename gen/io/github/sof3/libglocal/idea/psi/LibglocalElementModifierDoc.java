@@ -5,9 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LibglocalElementModifierDoc extends PsiElement {
+public interface LibglocalElementModifierDoc extends LibglocalModifierBlock {
 
   @NotNull
   LibglocalElementLiteralStatic getElementLiteralStatic();
+
+  @NotNull
+  List<LibglocalBlockConstraint> getConstraints();
+
+  @NotNull
+  List<LibglocalBlockElement> getChildBlocks();
 
 }

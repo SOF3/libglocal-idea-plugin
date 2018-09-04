@@ -6,7 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.navigation.ItemPresentation;
 
-public interface LibglocalBlockMessage extends LibglocalNamedBlockElement, LibglocalBlockElement {
+public interface LibglocalBlockMessage extends LibglocalNamedBlockElement {
 
   @NotNull
   List<LibglocalBlockConstraint> getBlockConstraintList();
