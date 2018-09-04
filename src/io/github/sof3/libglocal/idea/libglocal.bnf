@@ -92,7 +92,7 @@ block_message ::= element_message_id element_literal line_delim [T_INDENT_INDENT
 private block_modifier ::= modifier_content line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent] {
 	methods=[getChildBlocks]
 }
-block_constraint ::= T_IDENTIFIER [element_literal_static] line_delim {
+block_constraint ::= T_IDENTIFIER [element_literal_static] line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent] {
 	methods=[getChildBlocks]
 }
 

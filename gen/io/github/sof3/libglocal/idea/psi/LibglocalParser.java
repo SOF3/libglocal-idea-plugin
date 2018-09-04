@@ -117,7 +117,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // T_IDENTIFIER [element_literal_static] line_delim
+  // T_IDENTIFIER [element_literal_static] line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent]
   public static boolean block_constraint(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_constraint")) return false;
     if (!nextTokenIs(b, T_IDENTIFIER)) return false;
@@ -126,6 +126,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, T_IDENTIFIER);
     r = r && block_constraint_1(b, l + 1);
     r = r && line_delim(b, l + 1);
+    r = r && block_constraint_3(b, l + 1);
     exit_section_(b, m, BLOCK_CONSTRAINT, r);
     return r;
   }
@@ -135,6 +136,46 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "block_constraint_1")) return false;
     element_literal_static(b, l + 1);
     return true;
+  }
+
+  // [T_INDENT_INDENT (block_constraint)* pseudo_dedent]
+  private static boolean block_constraint_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_constraint_3")) return false;
+    block_constraint_3_0(b, l + 1);
+    return true;
+  }
+
+  // T_INDENT_INDENT (block_constraint)* pseudo_dedent
+  private static boolean block_constraint_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_constraint_3_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, T_INDENT_INDENT);
+    r = r && block_constraint_3_0_1(b, l + 1);
+    r = r && pseudo_dedent(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (block_constraint)*
+  private static boolean block_constraint_3_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_constraint_3_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!block_constraint_3_0_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "block_constraint_3_0_1", c)) break;
+    }
+    return true;
+  }
+
+  // (block_constraint)
+  private static boolean block_constraint_3_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "block_constraint_3_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = block_constraint(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */

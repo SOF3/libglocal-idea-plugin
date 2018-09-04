@@ -7,6 +7,9 @@ import com.intellij.psi.PsiElement;
 
 public interface LibglocalBlockConstraint extends LibglocalBlockElement {
 
+  @NotNull
+  List<LibglocalBlockConstraint> getBlockConstraintList();
+
   @Nullable
   LibglocalElementLiteralStatic getElementLiteralStatic();
 

@@ -27,6 +27,12 @@ public class LibglocalBlockConstraintImpl extends ASTWrapperPsiElement implement
   }
 
   @Override
+  @NotNull
+  public List<LibglocalBlockConstraint> getBlockConstraintList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalBlockConstraint.class);
+  }
+
+  @Override
   @Nullable
   public LibglocalElementLiteralStatic getElementLiteralStatic() {
     return findChildByClass(LibglocalElementLiteralStatic.class);
