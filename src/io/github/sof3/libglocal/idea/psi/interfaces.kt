@@ -11,9 +11,8 @@ interface LibglocalMessageParentElement : PsiElement {
 	val messages: List<LibglocalBlockMessage>
 }
 
-interface LibglocalNamedBlockElement : LibglocalBlockElement {
+interface LibglocalModifierBlock : LibglocalBlockElement {
+	val constraints: List<LibglocalConstraintBlock>
 }
 
-interface LibglocalModifierBlock : LibglocalBlockElement {
-	val constraints: List<LibglocalBlockConstraint>
-}
+interface LibglocalConstraintBlock : LibglocalBlockElement

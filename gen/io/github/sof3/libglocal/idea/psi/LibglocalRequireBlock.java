@@ -5,10 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LibglocalBlockAuthor extends LibglocalBlockElement {
+public interface LibglocalRequireBlock extends LibglocalBlockElement {
 
   @NotNull
-  LibglocalElementLiteralStatic getElementLiteralStatic();
+  LibglocalElementRequireTarget getElementRequireTarget();
 
   @NotNull
   List<LibglocalBlockElement> getChildBlocks();

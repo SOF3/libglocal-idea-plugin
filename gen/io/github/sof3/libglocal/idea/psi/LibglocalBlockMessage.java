@@ -6,10 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.navigation.ItemPresentation;
 
-public interface LibglocalBlockMessage extends LibglocalNamedBlockElement {
-
-  @NotNull
-  List<LibglocalBlockConstraint> getBlockConstraintList();
+public interface LibglocalBlockMessage extends LibglocalBlockElement {
 
   @NotNull
   LibglocalElementLiteral getElementLiteral();
@@ -18,13 +15,13 @@ public interface LibglocalBlockMessage extends LibglocalNamedBlockElement {
   LibglocalElementMessageId getElementMessageId();
 
   @NotNull
-  List<LibglocalElementModifierArg> getElementModifierArgList();
+  List<LibglocalModifierArg> getModifierArgList();
 
   @NotNull
-  List<LibglocalElementModifierDoc> getElementModifierDocList();
+  List<LibglocalModifierDoc> getModifierDocList();
 
   @NotNull
-  List<LibglocalElementModifierVersion> getElementModifierVersionList();
+  List<LibglocalModifierVersion> getModifierVersionList();
 
   @NotNull
   List<LibglocalModifierBlock> getModifiers();
@@ -32,7 +29,7 @@ public interface LibglocalBlockMessage extends LibglocalNamedBlockElement {
   @NotNull
   List<LibglocalBlockElement> getChildBlocks();
 
-  @Nullable
+  @NotNull
   String getName();
 
   @NotNull

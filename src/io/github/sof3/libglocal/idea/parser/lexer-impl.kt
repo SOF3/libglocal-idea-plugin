@@ -9,6 +9,7 @@ internal enum class LexerState {
 			val indentStack = lexer.indentStack
 
 			lexer.expectedIdentifiers = 0
+			lexer.instructionMode = false
 
 			val (indent, line) = LibglocalLexer.readWhitespace(buffer)
 
@@ -107,34 +108,24 @@ internal enum class LexerState {
 
 				return LibglocalLexer.badToken()
 			} else {
+				var token: FutureToken? = null
 				if (buffer[0] == '$') {
-					val argToken = FutureToken(LibglocalElements.T_MODIFIER_ARG, 1)
-					val (white, _) = LibglocalLexer.readWhitespace(buffer.subSequence(1, buffer.length))
 					lexer.expectedIdentifiers = 2
-					lexer.nextState = IDENTIFIER
-					return if (white.isNotEmpty())
-						listOf(argToken, FutureToken(TokenType.WHITE_SPACE, white.length))
-					else
-						listOf(argToken)
-				}
-				if (buffer[0] == '*') {
-					val argToken = FutureToken(LibglocalElements.T_MODIFIER_DOC, 1)
-					val (white, _) = LibglocalLexer.readWhitespace(buffer.subSequence(1, buffer.length))
-					lexer.nextState = LITERAL
-					return if (white.isNotEmpty())
-						listOf(argToken, FutureToken(TokenType.WHITE_SPACE, white.length))
-					else
-						listOf(argToken)
-				}
-				if (buffer[0] == '~') {
-					val argToken = FutureToken(LibglocalElements.T_MODIFIER_VERSION, 1)
-					val (white, _) = LibglocalLexer.readWhitespace(buffer.subSequence(1, buffer.length))
+					token = FutureToken(LibglocalElements.T_MODIFIER_ARG, 1)
+				} else if (buffer[0] == '*') {
+					token = FutureToken(LibglocalElements.T_MODIFIER_DOC, 1)
+				} else if (buffer[0] == '~') {
+					token = FutureToken(LibglocalElements.T_MODIFIER_VERSION, 1)
 					lexer.expectedIdentifiers = 1
-					lexer.nextState = IDENTIFIER
-					return if (white.isNotEmpty())
-						listOf(argToken, FutureToken(TokenType.WHITE_SPACE, white.length))
-					else
-						listOf(argToken)
+				} else if (buffer[0] == '#') {
+					token = FutureToken(LibglocalElements.T_INSTRUCTION, 1)
+					lexer.instructionMode = true
+				}
+
+				if (token != null) {
+					lexer.optionalSeparator = true
+					lexer.nextState = SEPARATOR
+					return listOf(token)
 				}
 
 				val (list, read, _) = LibglocalLexer.readIdentifier(buffer)
@@ -152,20 +143,32 @@ internal enum class LexerState {
 				lexer.nextState = LINE_START
 				return listOf(FutureToken(LibglocalElements.T_EOL, white.length + (if (rem[0] == '\r') 2 else 1)))
 			}
+
+			lexer.nextState = if (lexer.instructionMode || lexer.expectedIdentifiers > 0) IDENTIFIER else LITERAL
+
 			if (white.isEmpty()) {
+				if (lexer.optionalSeparator) {
+					lexer.optionalSeparator = false
+					return emptyList()
+				}
 				return LibglocalLexer.badToken()
 			}
 
-			lexer.nextState = if (lexer.expectedIdentifiers > 0) IDENTIFIER else LITERAL
 			return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 		}
 	},
 
 	IDENTIFIER {
 		override fun advance(lexer: LibglocalLexer, buffer: CharSequence): List<FutureToken> {
+			if (lexer.instructionMode && buffer[0] == '=') {
+				lexer.instructionMode = false
+				lexer.optionalSeparator = true
+				lexer.nextState = SEPARATOR
+				return listOf(FutureToken(LibglocalElements.T_EQUALS, 1))
+			}
 			val (list, read, _) = LibglocalLexer.readIdentifier(buffer)
 			if (read) {
-				lexer.expectedIdentifiers--
+				if (!lexer.instructionMode) lexer.expectedIdentifiers--
 				lexer.nextState = SEPARATOR
 			}
 			return list
@@ -187,15 +190,15 @@ internal enum class LexerState {
 			if (strLen == 0) {
 				if (buffer[0] == '\r' || buffer[0] == '\n') {
 					var match = LexerPatterns.CONT_NEWLINE.find(buffer)
-					if(match!=null){
+					if (match != null) {
 						return listOf(FutureToken(LibglocalElements.T_CONT_NEWLINE, match.value.length))
 					}
 					match = LexerPatterns.CONT_SPACE.find(buffer)
-					if(match!=null){
+					if (match != null) {
 						return listOf(FutureToken(LibglocalElements.T_CONT_SPACE, match.value.length))
 					}
 					match = LexerPatterns.CONT_CONCAT.find(buffer)
-					if(match!=null){
+					if (match != null) {
 						return listOf(FutureToken(LibglocalElements.T_CONT_CONCAT, match.value.length))
 					}
 

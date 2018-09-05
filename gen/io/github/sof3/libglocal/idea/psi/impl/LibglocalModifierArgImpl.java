@@ -12,14 +12,14 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.sof3.libglocal.idea.psi.*;
 import com.intellij.navigation.ItemPresentation;
 
-public class LibglocalBlockMessageImpl extends ASTWrapperPsiElement implements LibglocalBlockMessage {
+public class LibglocalModifierArgImpl extends ASTWrapperPsiElement implements LibglocalModifierArg {
 
-  public LibglocalBlockMessageImpl(@NotNull ASTNode node) {
+  public LibglocalModifierArgImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull LibglocalVisitor visitor) {
-    visitor.visitBlockMessage(this);
+    visitor.visitModifierArg(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -29,37 +29,43 @@ public class LibglocalBlockMessageImpl extends ASTWrapperPsiElement implements L
 
   @Override
   @NotNull
-  public LibglocalElementLiteral getElementLiteral() {
-    return findNotNullChildByClass(LibglocalElementLiteral.class);
+  public List<LibglocalConstraintDelim> getConstraintDelimList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalConstraintDelim.class);
   }
 
   @Override
   @NotNull
-  public LibglocalElementMessageId getElementMessageId() {
-    return findNotNullChildByClass(LibglocalElementMessageId.class);
+  public List<LibglocalConstraintDoc> getConstraintDocList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalConstraintDoc.class);
   }
 
   @Override
   @NotNull
-  public List<LibglocalModifierArg> getModifierArgList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalModifierArg.class);
+  public List<LibglocalConstraintField> getConstraintFieldList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalConstraintField.class);
+  }
+
+  @Override
+  @Nullable
+  public LibglocalElementArgDefault getElementArgDefault() {
+    return findChildByClass(LibglocalElementArgDefault.class);
   }
 
   @Override
   @NotNull
-  public List<LibglocalModifierDoc> getModifierDocList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalModifierDoc.class);
+  public LibglocalElementArgName getElementArgName() {
+    return findNotNullChildByClass(LibglocalElementArgName.class);
   }
 
   @Override
-  @NotNull
-  public List<LibglocalModifierVersion> getModifierVersionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalModifierVersion.class);
+  @Nullable
+  public LibglocalElementArgType getElementArgType() {
+    return findChildByClass(LibglocalElementArgType.class);
   }
 
   @NotNull
-  public List<LibglocalModifierBlock> getModifiers() {
-    return Utils.getModifiers(this);
+  public List<LibglocalConstraintBlock> getConstraints() {
+    return Utils.getConstraints(this);
   }
 
   @NotNull
@@ -67,14 +73,13 @@ public class LibglocalBlockMessageImpl extends ASTWrapperPsiElement implements L
     return Utils.getChildBlocks(this);
   }
 
-  @NotNull
   public String getName() {
     return Utils.getName(this);
   }
 
   @NotNull
-  public String getFullName() {
-    return Utils.getFullName(this);
+  public String getType() {
+    return Utils.getType(this);
   }
 
   @NotNull

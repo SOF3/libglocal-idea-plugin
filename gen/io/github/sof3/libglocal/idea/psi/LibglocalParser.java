@@ -23,14 +23,8 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     boolean r;
     b = adapt_builder_(t, b, this, null);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
-    if (t == BLOCK_AUTHOR) {
-      r = block_author(b, 0);
-    }
-    else if (t == BLOCK_CONSTRAINT) {
-      r = block_constraint(b, 0);
-    }
-    else if (t == BLOCK_LANG) {
-      r = block_lang(b, 0);
+    if (t == AUTHOR_BLOCK) {
+      r = author_block(b, 0);
     }
     else if (t == BLOCK_MESSAGE) {
       r = block_message(b, 0);
@@ -41,14 +35,26 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     else if (t == BLOCK_MESSAGES) {
       r = block_messages(b, 0);
     }
-    else if (t == BLOCK_REQUIRE) {
-      r = block_require(b, 0);
+    else if (t == CONSTRAINT_DELIM) {
+      r = constraint_delim(b, 0);
     }
-    else if (t == BLOCK_VERSION) {
-      r = block_version(b, 0);
+    else if (t == CONSTRAINT_DOC) {
+      r = constraint_doc(b, 0);
+    }
+    else if (t == CONSTRAINT_FIELD) {
+      r = constraint_field(b, 0);
+    }
+    else if (t == ELEMENT_ARG_DEFAULT) {
+      r = element_arg_default(b, 0);
+    }
+    else if (t == ELEMENT_ARG_NAME) {
+      r = element_arg_name(b, 0);
     }
     else if (t == ELEMENT_ARG_REF) {
       r = element_arg_ref(b, 0);
+    }
+    else if (t == ELEMENT_ARG_TYPE) {
+      r = element_arg_type(b, 0);
     }
     else if (t == ELEMENT_ARGS_ENTRY) {
       r = element_args_entry(b, 0);
@@ -80,17 +86,32 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     else if (t == ELEMENT_MESSAGE_REF) {
       r = element_message_ref(b, 0);
     }
-    else if (t == ELEMENT_MODIFIER_ARG) {
-      r = element_modifier_arg(b, 0);
-    }
-    else if (t == ELEMENT_MODIFIER_DOC) {
-      r = element_modifier_doc(b, 0);
-    }
-    else if (t == ELEMENT_MODIFIER_VERSION) {
-      r = element_modifier_version(b, 0);
+    else if (t == ELEMENT_REQUIRE_TARGET) {
+      r = element_require_target(b, 0);
     }
     else if (t == ELEMENT_SPAN) {
       r = element_span(b, 0);
+    }
+    else if (t == ELEMENT_VERSION_VALUE) {
+      r = element_version_value(b, 0);
+    }
+    else if (t == LANG_BLOCK) {
+      r = lang_block(b, 0);
+    }
+    else if (t == MODIFIER_ARG) {
+      r = modifier_arg(b, 0);
+    }
+    else if (t == MODIFIER_DOC) {
+      r = modifier_doc(b, 0);
+    }
+    else if (t == MODIFIER_VERSION) {
+      r = modifier_version(b, 0);
+    }
+    else if (t == REQUIRE_BLOCK) {
+      r = require_block(b, 0);
+    }
+    else if (t == VERSION_BLOCK) {
+      r = version_block(b, 0);
     }
     else {
       r = parse_root_(t, b, 0);
@@ -103,107 +124,73 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // constraint_field | constraint_delim | constraint_doc
+  static boolean arg_constraints(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arg_constraints")) return false;
+    boolean r;
+    r = constraint_field(b, l + 1);
+    if (!r) r = constraint_delim(b, l + 1);
+    if (!r) r = constraint_doc(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // T_MODIFIER_ARG element_arg_name [element_arg_type [element_arg_default]] line_delim
+  static boolean arg_template(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arg_template")) return false;
+    if (!nextTokenIs(b, T_MODIFIER_ARG)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, T_MODIFIER_ARG);
+    r = r && element_arg_name(b, l + 1);
+    r = r && arg_template_2(b, l + 1);
+    r = r && line_delim(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // [element_arg_type [element_arg_default]]
+  private static boolean arg_template_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arg_template_2")) return false;
+    arg_template_2_0(b, l + 1);
+    return true;
+  }
+
+  // element_arg_type [element_arg_default]
+  private static boolean arg_template_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arg_template_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = element_arg_type(b, l + 1);
+    r = r && arg_template_2_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // [element_arg_default]
+  private static boolean arg_template_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arg_template_2_0_1")) return false;
+    element_arg_default(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // K_AUTHOR element_literal_static line_delim
-  public static boolean block_author(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_author")) return false;
+  public static boolean author_block(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "author_block")) return false;
     if (!nextTokenIs(b, K_AUTHOR)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, K_AUTHOR);
     r = r && element_literal_static(b, l + 1);
     r = r && line_delim(b, l + 1);
-    exit_section_(b, m, BLOCK_AUTHOR, r);
+    exit_section_(b, m, AUTHOR_BLOCK, r);
     return r;
   }
 
   /* ********************************************************** */
-  // T_IDENTIFIER [element_literal_static] line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent]
-  public static boolean block_constraint(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_constraint")) return false;
-    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, T_IDENTIFIER);
-    r = r && block_constraint_1(b, l + 1);
-    r = r && line_delim(b, l + 1);
-    r = r && block_constraint_3(b, l + 1);
-    exit_section_(b, m, BLOCK_CONSTRAINT, r);
-    return r;
-  }
-
-  // [element_literal_static]
-  private static boolean block_constraint_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_constraint_1")) return false;
-    element_literal_static(b, l + 1);
-    return true;
-  }
-
-  // [T_INDENT_INDENT (block_constraint)* pseudo_dedent]
-  private static boolean block_constraint_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_constraint_3")) return false;
-    block_constraint_3_0(b, l + 1);
-    return true;
-  }
-
-  // T_INDENT_INDENT (block_constraint)* pseudo_dedent
-  private static boolean block_constraint_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_constraint_3_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, T_INDENT_INDENT);
-    r = r && block_constraint_3_0_1(b, l + 1);
-    r = r && pseudo_dedent(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (block_constraint)*
-  private static boolean block_constraint_3_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_constraint_3_0_1")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!block_constraint_3_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "block_constraint_3_0_1", c)) break;
-    }
-    return true;
-  }
-
-  // (block_constraint)
-  private static boolean block_constraint_3_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_constraint_3_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = block_constraint(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // (K_BASE_LANG | K_LANG) element_lang_id element_lang_name line_delim
-  public static boolean block_lang(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_lang")) return false;
-    if (!nextTokenIs(b, "<block lang>", K_BASE_LANG, K_LANG)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, BLOCK_LANG, "<block lang>");
-    r = block_lang_0(b, l + 1);
-    r = r && element_lang_id(b, l + 1);
-    r = r && element_lang_name(b, l + 1);
-    r = r && line_delim(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // K_BASE_LANG | K_LANG
-  private static boolean block_lang_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_lang_0")) return false;
-    boolean r;
-    r = consumeToken(b, K_BASE_LANG);
-    if (!r) r = consumeToken(b, K_LANG);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // element_message_id element_literal line_delim [T_INDENT_INDENT (block_modifier)* pseudo_dedent]
+  // element_message_id element_literal line_delim
+  // 	[T_INDENT_INDENT message_modifiers* pseudo_dedent]
   public static boolean block_message(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_message")) return false;
     if (!nextTokenIs(b, "<block message>", T_FLAG, T_IDENTIFIER)) return false;
@@ -217,14 +204,14 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [T_INDENT_INDENT (block_modifier)* pseudo_dedent]
+  // [T_INDENT_INDENT message_modifiers* pseudo_dedent]
   private static boolean block_message_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_message_3")) return false;
     block_message_3_0(b, l + 1);
     return true;
   }
 
-  // T_INDENT_INDENT (block_modifier)* pseudo_dedent
+  // T_INDENT_INDENT message_modifiers* pseudo_dedent
   private static boolean block_message_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_message_3_0")) return false;
     boolean r;
@@ -236,25 +223,15 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (block_modifier)*
+  // message_modifiers*
   private static boolean block_message_3_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "block_message_3_0_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!block_message_3_0_1_0(b, l + 1)) break;
+      if (!message_modifiers(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "block_message_3_0_1", c)) break;
     }
     return true;
-  }
-
-  // (block_modifier)
-  private static boolean block_message_3_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_message_3_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = block_modifier(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -365,81 +342,97 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // modifier_content line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent]
-  static boolean block_modifier(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_modifier")) return false;
+  // T_INSTRUCTION "delim" T_IDENTIFIER line_delim
+  public static boolean constraint_delim(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "constraint_delim")) return false;
+    if (!nextTokenIs(b, T_INSTRUCTION)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = modifier_content(b, l + 1);
+    r = consumeToken(b, T_INSTRUCTION);
+    r = r && consumeToken(b, "delim");
+    r = r && consumeToken(b, T_IDENTIFIER);
     r = r && line_delim(b, l + 1);
-    r = r && block_modifier_2(b, l + 1);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, CONSTRAINT_DELIM, r);
     return r;
   }
 
-  // [T_INDENT_INDENT (block_constraint)* pseudo_dedent]
-  private static boolean block_modifier_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_modifier_2")) return false;
-    block_modifier_2_0(b, l + 1);
+  /* ********************************************************** */
+  // T_MODIFIER_DOC element_literal_static line_delim
+  public static boolean constraint_doc(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "constraint_doc")) return false;
+    if (!nextTokenIs(b, T_MODIFIER_DOC)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, T_MODIFIER_DOC);
+    r = r && element_literal_static(b, l + 1);
+    r = r && line_delim(b, l + 1);
+    exit_section_(b, m, CONSTRAINT_DOC, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent]
+  public static boolean constraint_field(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "constraint_field")) return false;
+    if (!nextTokenIs(b, T_MODIFIER_ARG)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = arg_template(b, l + 1);
+    r = r && constraint_field_1(b, l + 1);
+    exit_section_(b, m, CONSTRAINT_FIELD, r);
+    return r;
+  }
+
+  // [T_INDENT_INDENT arg_constraints* pseudo_dedent]
+  private static boolean constraint_field_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "constraint_field_1")) return false;
+    constraint_field_1_0(b, l + 1);
     return true;
   }
 
-  // T_INDENT_INDENT (block_constraint)* pseudo_dedent
-  private static boolean block_modifier_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_modifier_2_0")) return false;
+  // T_INDENT_INDENT arg_constraints* pseudo_dedent
+  private static boolean constraint_field_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "constraint_field_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, T_INDENT_INDENT);
-    r = r && block_modifier_2_0_1(b, l + 1);
+    r = r && constraint_field_1_0_1(b, l + 1);
     r = r && pseudo_dedent(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (block_constraint)*
-  private static boolean block_modifier_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_modifier_2_0_1")) return false;
+  // arg_constraints*
+  private static boolean constraint_field_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "constraint_field_1_0_1")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!block_modifier_2_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "block_modifier_2_0_1", c)) break;
+      if (!arg_constraints(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "constraint_field_1_0_1", c)) break;
     }
     return true;
   }
 
-  // (block_constraint)
-  private static boolean block_modifier_2_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_modifier_2_0_1_0")) return false;
+  /* ********************************************************** */
+  // element_literal
+  public static boolean element_arg_default(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_arg_default")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = block_constraint(b, l + 1);
-    exit_section_(b, m, null, r);
+    Marker m = enter_section_(b, l, _NONE_, ELEMENT_ARG_DEFAULT, "<element arg default>");
+    r = element_literal(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // K_REQUIRE T_IDENTIFIER line_delim
-  public static boolean block_require(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_require")) return false;
-    if (!nextTokenIs(b, K_REQUIRE)) return false;
+  // T_IDENTIFIER
+  public static boolean element_arg_name(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_arg_name")) return false;
+    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, K_REQUIRE, T_IDENTIFIER);
-    r = r && line_delim(b, l + 1);
-    exit_section_(b, m, BLOCK_REQUIRE, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // K_VERSION T_IDENTIFIER line_delim
-  public static boolean block_version(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "block_version")) return false;
-    if (!nextTokenIs(b, K_VERSION)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, K_VERSION, T_IDENTIFIER);
-    r = r && line_delim(b, l + 1);
-    exit_section_(b, m, BLOCK_VERSION, r);
+    r = consumeToken(b, T_IDENTIFIER);
+    exit_section_(b, m, ELEMENT_ARG_NAME, r);
     return r;
   }
 
@@ -453,6 +446,30 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     r = consumeTokens(b, 0, T_ARG_REF_START, T_IDENTIFIER, T_CLOSE_BRACE);
     exit_section_(b, m, ELEMENT_ARG_REF, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // T_FLAG* T_IDENTIFIER
+  public static boolean element_arg_type(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_arg_type")) return false;
+    if (!nextTokenIs(b, "<element arg type>", T_FLAG, T_IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, ELEMENT_ARG_TYPE, "<element arg type>");
+    r = element_arg_type_0(b, l + 1);
+    r = r && consumeToken(b, T_IDENTIFIER);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // T_FLAG*
+  private static boolean element_arg_type_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_arg_type_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!consumeToken(b, T_FLAG)) break;
+      if (!empty_element_parsed_guard_(b, "element_arg_type_0", c)) break;
+    }
+    return true;
   }
 
   /* ********************************************************** */
@@ -632,77 +649,14 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // T_MODIFIER_ARG T_IDENTIFIER [T_FLAG* T_IDENTIFIER [element_literal]]
-  public static boolean element_modifier_arg(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "element_modifier_arg")) return false;
-    if (!nextTokenIs(b, T_MODIFIER_ARG)) return false;
+  // T_IDENTIFIER
+  public static boolean element_require_target(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_require_target")) return false;
+    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, T_MODIFIER_ARG, T_IDENTIFIER);
-    r = r && element_modifier_arg_2(b, l + 1);
-    exit_section_(b, m, ELEMENT_MODIFIER_ARG, r);
-    return r;
-  }
-
-  // [T_FLAG* T_IDENTIFIER [element_literal]]
-  private static boolean element_modifier_arg_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "element_modifier_arg_2")) return false;
-    element_modifier_arg_2_0(b, l + 1);
-    return true;
-  }
-
-  // T_FLAG* T_IDENTIFIER [element_literal]
-  private static boolean element_modifier_arg_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "element_modifier_arg_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = element_modifier_arg_2_0_0(b, l + 1);
-    r = r && consumeToken(b, T_IDENTIFIER);
-    r = r && element_modifier_arg_2_0_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // T_FLAG*
-  private static boolean element_modifier_arg_2_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "element_modifier_arg_2_0_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!consumeToken(b, T_FLAG)) break;
-      if (!empty_element_parsed_guard_(b, "element_modifier_arg_2_0_0", c)) break;
-    }
-    return true;
-  }
-
-  // [element_literal]
-  private static boolean element_modifier_arg_2_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "element_modifier_arg_2_0_2")) return false;
-    element_literal(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
-  // T_MODIFIER_DOC element_literal_static
-  public static boolean element_modifier_doc(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "element_modifier_doc")) return false;
-    if (!nextTokenIs(b, T_MODIFIER_DOC)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, T_MODIFIER_DOC);
-    r = r && element_literal_static(b, l + 1);
-    exit_section_(b, m, ELEMENT_MODIFIER_DOC, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // T_MODIFIER_VERSION T_IDENTIFIER
-  public static boolean element_modifier_version(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "element_modifier_version")) return false;
-    if (!nextTokenIs(b, T_MODIFIER_VERSION)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, T_MODIFIER_VERSION, T_IDENTIFIER);
-    exit_section_(b, m, ELEMENT_MODIFIER_VERSION, r);
+    r = consumeToken(b, T_IDENTIFIER);
+    exit_section_(b, m, ELEMENT_REQUIRE_TARGET, r);
     return r;
   }
 
@@ -721,7 +675,43 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (block_lang | block_author | block_version | block_require)+ block_messages
+  // T_IDENTIFIER
+  public static boolean element_version_value(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "element_version_value")) return false;
+    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, T_IDENTIFIER);
+    exit_section_(b, m, ELEMENT_VERSION_VALUE, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (K_BASE_LANG | K_LANG) element_lang_id element_lang_name line_delim
+  public static boolean lang_block(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "lang_block")) return false;
+    if (!nextTokenIs(b, "<lang block>", K_BASE_LANG, K_LANG)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, LANG_BLOCK, "<lang block>");
+    r = lang_block_0(b, l + 1);
+    r = r && element_lang_id(b, l + 1);
+    r = r && element_lang_name(b, l + 1);
+    r = r && line_delim(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // K_BASE_LANG | K_LANG
+  private static boolean lang_block_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "lang_block_0")) return false;
+    boolean r;
+    r = consumeToken(b, K_BASE_LANG);
+    if (!r) r = consumeToken(b, K_LANG);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (lang_block | author_block | version_block | require_block)+ block_messages
   static boolean libglocal_file(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "libglocal_file")) return false;
     boolean r;
@@ -732,7 +722,7 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (block_lang | block_author | block_version | block_require)+
+  // (lang_block | author_block | version_block | require_block)+
   private static boolean libglocal_file_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "libglocal_file_0")) return false;
     boolean r;
@@ -747,14 +737,14 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // block_lang | block_author | block_version | block_require
+  // lang_block | author_block | version_block | require_block
   private static boolean libglocal_file_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "libglocal_file_0_0")) return false;
     boolean r;
-    r = block_lang(b, l + 1);
-    if (!r) r = block_author(b, l + 1);
-    if (!r) r = block_version(b, l + 1);
-    if (!r) r = block_require(b, l + 1);
+    r = lang_block(b, l + 1);
+    if (!r) r = author_block(b, l + 1);
+    if (!r) r = version_block(b, l + 1);
+    if (!r) r = require_block(b, l + 1);
     return r;
   }
 
@@ -796,13 +786,90 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // element_modifier_arg | element_modifier_doc | element_modifier_version
-  static boolean modifier_content(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "modifier_content")) return false;
+  // modifier_arg | modifier_doc | modifier_version
+  static boolean message_modifiers(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "message_modifiers")) return false;
     boolean r;
-    r = element_modifier_arg(b, l + 1);
-    if (!r) r = element_modifier_doc(b, l + 1);
-    if (!r) r = element_modifier_version(b, l + 1);
+    r = modifier_arg(b, l + 1);
+    if (!r) r = modifier_doc(b, l + 1);
+    if (!r) r = modifier_version(b, l + 1);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent]
+  public static boolean modifier_arg(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifier_arg")) return false;
+    if (!nextTokenIs(b, T_MODIFIER_ARG)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = arg_template(b, l + 1);
+    r = r && modifier_arg_1(b, l + 1);
+    exit_section_(b, m, MODIFIER_ARG, r);
+    return r;
+  }
+
+  // [T_INDENT_INDENT arg_constraints* pseudo_dedent]
+  private static boolean modifier_arg_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifier_arg_1")) return false;
+    modifier_arg_1_0(b, l + 1);
+    return true;
+  }
+
+  // T_INDENT_INDENT arg_constraints* pseudo_dedent
+  private static boolean modifier_arg_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifier_arg_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, T_INDENT_INDENT);
+    r = r && modifier_arg_1_0_1(b, l + 1);
+    r = r && pseudo_dedent(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // arg_constraints*
+  private static boolean modifier_arg_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifier_arg_1_0_1")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!arg_constraints(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "modifier_arg_1_0_1", c)) break;
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
+  // T_MODIFIER_DOC element_literal_static? line_delim
+  public static boolean modifier_doc(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifier_doc")) return false;
+    if (!nextTokenIs(b, T_MODIFIER_DOC)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, T_MODIFIER_DOC);
+    r = r && modifier_doc_1(b, l + 1);
+    r = r && line_delim(b, l + 1);
+    exit_section_(b, m, MODIFIER_DOC, r);
+    return r;
+  }
+
+  // element_literal_static?
+  private static boolean modifier_doc_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifier_doc_1")) return false;
+    element_literal_static(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // T_MODIFIER_VERSION T_IDENTIFIER line_delim
+  public static boolean modifier_version(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifier_version")) return false;
+    if (!nextTokenIs(b, T_MODIFIER_VERSION)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, T_MODIFIER_VERSION, T_IDENTIFIER);
+    r = r && line_delim(b, l + 1);
+    exit_section_(b, m, MODIFIER_VERSION, r);
     return r;
   }
 
@@ -815,6 +882,34 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, T_INDENT_DEDENT);
     if (!r) r = eof(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // K_REQUIRE element_require_target line_delim
+  public static boolean require_block(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "require_block")) return false;
+    if (!nextTokenIs(b, K_REQUIRE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_REQUIRE);
+    r = r && element_require_target(b, l + 1);
+    r = r && line_delim(b, l + 1);
+    exit_section_(b, m, REQUIRE_BLOCK, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // K_VERSION element_version_value line_delim
+  public static boolean version_block(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "version_block")) return false;
+    if (!nextTokenIs(b, K_VERSION)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, K_VERSION);
+    r = r && element_version_value(b, l + 1);
+    r = r && line_delim(b, l + 1);
+    exit_section_(b, m, VERSION_BLOCK, r);
     return r;
   }
 

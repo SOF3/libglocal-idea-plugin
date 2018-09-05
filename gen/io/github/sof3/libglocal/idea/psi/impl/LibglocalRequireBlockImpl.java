@@ -10,16 +10,15 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.sof3.libglocal.idea.psi.LibglocalElements.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.sof3.libglocal.idea.psi.*;
-import com.intellij.ide.projectView.PresentationData;
 
-public class LibglocalBlockMessagesImpl extends ASTWrapperPsiElement implements LibglocalBlockMessages {
+public class LibglocalRequireBlockImpl extends ASTWrapperPsiElement implements LibglocalRequireBlock {
 
-  public LibglocalBlockMessagesImpl(@NotNull ASTNode node) {
+  public LibglocalRequireBlockImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull LibglocalVisitor visitor) {
-    visitor.visitBlockMessages(this);
+    visitor.visitRequireBlock(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -29,20 +28,8 @@ public class LibglocalBlockMessagesImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @NotNull
-  public List<LibglocalBlockMessage> getBlockMessageList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalBlockMessage.class);
-  }
-
-  @Override
-  @NotNull
-  public List<LibglocalBlockMessageGroup> getBlockMessageGroupList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalBlockMessageGroup.class);
-  }
-
-  @Override
-  @NotNull
-  public LibglocalElementMessageId getElementMessageId() {
-    return findNotNullChildByClass(LibglocalElementMessageId.class);
+  public LibglocalElementRequireTarget getElementRequireTarget() {
+    return findNotNullChildByClass(LibglocalElementRequireTarget.class);
   }
 
   @NotNull
@@ -51,18 +38,8 @@ public class LibglocalBlockMessagesImpl extends ASTWrapperPsiElement implements 
   }
 
   @NotNull
-  public List<LibglocalBlockMessage> getMessages() {
-    return Utils.getMessages(this);
-  }
-
-  @NotNull
   public String getName() {
     return Utils.getName(this);
-  }
-
-  @NotNull
-  public PresentationData getPresentation() {
-    return Utils.getPresentation(this);
   }
 
 }

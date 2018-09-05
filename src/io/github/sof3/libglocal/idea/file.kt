@@ -10,14 +10,14 @@ class LibglocalFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, 
 	override val childBlocks: List<LibglocalBlockElement>
 		get() = listOfNotNull(messagesBlock)
 
-	val langBlock: LibglocalBlockLang?
-		get() = PsiTreeUtil.getChildOfType(this, LibglocalBlockLang::class.java)
-	val authorBlocks: List<LibglocalBlockAuthor>
-		get() = PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalBlockAuthor::class.java)
-	val versionBlock: LibglocalBlockVersion?
-		get() = PsiTreeUtil.getChildOfType(this, LibglocalBlockVersion::class.java)
-	val requireBlocks: List<LibglocalBlockRequire>
-		get() = PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalBlockRequire::class.java)
+	val langBlock: LibglocalLangBlock?
+		get() = PsiTreeUtil.getChildOfType(this, LibglocalLangBlock::class.java)
+	val authorBlocks: List<LibglocalAuthorBlock>
+		get() = PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalAuthorBlock::class.java)
+	val versionBlock: LibglocalVersionBlock?
+		get() = PsiTreeUtil.getChildOfType(this, LibglocalVersionBlock::class.java)
+	val requireBlocks: List<LibglocalRequireBlock>
+		get() = PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalRequireBlock::class.java)
 	val messagesBlock: LibglocalBlockMessages?
 		get() = PsiTreeUtil.getChildOfType(this, LibglocalBlockMessages::class.java)
 

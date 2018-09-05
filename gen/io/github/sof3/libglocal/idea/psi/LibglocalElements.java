@@ -10,29 +10,36 @@ import io.github.sof3.libglocal.idea.psi.impl.*;
 
 public interface LibglocalElements {
 
-  IElementType BLOCK_AUTHOR = new LibglocalElementType("BLOCK_AUTHOR");
-  IElementType BLOCK_CONSTRAINT = new LibglocalElementType("BLOCK_CONSTRAINT");
-  IElementType BLOCK_LANG = new LibglocalElementType("BLOCK_LANG");
+  IElementType AUTHOR_BLOCK = new LibglocalElementType("AUTHOR_BLOCK");
   IElementType BLOCK_MESSAGE = new LibglocalElementType("BLOCK_MESSAGE");
   IElementType BLOCK_MESSAGES = new LibglocalElementType("BLOCK_MESSAGES");
   IElementType BLOCK_MESSAGE_GROUP = new LibglocalElementType("BLOCK_MESSAGE_GROUP");
-  IElementType BLOCK_REQUIRE = new LibglocalElementType("BLOCK_REQUIRE");
-  IElementType BLOCK_VERSION = new LibglocalElementType("BLOCK_VERSION");
+  IElementType CONSTRAINT_DELIM = new LibglocalElementType("CONSTRAINT_DELIM");
+  IElementType CONSTRAINT_DOC = new LibglocalElementType("CONSTRAINT_DOC");
+  IElementType CONSTRAINT_FIELD = new LibglocalElementType("CONSTRAINT_FIELD");
   IElementType ELEMENT_ARGS_ENTRY = new LibglocalElementType("ELEMENT_ARGS_ENTRY");
   IElementType ELEMENT_ARGS_SUPPLIER = new LibglocalElementType("ELEMENT_ARGS_SUPPLIER");
   IElementType ELEMENT_ARGS_VALUE = new LibglocalElementType("ELEMENT_ARGS_VALUE");
   IElementType ELEMENT_ARGS_VALUE_STRING = new LibglocalElementType("ELEMENT_ARGS_VALUE_STRING");
+  IElementType ELEMENT_ARG_DEFAULT = new LibglocalElementType("ELEMENT_ARG_DEFAULT");
+  IElementType ELEMENT_ARG_NAME = new LibglocalElementType("ELEMENT_ARG_NAME");
   IElementType ELEMENT_ARG_REF = new LibglocalElementType("ELEMENT_ARG_REF");
+  IElementType ELEMENT_ARG_TYPE = new LibglocalElementType("ELEMENT_ARG_TYPE");
   IElementType ELEMENT_LANG_ID = new LibglocalElementType("ELEMENT_LANG_ID");
   IElementType ELEMENT_LANG_NAME = new LibglocalElementType("ELEMENT_LANG_NAME");
   IElementType ELEMENT_LITERAL = new LibglocalElementType("ELEMENT_LITERAL");
   IElementType ELEMENT_LITERAL_STATIC = new LibglocalElementType("ELEMENT_LITERAL_STATIC");
   IElementType ELEMENT_MESSAGE_ID = new LibglocalElementType("ELEMENT_MESSAGE_ID");
   IElementType ELEMENT_MESSAGE_REF = new LibglocalElementType("ELEMENT_MESSAGE_REF");
-  IElementType ELEMENT_MODIFIER_ARG = new LibglocalElementType("ELEMENT_MODIFIER_ARG");
-  IElementType ELEMENT_MODIFIER_DOC = new LibglocalElementType("ELEMENT_MODIFIER_DOC");
-  IElementType ELEMENT_MODIFIER_VERSION = new LibglocalElementType("ELEMENT_MODIFIER_VERSION");
+  IElementType ELEMENT_REQUIRE_TARGET = new LibglocalElementType("ELEMENT_REQUIRE_TARGET");
   IElementType ELEMENT_SPAN = new LibglocalElementType("ELEMENT_SPAN");
+  IElementType ELEMENT_VERSION_VALUE = new LibglocalElementType("ELEMENT_VERSION_VALUE");
+  IElementType LANG_BLOCK = new LibglocalElementType("LANG_BLOCK");
+  IElementType MODIFIER_ARG = new LibglocalElementType("MODIFIER_ARG");
+  IElementType MODIFIER_DOC = new LibglocalElementType("MODIFIER_DOC");
+  IElementType MODIFIER_VERSION = new LibglocalElementType("MODIFIER_VERSION");
+  IElementType REQUIRE_BLOCK = new LibglocalElementType("REQUIRE_BLOCK");
+  IElementType VERSION_BLOCK = new LibglocalElementType("VERSION_BLOCK");
 
   IElementType K_AUTHOR = new LibglocalTokenType("K_AUTHOR");
   IElementType K_BASE_LANG = new LibglocalTokenType("K_BASE_LANG");
@@ -56,6 +63,7 @@ public interface LibglocalElements {
   IElementType T_INDENT_INDENT = new LibglocalTokenType("increase indent");
   IElementType T_INDENT_INHERIT = new LibglocalTokenType("indent");
   IElementType T_INDENT_INVALID = new LibglocalTokenType("invalid indent");
+  IElementType T_INSTRUCTION = new LibglocalTokenType("#");
   IElementType T_LITERAL_ESCAPE = new LibglocalTokenType("T_LITERAL_ESCAPE");
   IElementType T_LITERAL_INVALID_ESCAPE = new LibglocalTokenType("invalid literal escape");
   IElementType T_LITERAL_STRING = new LibglocalTokenType("T_LITERAL_STRING");
@@ -71,14 +79,8 @@ public interface LibglocalElements {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == BLOCK_AUTHOR) {
-        return new LibglocalBlockAuthorImpl(node);
-      }
-      else if (type == BLOCK_CONSTRAINT) {
-        return new LibglocalBlockConstraintImpl(node);
-      }
-      else if (type == BLOCK_LANG) {
-        return new LibglocalBlockLangImpl(node);
+       if (type == AUTHOR_BLOCK) {
+        return new LibglocalAuthorBlockImpl(node);
       }
       else if (type == BLOCK_MESSAGE) {
         return new LibglocalBlockMessageImpl(node);
@@ -89,11 +91,14 @@ public interface LibglocalElements {
       else if (type == BLOCK_MESSAGE_GROUP) {
         return new LibglocalBlockMessageGroupImpl(node);
       }
-      else if (type == BLOCK_REQUIRE) {
-        return new LibglocalBlockRequireImpl(node);
+      else if (type == CONSTRAINT_DELIM) {
+        return new LibglocalConstraintDelimImpl(node);
       }
-      else if (type == BLOCK_VERSION) {
-        return new LibglocalBlockVersionImpl(node);
+      else if (type == CONSTRAINT_DOC) {
+        return new LibglocalConstraintDocImpl(node);
+      }
+      else if (type == CONSTRAINT_FIELD) {
+        return new LibglocalConstraintFieldImpl(node);
       }
       else if (type == ELEMENT_ARGS_ENTRY) {
         return new LibglocalElementArgsEntryImpl(node);
@@ -107,8 +112,17 @@ public interface LibglocalElements {
       else if (type == ELEMENT_ARGS_VALUE_STRING) {
         return new LibglocalElementArgsValueStringImpl(node);
       }
+      else if (type == ELEMENT_ARG_DEFAULT) {
+        return new LibglocalElementArgDefaultImpl(node);
+      }
+      else if (type == ELEMENT_ARG_NAME) {
+        return new LibglocalElementArgNameImpl(node);
+      }
       else if (type == ELEMENT_ARG_REF) {
         return new LibglocalElementArgRefImpl(node);
+      }
+      else if (type == ELEMENT_ARG_TYPE) {
+        return new LibglocalElementArgTypeImpl(node);
       }
       else if (type == ELEMENT_LANG_ID) {
         return new LibglocalElementLangIdImpl(node);
@@ -128,17 +142,32 @@ public interface LibglocalElements {
       else if (type == ELEMENT_MESSAGE_REF) {
         return new LibglocalElementMessageRefImpl(node);
       }
-      else if (type == ELEMENT_MODIFIER_ARG) {
-        return new LibglocalElementModifierArgImpl(node);
-      }
-      else if (type == ELEMENT_MODIFIER_DOC) {
-        return new LibglocalElementModifierDocImpl(node);
-      }
-      else if (type == ELEMENT_MODIFIER_VERSION) {
-        return new LibglocalElementModifierVersionImpl(node);
+      else if (type == ELEMENT_REQUIRE_TARGET) {
+        return new LibglocalElementRequireTargetImpl(node);
       }
       else if (type == ELEMENT_SPAN) {
         return new LibglocalElementSpanImpl(node);
+      }
+      else if (type == ELEMENT_VERSION_VALUE) {
+        return new LibglocalElementVersionValueImpl(node);
+      }
+      else if (type == LANG_BLOCK) {
+        return new LibglocalLangBlockImpl(node);
+      }
+      else if (type == MODIFIER_ARG) {
+        return new LibglocalModifierArgImpl(node);
+      }
+      else if (type == MODIFIER_DOC) {
+        return new LibglocalModifierDocImpl(node);
+      }
+      else if (type == MODIFIER_VERSION) {
+        return new LibglocalModifierVersionImpl(node);
+      }
+      else if (type == REQUIRE_BLOCK) {
+        return new LibglocalRequireBlockImpl(node);
+      }
+      else if (type == VERSION_BLOCK) {
+        return new LibglocalVersionBlockImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

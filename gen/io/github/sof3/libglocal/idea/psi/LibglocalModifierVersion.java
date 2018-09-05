@@ -5,10 +5,10 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LibglocalElementModifierVersion extends LibglocalModifierBlock {
+public interface LibglocalModifierVersion extends LibglocalModifierBlock {
 
   @NotNull
-  List<LibglocalBlockConstraint> getConstraints();
+  List<LibglocalConstraintBlock> getConstraints();
 
   @NotNull
   List<LibglocalBlockElement> getChildBlocks();

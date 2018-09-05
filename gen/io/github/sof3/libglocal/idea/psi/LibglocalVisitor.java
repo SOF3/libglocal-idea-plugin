@@ -7,41 +7,49 @@ import com.intellij.psi.PsiElement;
 
 public class LibglocalVisitor extends PsiElementVisitor {
 
-  public void visitBlockAuthor(@NotNull LibglocalBlockAuthor o) {
-    visitBlockElement(o);
-  }
-
-  public void visitBlockConstraint(@NotNull LibglocalBlockConstraint o) {
-    visitBlockElement(o);
-  }
-
-  public void visitBlockLang(@NotNull LibglocalBlockLang o) {
+  public void visitAuthorBlock(@NotNull LibglocalAuthorBlock o) {
     visitBlockElement(o);
   }
 
   public void visitBlockMessage(@NotNull LibglocalBlockMessage o) {
-    visitNamedBlockElement(o);
+    visitBlockElement(o);
   }
 
   public void visitBlockMessageGroup(@NotNull LibglocalBlockMessageGroup o) {
-    visitNamedBlockElement(o);
+    visitBlockElement(o);
     // visitMessageParentElement(o);
   }
 
   public void visitBlockMessages(@NotNull LibglocalBlockMessages o) {
-    visitNamedBlockElement(o);
+    visitBlockElement(o);
     // visitMessageParentElement(o);
   }
 
-  public void visitBlockRequire(@NotNull LibglocalBlockRequire o) {
-    visitBlockElement(o);
+  public void visitConstraintDelim(@NotNull LibglocalConstraintDelim o) {
+    visitPsiElement(o);
   }
 
-  public void visitBlockVersion(@NotNull LibglocalBlockVersion o) {
-    visitBlockElement(o);
+  public void visitConstraintDoc(@NotNull LibglocalConstraintDoc o) {
+    visitPsiElement(o);
+  }
+
+  public void visitConstraintField(@NotNull LibglocalConstraintField o) {
+    visitConstraintBlock(o);
+  }
+
+  public void visitElementArgDefault(@NotNull LibglocalElementArgDefault o) {
+    visitPsiElement(o);
+  }
+
+  public void visitElementArgName(@NotNull LibglocalElementArgName o) {
+    visitPsiElement(o);
   }
 
   public void visitElementArgRef(@NotNull LibglocalElementArgRef o) {
+    visitPsiElement(o);
+  }
+
+  public void visitElementArgType(@NotNull LibglocalElementArgType o) {
     visitPsiElement(o);
   }
 
@@ -85,31 +93,51 @@ public class LibglocalVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitElementModifierArg(@NotNull LibglocalElementModifierArg o) {
-    visitModifierBlock(o);
-  }
-
-  public void visitElementModifierDoc(@NotNull LibglocalElementModifierDoc o) {
-    visitModifierBlock(o);
-  }
-
-  public void visitElementModifierVersion(@NotNull LibglocalElementModifierVersion o) {
-    visitModifierBlock(o);
+  public void visitElementRequireTarget(@NotNull LibglocalElementRequireTarget o) {
+    visitPsiElement(o);
   }
 
   public void visitElementSpan(@NotNull LibglocalElementSpan o) {
     visitPsiElement(o);
   }
 
+  public void visitElementVersionValue(@NotNull LibglocalElementVersionValue o) {
+    visitPsiElement(o);
+  }
+
+  public void visitLangBlock(@NotNull LibglocalLangBlock o) {
+    visitBlockElement(o);
+  }
+
+  public void visitModifierArg(@NotNull LibglocalModifierArg o) {
+    visitModifierBlock(o);
+  }
+
+  public void visitModifierDoc(@NotNull LibglocalModifierDoc o) {
+    visitModifierBlock(o);
+  }
+
+  public void visitModifierVersion(@NotNull LibglocalModifierVersion o) {
+    visitModifierBlock(o);
+  }
+
+  public void visitRequireBlock(@NotNull LibglocalRequireBlock o) {
+    visitBlockElement(o);
+  }
+
+  public void visitVersionBlock(@NotNull LibglocalVersionBlock o) {
+    visitBlockElement(o);
+  }
+
   public void visitBlockElement(@NotNull LibglocalBlockElement o) {
     visitPsiElement(o);
   }
 
-  public void visitModifierBlock(@NotNull LibglocalModifierBlock o) {
+  public void visitConstraintBlock(@NotNull LibglocalConstraintBlock o) {
     visitPsiElement(o);
   }
 
-  public void visitNamedBlockElement(@NotNull LibglocalNamedBlockElement o) {
+  public void visitModifierBlock(@NotNull LibglocalModifierBlock o) {
     visitPsiElement(o);
   }
 

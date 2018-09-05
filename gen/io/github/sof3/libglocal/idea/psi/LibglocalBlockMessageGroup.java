@@ -6,7 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.ide.projectView.PresentationData;
 
-public interface LibglocalBlockMessageGroup extends LibglocalNamedBlockElement, LibglocalMessageParentElement {
+public interface LibglocalBlockMessageGroup extends LibglocalBlockElement, LibglocalMessageParentElement {
 
   @NotNull
   List<LibglocalBlockMessage> getBlockMessageList();
@@ -23,7 +23,7 @@ public interface LibglocalBlockMessageGroup extends LibglocalNamedBlockElement, 
   @NotNull
   List<LibglocalBlockMessage> getMessages();
 
-  @Nullable
+  @NotNull
   String getName();
 
   @NotNull

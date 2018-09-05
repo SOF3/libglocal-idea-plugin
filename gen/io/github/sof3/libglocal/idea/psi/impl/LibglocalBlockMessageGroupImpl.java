@@ -55,7 +55,7 @@ public class LibglocalBlockMessageGroupImpl extends ASTWrapperPsiElement impleme
     return Utils.getMessages(this);
   }
 
-  @Nullable
+  @NotNull
   public String getName() {
     return Utils.getName(this);
   }

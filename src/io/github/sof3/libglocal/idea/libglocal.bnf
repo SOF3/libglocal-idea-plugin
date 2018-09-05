@@ -26,6 +26,7 @@
 		T_MODIFIER_ARG="$"
 		T_MODIFIER_DOC="*"
 		T_MODIFIER_VERSION="~"
+		T_INSTRUCTION="#"
 		T_ARG_REF_START="${"
 		T_MESSAGE_REF_START="#{"
 		T_DYNAMIC="$"
@@ -40,14 +41,13 @@
 
 	psiImplUtilClass="io.github.sof3.libglocal.idea.psi.Utils"
 
-	implements("block_lang")=["LibglocalBlockElement"]
-	implements("block_author")=["LibglocalBlockElement"]
-	implements("block_version")=["LibglocalBlockElement"]
-	implements("block_require")=["LibglocalBlockElement"]
-	implements("block_messages")=["LibglocalNamedBlockElement" "LibglocalMessageParentElement"]
-	implements("block_message_group")=["LibglocalNamedBlockElement" "LibglocalMessageParentElement"]
-	implements("block_message")=["LibglocalNamedBlockElement"]
-	implements("block_constraint")=["LibglocalBlockElement"]
+	implements("lang_block")=["LibglocalBlockElement"]
+	implements("author_block")=["LibglocalBlockElement"]
+	implements("version_block")=["LibglocalBlockElement"]
+	implements("require_block")=["LibglocalBlockElement"]
+	implements("block_messages")=["LibglocalBlockElement" "LibglocalMessageParentElement"]
+	implements("block_message_group")=["LibglocalBlockElement" "LibglocalMessageParentElement"]
+	implements("block_message")=["LibglocalBlockElement"]
 }
 
 /*
@@ -57,26 +57,30 @@ In addition, the lexer inserts T_INDENT_INDENT and pseudo_dedent tokens *before*
 the change in indentation level, where these two tokens are equivalent to '{' and '}' in JSON.
  */
 
-libglocal_file ::= (block_lang | block_author | block_version | block_require)+ block_messages
+libglocal_file ::= (lang_block | author_block | version_block | require_block)+ block_messages
 
 private pseudo_dedent ::= T_INDENT_DEDENT | <<eof>>
 private line_delim ::= T_EOL | <<eof>>
 
-block_lang ::= (K_BASE_LANG | K_LANG) element_lang_id element_lang_name line_delim {
+lang_block ::= (K_BASE_LANG | K_LANG) element_lang_id element_lang_name line_delim {
 	methods=[getChildBlocks getName]
 }
 element_lang_id ::= T_IDENTIFIER
 element_lang_name ::= element_literal_static
 
-block_author ::= K_AUTHOR element_literal_static line_delim {
+author_block ::= K_AUTHOR element_literal_static line_delim {
 	methods=[getChildBlocks getName]
 }
-block_version ::= K_VERSION T_IDENTIFIER line_delim {
+
+version_block ::= K_VERSION element_version_value line_delim {
 	methods=[getChildBlocks getName]
 }
-block_require ::= K_REQUIRE T_IDENTIFIER line_delim {
+element_version_value ::= T_IDENTIFIER
+
+require_block ::= K_REQUIRE element_require_target line_delim {
 	methods=[getChildBlocks getName]
 }
+element_require_target ::= T_IDENTIFIER
 
 block_messages ::= K_MESSAGES element_message_id line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent] {
 	methods=[getChildBlocks getMessages getName getPresentation]
@@ -86,29 +90,39 @@ block_message_group ::= element_message_id line_delim [T_INDENT_INDENT (block_me
 }
 element_message_id ::= T_FLAG* T_IDENTIFIER
 
-block_message ::= element_message_id element_literal line_delim [T_INDENT_INDENT (block_modifier)* pseudo_dedent] {
+block_message ::= element_message_id element_literal line_delim
+	[T_INDENT_INDENT message_modifiers* pseudo_dedent] {
 	methods=[getModifiers getChildBlocks getName getFullName getPresentation]
 }
-private block_modifier ::= modifier_content line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent] {
-	methods=[getChildBlocks]
+
+private message_modifiers ::= (modifier_arg | modifier_doc | modifier_version)
+
+modifier_arg ::= arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
+	implements=["LibglocalModifierBlock"]
+	methods=[getConstraints getChildBlocks getName getType getPresentation]
 }
-block_constraint ::= T_IDENTIFIER [element_literal_static] line_delim [T_INDENT_INDENT (block_constraint)* pseudo_dedent] {
-	methods=[getChildBlocks]
+private arg_template ::= T_MODIFIER_ARG element_arg_name [element_arg_type [element_arg_default]] line_delim
+element_arg_name ::= T_IDENTIFIER
+element_arg_type ::= T_FLAG* T_IDENTIFIER
+element_arg_default ::= element_literal
+
+modifier_doc ::= T_MODIFIER_DOC element_literal_static? line_delim {
+	implements=["LibglocalModifierBlock"]
+	methods=[getConstraints getChildBlocks]
+}
+modifier_version ::= T_MODIFIER_VERSION T_IDENTIFIER line_delim {
+	implements=["LibglocalModifierBlock"]
+	methods=[getConstraints getChildBlocks]
 }
 
-private modifier_content ::= (element_modifier_arg | element_modifier_doc | element_modifier_version)
-element_modifier_arg ::= T_MODIFIER_ARG T_IDENTIFIER [T_FLAG* T_IDENTIFIER [element_literal]] {
-	implements=["LibglocalModifierBlock"]
-	methods=[getConstraints getChildBlocks]
+private arg_constraints ::= constraint_field | constraint_delim | constraint_doc
+
+constraint_field ::= arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
+	implements=["LibglocalConstraintBlock"]
+	methods=[getChildBlocks getName getType getPresentation]
 }
-element_modifier_doc ::= T_MODIFIER_DOC element_literal_static {
-	implements=["LibglocalModifierBlock"]
-	methods=[getConstraints getChildBlocks]
-}
-element_modifier_version ::= T_MODIFIER_VERSION T_IDENTIFIER {
-	implements=["LibglocalModifierBlock"]
-	methods=[getConstraints getChildBlocks]
-}
+constraint_delim ::= T_INSTRUCTION "delim" T_IDENTIFIER line_delim
+constraint_doc ::= T_MODIFIER_DOC element_literal_static line_delim
 
 element_literal ::= (literal_token)+
 private literal_token ::= literal_token_static | element_arg_ref | element_message_ref | element_span

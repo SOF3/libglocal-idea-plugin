@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LibglocalBlockLang extends LibglocalBlockElement {
+public interface LibglocalLangBlock extends LibglocalBlockElement {
 
   @NotNull
   LibglocalElementLangId getElementLangId();

@@ -11,14 +11,14 @@ import static io.github.sof3.libglocal.idea.psi.LibglocalElements.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.sof3.libglocal.idea.psi.*;
 
-public class LibglocalBlockVersionImpl extends ASTWrapperPsiElement implements LibglocalBlockVersion {
+public class LibglocalConstraintDocImpl extends ASTWrapperPsiElement implements LibglocalConstraintDoc {
 
-  public LibglocalBlockVersionImpl(@NotNull ASTNode node) {
+  public LibglocalConstraintDocImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull LibglocalVisitor visitor) {
-    visitor.visitBlockVersion(this);
+    visitor.visitConstraintDoc(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -26,14 +26,10 @@ public class LibglocalBlockVersionImpl extends ASTWrapperPsiElement implements L
     else super.accept(visitor);
   }
 
+  @Override
   @NotNull
-  public List<LibglocalBlockElement> getChildBlocks() {
-    return Utils.getChildBlocks(this);
-  }
-
-  @NotNull
-  public String getName() {
-    return Utils.getName(this);
+  public LibglocalElementLiteralStatic getElementLiteralStatic() {
+    return findNotNullChildByClass(LibglocalElementLiteralStatic.class);
   }
 
 }

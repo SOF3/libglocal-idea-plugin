@@ -40,6 +40,8 @@ class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
 	var reachedMessages = false
 
 	var expectedIdentifiers = 0
+	var optionalSeparator = false
+	var instructionMode = false
 
 	val indentStack = mutableListOf<CharSequence>()
 	private val futureTokens = mutableListOf<FutureToken>()
@@ -104,7 +106,7 @@ class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
 			if (highlightingLexer) {
 				tokens = tokens.filter { it.length > 0 }
 			}
-		} while (tokens.isEmpty()) // empty return value implies retry
+		} while (tokens.isEmpty()) // retry if no tokens are found; state might have been changed
 
 
 		futureTokens.addAll(tokens)
