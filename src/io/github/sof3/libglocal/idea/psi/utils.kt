@@ -6,6 +6,7 @@ package io.github.sof3.libglocal.idea.psi
 import com.intellij.ide.projectView.PresentationData
 import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.util.PsiTreeUtil
+import io.github.sof3.libglocal.idea.Icons
 
 /*
  * libglocal-idea-plugin
@@ -53,7 +54,7 @@ private fun getChildBlocksMessageParentImpl(e: LibglocalMessageParentElement): L
 	return ret
 }
 
-internal fun getChildBlocks(e: LibglocalBlockMessage): List<LibglocalBlockElement> = e.modifiers
+internal fun getChildBlocks(e: LibglocalBlockMessage): List<LibglocalBlockElement> = e.modifierArgList
 
 internal fun getChildBlocks(e: LibglocalModifierBlock): List<LibglocalBlockElement> = e.constraints
 
@@ -89,7 +90,7 @@ internal fun getType(e: LibglocalModifierArg) = e.elementArgType?.text ?: "strin
 internal fun getName(e: LibglocalConstraintField) = e.elementArgName.text
 internal fun getType(e: LibglocalConstraintField) = e.elementArgType?.text ?: "string"
 
-internal fun getPresentation(e: LibglocalBlockMessages) = PresentationData(e.name, e.name, null, null)
-internal fun getPresentation(e: LibglocalBlockMessageGroup) = PresentationData(e.name, e.fullName, null, null)
-internal fun getPresentation(e: LibglocalBlockMessage): ItemPresentation = PresentationData(e.name, e.fullName, null, null)
-internal fun getPresentation(e: LibglocalModifierArg): ItemPresentation = PresentationData(e.name, e.type, null, null)
+internal fun getPresentation(e: LibglocalBlockMessages) = PresentationData(e.name, e.name, Icons.MODULE.px16, null)
+internal fun getPresentation(e: LibglocalBlockMessageGroup) = PresentationData(e.name, e.fullName, Icons.GROUP.px16, null)
+internal fun getPresentation(e: LibglocalBlockMessage): ItemPresentation = PresentationData(e.name, e.fullName, Icons.MESSAGE.px16, null)
+internal fun getPresentation(e: LibglocalModifierArg): ItemPresentation = PresentationData(e.name, e.type, Icons.ARG.px16, null)

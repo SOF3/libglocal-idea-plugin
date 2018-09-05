@@ -67,7 +67,7 @@ class LibglocalColorSettingsPage : ColorSettingsPage {
 
 	override fun getDisplayName() = "Libglocal"
 
-	override fun getIcon(): Icon? = Icons.LIBGLOCAL_16PX
+	override fun getIcon(): Icon? = Icons.LIBGLOCAL.px16
 
 	override fun getHighlighter(): SyntaxHighlighter = LibglocalHighlighter()
 

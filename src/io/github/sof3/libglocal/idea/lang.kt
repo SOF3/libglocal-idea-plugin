@@ -31,7 +31,7 @@ object LibglocalFileType : LanguageFileType(LibglocalLanguage) {
 
 	override fun getDefaultExtension() = "lang"
 
-	override fun getIcon(): Icon? = Icons.LIBGLOCAL_16PX
+	override fun getIcon(): Icon? = Icons.LIBGLOCAL.px16
 }
 
 class LibglocalFileTypeFactory : FileTypeFactory() {

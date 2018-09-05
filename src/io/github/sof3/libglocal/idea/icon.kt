@@ -1,6 +1,7 @@
 package io.github.sof3.libglocal.idea
 
 import com.intellij.openapi.util.IconLoader
+import javax.swing.Icon
 
 /*
  * libglocal-idea-plugin
@@ -21,7 +22,16 @@ import com.intellij.openapi.util.IconLoader
  */
 
 object Icons {
-	val LIBGLOCAL_ORIGINAL = IconLoader.getIcon("/icons/libglocal.png")
-	val LIBGLOCAL_13PX = IconLoader.getIcon("/icons/libglocal-13px.png")
-	val LIBGLOCAL_16PX = IconLoader.getIcon("/icons/libglocal-16px.png")
+	val LIBGLOCAL = icon("libglocal")
+	val MODULE = icon("module")
+	val GROUP = icon("group")
+	val MESSAGE = icon("message")
+	val ARG = icon("arg")
 }
+
+data class IconGroup(val px13: Icon, val px16: Icon)
+
+private fun icon(name: String) = IconGroup(
+		IconLoader.getIcon("/icons/$name-13px.png"),
+		IconLoader.getIcon("/icons/$name-16px.png")
+)
