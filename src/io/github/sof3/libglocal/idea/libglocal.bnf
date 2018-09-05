@@ -49,7 +49,7 @@
 		T_MESSAGE_REF_START="#{"
 		T_DYNAMIC="$"
 		T_SPAN_START="%{"
-		T_OPEN_BRACE="{" // only used in open brace
+		T_OPEN_BRACE="{" // only used in open brace for a literal
 		T_CLOSE_BRACE="}"
 
 		T_SPAN_TYPE="span type"
@@ -114,12 +114,11 @@ block_message ::= element_message_id element_literal line_delim
 }
 
 private message_modifiers ::= (modifier_arg | modifier_doc | modifier_version)
-
-modifier_arg ::= arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
+modifier_arg ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
 	implements=["LibglocalModifierBlock"]
 	methods=[getConstraints getChildBlocks getName getType getPresentation]
 }
-private arg_template ::= T_MODIFIER_ARG element_arg_name [element_arg_type [element_arg_default]] line_delim
+private arg_template ::= element_arg_name [element_arg_type [element_arg_default]] line_delim
 element_arg_name ::= T_IDENTIFIER
 element_arg_type ::= T_FLAG* T_IDENTIFIER
 element_arg_default ::= element_literal
@@ -134,8 +133,7 @@ modifier_version ::= T_MODIFIER_VERSION T_IDENTIFIER line_delim {
 }
 
 private arg_constraints ::= constraint_field | constraint_delim | constraint_doc
-
-constraint_field ::= arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
+constraint_field ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
 	implements=["LibglocalConstraintBlock"]
 	methods=[getChildBlocks getName getType getPresentation]
 }

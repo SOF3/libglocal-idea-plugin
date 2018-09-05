@@ -23,6 +23,8 @@ import io.github.sof3.libglocal.idea.psi.LibglocalElements
  * limitations under the License.
  */
 
+internal data class FutureToken(val type: IElementType, val length: Int)
+
 class LibglocalLexer(val highlighting: Boolean) : LexerBase() {
 	data class WhitespaceResult(val whitespace: CharSequence, val trimmed: CharSequence)
 
@@ -161,5 +163,3 @@ class LibglocalLexer(val highlighting: Boolean) : LexerBase() {
 		return myTokenType
 	}
 }
-
-internal data class FutureToken(val type: IElementType, val length: Int)
