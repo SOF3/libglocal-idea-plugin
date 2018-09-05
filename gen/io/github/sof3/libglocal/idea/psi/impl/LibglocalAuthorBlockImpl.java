@@ -29,7 +29,7 @@ public class LibglocalAuthorBlockImpl extends ASTWrapperPsiElement implements Li
   @Override
   @NotNull
   public LibglocalElementLiteralStatic getElementLiteralStatic() {
-    return findNotNullChildByClass(LibglocalElementLiteralStatic.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementLiteralStatic.class));
   }
 
   @NotNull

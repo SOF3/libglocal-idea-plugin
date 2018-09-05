@@ -109,6 +109,14 @@ public class LibglocalVisitor extends PsiElementVisitor {
     visitBlockElement(o);
   }
 
+  public void visitMessageFlag(@NotNull LibglocalMessageFlag o) {
+    visitPsiElement(o);
+  }
+
+  public void visitMessageName(@NotNull LibglocalMessageName o) {
+    visitPsiElement(o);
+  }
+
   public void visitModifierArg(@NotNull LibglocalModifierArg o) {
     visitModifierBlock(o);
   }

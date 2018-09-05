@@ -34,6 +34,7 @@
 				language="libglocal"
 				implementationClass="io.github.sof3.libglocal.idea.LibglocalHlFactory"/>
 		<colorSettingsPage implementation="io.github.sof3.libglocal.idea.LibglocalColorSettingsPage"/>
+		<stubElementTypeHolder class="io.github.sof3.libglocal.idea.psi.impl.StubElementTypes"/>
 		<!--<annotator-->
 		<!--language="libglocal"-->
 		<!--implementationClass="io.github.sof3.libglocal.idea.annotator.SpanAnnotator"/>-->

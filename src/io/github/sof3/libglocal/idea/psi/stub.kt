@@ -1,4 +1,7 @@
-package io.github.sof3.libglocal.idea
+package io.github.sof3.libglocal.idea.psi
+
+import com.intellij.psi.stubs.StubElement
+import io.github.sof3.libglocal.idea.MessageVisibility
 
 /*
  * libglocal-idea-plugin
@@ -18,9 +21,7 @@ package io.github.sof3.libglocal.idea
  * limitations under the License.
  */
 
-enum class MessageVisibility{
-	PUBLIC,
-	LOCAL,
-	LIB,
-	;
+interface MessageStub: StubElement<LibglocalBlockMessage> {
+	val fullName: String
+	val visibility: MessageVisibility
 }

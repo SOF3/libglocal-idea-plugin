@@ -29,7 +29,7 @@ public class LibglocalModifierDocImpl extends ASTWrapperPsiElement implements Li
   @Override
   @Nullable
   public LibglocalElementLiteralStatic getElementLiteralStatic() {
-    return findChildByClass(LibglocalElementLiteralStatic.class);
+    return PsiTreeUtil.getChildOfType(this, LibglocalElementLiteralStatic.class);
   }
 
   @NotNull

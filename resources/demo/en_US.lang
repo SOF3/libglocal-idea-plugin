@@ -98,6 +98,7 @@ messages LibglocalExample
 		group
 			uncle Or access a message in a grandparent group as #{..ref}.
 				| Each extra . in the beginning represents "parent group", just like "/.." in a filesystem.
+
 		requires-args This message will be included with ${arg1}, ${arg2}, ${arg3}, ${arg4} and ${arg5}.
 			$arg1 string foo
 			$arg2 string bar
@@ -112,6 +113,7 @@ messages LibglocalExample
 				,,, } Or have nothing between them: #{.requires-args}
 			$myarg
 			$myarg2
+
 		requires-object This message requires an object parameter: ${object.field1}, ${object.field2}
 			$object object
 				$field1

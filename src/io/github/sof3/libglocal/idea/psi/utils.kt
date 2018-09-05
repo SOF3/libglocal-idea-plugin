@@ -7,6 +7,7 @@ import com.intellij.ide.projectView.PresentationData
 import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.sof3.libglocal.idea.Icons
+import io.github.sof3.libglocal.idea.MessageVisibility
 
 /*
  * libglocal-idea-plugin
@@ -30,7 +31,7 @@ internal fun getMessages(e: LibglocalBlockMessages): List<LibglocalBlockMessage>
 
 internal fun getMessages(e: LibglocalBlockMessageGroup): List<LibglocalBlockMessage> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalBlockMessage::class.java)
 
-internal fun getModifiers(e: LibglocalBlockMessage): List<LibglocalModifierBlock> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalModifierBlock::class.java)
+internal fun getModifiers(e: LibglocalBlockMessage): List<LibglocalModifierBlock> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalModifierBlock::class.java) // TODO switch to stubs
 
 internal fun getConstraints(e: LibglocalModifierBlock): List<LibglocalConstraintBlock> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalConstraintBlock::class.java)
 
@@ -66,9 +67,9 @@ internal fun getName(e: LibglocalAuthorBlock) = e.elementLiteralStatic.text!!
 internal fun getName(e: LibglocalVersionBlock) = e.elementVersionValue.text!!
 internal fun getName(e: LibglocalRequireBlock) = e.elementRequireTarget.text!!
 
-internal fun getName(e: LibglocalBlockMessages) = e.elementMessageId.text!!
-internal fun getName(e: LibglocalBlockMessageGroup) = e.elementMessageId.text!!
-internal fun getName(e: LibglocalBlockMessage) = e.elementMessageId.text!!
+internal fun getName(e: LibglocalBlockMessages) = e.elementMessageId.messageName.text!!
+internal fun getName(e: LibglocalBlockMessageGroup) = e.elementMessageId.messageName.text!!
+internal fun getName(e: LibglocalBlockMessage) = e.stub?.fullName ?: e.elementMessageId.messageName.text!!
 
 internal fun getFullName(e: LibglocalBlockElement): String {
 	val names = mutableListOf(e.name ?: "???")
@@ -82,6 +83,21 @@ internal fun getFullName(e: LibglocalBlockElement): String {
 		element = element.parent
 	}
 	return names.reversed().joinToString(separator = ".")
+}
+
+internal fun getVisibility(e: LibglocalBlockMessage): MessageVisibility {
+	val stub = e.stub ?: null
+	if (stub != null) {
+		return stub.visibility
+	}
+
+	for (flag in e.elementMessageId.messageFlagList) {
+		when(flag.text){
+			"local:" -> return MessageVisibility.LOCAL
+			"lib:" -> return MessageVisibility.LIB
+		}
+	}
+	return MessageVisibility.PUBLIC
 }
 
 internal fun getName(e: LibglocalModifierArg) = e.elementArgName.text

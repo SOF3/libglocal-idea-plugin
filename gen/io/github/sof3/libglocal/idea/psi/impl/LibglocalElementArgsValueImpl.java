@@ -29,7 +29,7 @@ public class LibglocalElementArgsValueImpl extends ASTWrapperPsiElement implemen
   @Override
   @Nullable
   public LibglocalElementArgsValueString getElementArgsValueString() {
-    return findChildByClass(LibglocalElementArgsValueString.class);
+    return PsiTreeUtil.getChildOfType(this, LibglocalElementArgsValueString.class);
   }
 
 }

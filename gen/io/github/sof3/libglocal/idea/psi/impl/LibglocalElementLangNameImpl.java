@@ -29,7 +29,7 @@ public class LibglocalElementLangNameImpl extends ASTWrapperPsiElement implement
   @Override
   @NotNull
   public LibglocalElementLiteralStatic getElementLiteralStatic() {
-    return findNotNullChildByClass(LibglocalElementLiteralStatic.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementLiteralStatic.class));
   }
 
 }

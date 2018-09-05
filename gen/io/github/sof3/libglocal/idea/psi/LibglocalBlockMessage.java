@@ -4,9 +4,11 @@ package io.github.sof3.libglocal.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
 import com.intellij.navigation.ItemPresentation;
+import io.github.sof3.libglocal.idea.MessageVisibility;
 
-public interface LibglocalBlockMessage extends LibglocalBlockElement {
+public interface LibglocalBlockMessage extends LibglocalBlockElement, StubBasedPsiElement<MessageStub> {
 
   @NotNull
   LibglocalElementLiteral getElementLiteral();
@@ -34,6 +36,9 @@ public interface LibglocalBlockMessage extends LibglocalBlockElement {
 
   @NotNull
   String getFullName();
+
+  @NotNull
+  MessageVisibility getVisibility();
 
   @NotNull
   ItemPresentation getPresentation();

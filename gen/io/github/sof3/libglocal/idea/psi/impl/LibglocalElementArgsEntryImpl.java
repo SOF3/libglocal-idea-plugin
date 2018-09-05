@@ -29,7 +29,7 @@ public class LibglocalElementArgsEntryImpl extends ASTWrapperPsiElement implemen
   @Override
   @NotNull
   public LibglocalElementArgsValue getElementArgsValue() {
-    return findNotNullChildByClass(LibglocalElementArgsValue.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementArgsValue.class));
   }
 
 }

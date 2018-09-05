@@ -1,4 +1,4 @@
-package io.github.sof3.libglocal.idea
+package io.github.sof3.libglocal.idea.ref
 
 /*
  * libglocal-idea-plugin
@@ -17,10 +17,3 @@ package io.github.sof3.libglocal.idea
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-enum class MessageVisibility{
-	PUBLIC,
-	LOCAL,
-	LIB,
-	;
-}

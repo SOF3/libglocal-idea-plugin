@@ -47,19 +47,19 @@ public class LibglocalConstraintFieldImpl extends ASTWrapperPsiElement implement
   @Override
   @Nullable
   public LibglocalElementArgDefault getElementArgDefault() {
-    return findChildByClass(LibglocalElementArgDefault.class);
+    return PsiTreeUtil.getChildOfType(this, LibglocalElementArgDefault.class);
   }
 
   @Override
   @NotNull
   public LibglocalElementArgName getElementArgName() {
-    return findNotNullChildByClass(LibglocalElementArgName.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementArgName.class));
   }
 
   @Override
   @Nullable
   public LibglocalElementArgType getElementArgType() {
-    return findChildByClass(LibglocalElementArgType.class);
+    return PsiTreeUtil.getChildOfType(this, LibglocalElementArgType.class);
   }
 
   @NotNull

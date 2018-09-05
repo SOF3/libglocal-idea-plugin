@@ -66,6 +66,12 @@
 	implements("block_messages")=["LibglocalBlockElement" "LibglocalMessageParentElement"]
 	implements("block_message_group")=["LibglocalBlockElement" "LibglocalMessageParentElement"]
 	implements("block_message")=["LibglocalBlockElement"]
+
+	implements("modifier_arg")=["LibglocalModifierBlock"]
+	implements("modifier_doc")=["LibglocalModifierBlock"]
+	implements("modifier_version")=["LibglocalModifierBlock"]
+
+	implements("constraint_field")=["LibglocalConstraintBlock"]
 }
 
 /*
@@ -106,16 +112,18 @@ block_messages ::= K_MESSAGES element_message_id line_delim [T_INDENT_INDENT (bl
 block_message_group ::= element_message_id line_delim [T_INDENT_INDENT (block_message_group | block_message)* pseudo_dedent] {
 	methods=[getChildBlocks getMessages getName getFullName getPresentation]
 }
-element_message_id ::= T_FLAG* T_IDENTIFIER
+element_message_id ::= message_flag* message_name
+message_flag ::= T_FLAG
+message_name ::= T_IDENTIFIER
 
 block_message ::= element_message_id element_literal line_delim
 	[T_INDENT_INDENT message_modifiers* pseudo_dedent] {
-	methods=[getModifiers getChildBlocks getName getFullName getPresentation]
+	methods=[getModifiers getChildBlocks getName getFullName getVisibility getPresentation]
+	stubClass="io.github.sof3.libglocal.idea.psi.MessageStub"
 }
 
 private message_modifiers ::= (modifier_arg | modifier_doc | modifier_version)
 modifier_arg ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
-	implements=["LibglocalModifierBlock"]
 	methods=[getConstraints getChildBlocks getName getType getPresentation]
 }
 private arg_template ::= element_arg_name [element_arg_type [element_arg_default]] line_delim
@@ -124,17 +132,14 @@ element_arg_type ::= T_FLAG* T_IDENTIFIER
 element_arg_default ::= element_literal
 
 modifier_doc ::= T_MODIFIER_DOC element_literal_static? line_delim {
-	implements=["LibglocalModifierBlock"]
 	methods=[getConstraints getChildBlocks]
 }
 modifier_version ::= T_MODIFIER_VERSION T_IDENTIFIER line_delim {
-	implements=["LibglocalModifierBlock"]
 	methods=[getConstraints getChildBlocks]
 }
 
 private arg_constraints ::= constraint_field | constraint_delim | constraint_doc
 constraint_field ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
-	implements=["LibglocalConstraintBlock"]
 	methods=[getChildBlocks getName getType getPresentation]
 }
 constraint_delim ::= T_INSTRUCTION "delim" T_IDENTIFIER line_delim

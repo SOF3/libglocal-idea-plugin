@@ -29,13 +29,13 @@ public class LibglocalLangBlockImpl extends ASTWrapperPsiElement implements Libg
   @Override
   @NotNull
   public LibglocalElementLangId getElementLangId() {
-    return findNotNullChildByClass(LibglocalElementLangId.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementLangId.class));
   }
 
   @Override
   @NotNull
   public LibglocalElementLangName getElementLangName() {
-    return findNotNullChildByClass(LibglocalElementLangName.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementLangName.class));
   }
 
   @NotNull

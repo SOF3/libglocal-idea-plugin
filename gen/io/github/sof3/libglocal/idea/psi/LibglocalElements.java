@@ -35,6 +35,8 @@ public interface LibglocalElements {
   IElementType ELEMENT_SPAN = new LibglocalElementType("ELEMENT_SPAN");
   IElementType ELEMENT_VERSION_VALUE = new LibglocalElementType("ELEMENT_VERSION_VALUE");
   IElementType LANG_BLOCK = new LibglocalElementType("LANG_BLOCK");
+  IElementType MESSAGE_FLAG = new LibglocalElementType("MESSAGE_FLAG");
+  IElementType MESSAGE_NAME = new LibglocalElementType("MESSAGE_NAME");
   IElementType MODIFIER_ARG = new LibglocalElementType("MODIFIER_ARG");
   IElementType MODIFIER_DOC = new LibglocalElementType("MODIFIER_DOC");
   IElementType MODIFIER_VERSION = new LibglocalElementType("MODIFIER_VERSION");
@@ -153,6 +155,12 @@ public interface LibglocalElements {
       }
       else if (type == LANG_BLOCK) {
         return new LibglocalLangBlockImpl(node);
+      }
+      else if (type == MESSAGE_FLAG) {
+        return new LibglocalMessageFlagImpl(node);
+      }
+      else if (type == MESSAGE_NAME) {
+        return new LibglocalMessageNameImpl(node);
       }
       else if (type == MODIFIER_ARG) {
         return new LibglocalModifierArgImpl(node);

@@ -29,7 +29,7 @@ public class LibglocalRequireBlockImpl extends ASTWrapperPsiElement implements L
   @Override
   @NotNull
   public LibglocalElementRequireTarget getElementRequireTarget() {
-    return findNotNullChildByClass(LibglocalElementRequireTarget.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementRequireTarget.class));
   }
 
   @NotNull

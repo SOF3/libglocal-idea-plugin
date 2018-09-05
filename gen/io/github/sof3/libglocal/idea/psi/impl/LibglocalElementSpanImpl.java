@@ -29,7 +29,7 @@ public class LibglocalElementSpanImpl extends ASTWrapperPsiElement implements Li
   @Override
   @NotNull
   public LibglocalElementLiteral getElementLiteral() {
-    return findNotNullChildByClass(LibglocalElementLiteral.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementLiteral.class));
   }
 
 }

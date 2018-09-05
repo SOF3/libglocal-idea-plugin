@@ -42,7 +42,7 @@ public class LibglocalBlockMessageGroupImpl extends ASTWrapperPsiElement impleme
   @Override
   @NotNull
   public LibglocalElementMessageId getElementMessageId() {
-    return findNotNullChildByClass(LibglocalElementMessageId.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementMessageId.class));
   }
 
   @NotNull

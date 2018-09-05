@@ -8,14 +8,26 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.sof3.libglocal.idea.psi.LibglocalElements.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.intellij.extapi.psi.StubBasedPsiElementBase;
+import io.github.sof3.libglocal.idea.psi.MessageStub;
 import io.github.sof3.libglocal.idea.psi.*;
 import com.intellij.navigation.ItemPresentation;
+import io.github.sof3.libglocal.idea.MessageVisibility;
+import com.intellij.psi.stubs.IStubElementType;
+import com.intellij.psi.tree.IElementType;
 
-public class LibglocalBlockMessageImpl extends ASTWrapperPsiElement implements LibglocalBlockMessage {
+public class LibglocalBlockMessageImpl extends StubBasedPsiElementBase<MessageStub> implements LibglocalBlockMessage {
+
+  public LibglocalBlockMessageImpl(@NotNull MessageStub stub, @NotNull IStubElementType type) {
+    super(stub, type);
+  }
 
   public LibglocalBlockMessageImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  public LibglocalBlockMessageImpl(MessageStub stub, IElementType type, ASTNode node) {
+    super(stub, type, node);
   }
 
   public void accept(@NotNull LibglocalVisitor visitor) {
@@ -30,13 +42,13 @@ public class LibglocalBlockMessageImpl extends ASTWrapperPsiElement implements L
   @Override
   @NotNull
   public LibglocalElementLiteral getElementLiteral() {
-    return findNotNullChildByClass(LibglocalElementLiteral.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementLiteral.class));
   }
 
   @Override
   @NotNull
   public LibglocalElementMessageId getElementMessageId() {
-    return findNotNullChildByClass(LibglocalElementMessageId.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementMessageId.class));
   }
 
   @Override
@@ -75,6 +87,11 @@ public class LibglocalBlockMessageImpl extends ASTWrapperPsiElement implements L
   @NotNull
   public String getFullName() {
     return Utils.getFullName(this);
+  }
+
+  @NotNull
+  public MessageVisibility getVisibility() {
+    return Utils.getVisibility(this);
   }
 
   @NotNull

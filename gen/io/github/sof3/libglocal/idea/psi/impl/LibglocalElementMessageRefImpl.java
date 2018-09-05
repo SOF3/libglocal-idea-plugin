@@ -29,7 +29,7 @@ public class LibglocalElementMessageRefImpl extends ASTWrapperPsiElement impleme
   @Override
   @NotNull
   public LibglocalElementArgsSupplier getElementArgsSupplier() {
-    return findNotNullChildByClass(LibglocalElementArgsSupplier.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalElementArgsSupplier.class));
   }
 
 }

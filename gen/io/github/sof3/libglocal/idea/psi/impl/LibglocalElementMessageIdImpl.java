@@ -26,4 +26,16 @@ public class LibglocalElementMessageIdImpl extends ASTWrapperPsiElement implemen
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public List<LibglocalMessageFlag> getMessageFlagList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalMessageFlag.class);
+  }
+
+  @Override
+  @NotNull
+  public LibglocalMessageName getMessageName() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LibglocalMessageName.class));
+  }
+
 }

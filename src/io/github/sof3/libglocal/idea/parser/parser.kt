@@ -9,7 +9,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IFileElementType
 import com.intellij.psi.tree.TokenSet
-import io.github.sof3.libglocal.idea.LibglocalFile
+import io.github.sof3.libglocal.idea.psi.LibglocalFile
 import io.github.sof3.libglocal.idea.LibglocalLanguage
 import io.github.sof3.libglocal.idea.psi.LibglocalElements
 import io.github.sof3.libglocal.idea.psi.LibglocalParser
