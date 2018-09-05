@@ -23,7 +23,7 @@ import io.github.sof3.libglocal.idea.psi.LibglocalElements
  * limitations under the License.
  */
 
-class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
+class LibglocalLexer(val highlighting: Boolean) : LexerBase() {
 	data class WhitespaceResult(val whitespace: CharSequence, val trimmed: CharSequence)
 
 	companion object {
@@ -55,11 +55,13 @@ class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
 
 	internal var nextState = LexerState.LINE_START
 
-	var reachedMessages = false
+	internal var reachedMessages = false
 
-	var expectedIdentifiers = 0
-	var optionalSeparator = false
-	var instructionMode = false
+	internal var expectedIdentifiers = 0
+	internal var optionalSeparator = false
+	internal var instructionMode = false
+	// the T_CLOSE_BRACE behind a literal can mean "close a span" or "close an arg-list string literal", so we need to distinguish it here
+	internal var literalBraceStack = mutableListOf<LexerState>()
 
 	val indentStack = mutableListOf<CharSequence>()
 	private val futureTokens = mutableListOf<FutureToken>()
@@ -98,7 +100,7 @@ class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
 	private fun locateTokenLazy() {
 		if (myTokenType != null) return
 		locateTokenImpl()
-//		println("isHighlightingLexer: $highlightingLexer, myTokenType = $myTokenType \"${myBuffer?.substring(myTokenStart, myTokenEnd)?.replace(Regex("\n"), "\\\\n")}\", nextState = ${nextState.name}, reachedMessages = $reachedMessages, expectedIdentifiers = $expectedIdentifiers, futureTokens.size = ${futureTokens.size}")
+//		println("isHighlightingLexer: $highlighting, myTokenType = $myTokenType \"${myBuffer?.substring(myTokenStart, myTokenEnd)?.replace(Regex("\n"), "\\\\n")}\", nextState = ${nextState.name}, reachedMessages = $reachedMessages, expectedIdentifiers = $expectedIdentifiers, futureTokens.size = ${futureTokens.size}")
 	}
 
 	private fun locateTokenImpl() {
@@ -121,7 +123,7 @@ class LibglocalLexer(val highlightingLexer: Boolean) : LexerBase() {
 		var tokens: List<FutureToken>
 		do {
 			tokens = realAdvance()
-			if (highlightingLexer) {
+			if (highlighting) {
 				tokens = tokens.filter { it.length > 0 }
 			}
 		} while (tokens.isEmpty()) // retry if no tokens are found; state might have been changed

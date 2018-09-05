@@ -22,6 +22,8 @@ messages LibglocalExample
 		must These characters must be escaped: \} \\
 		brace These normally don't need to be escaped: # $ % But if followed by {, they must be escaped as \#{ \${ \%{
 		white "\n" "\s" "\0" These are translated into newline, space and nothing.
+		because \sTo have leading/trailing spaces, \\s must be used. It can also be replaced by a literal space before/after a \\0 like this \0
+		otherwise Libglocal will trim the spaces away. In addition, empty messages must contain a \\0, otherwise libglocal will parse them as message groups rather than empty messages.
 	continuation
 		space There will be a space between "because" and "the" because
 				| the | character means "continue on next line and insert a space in between".
@@ -84,7 +86,23 @@ messages LibglocalExample
 		group
 			uncle Or access a message in a grandparent group as #{..ref}.
 				| Each extra . in the beginning represents "parent group", just like "/.." in a filesystem.
-		requires-args This message will be included with ${arg1} and ${arg2}.
+		requires-args This message will be included with ${arg1}, ${arg2}, ${arg3}, ${arg4} and ${arg5}.
 			$arg1
 			$arg2
-		use-args Now we can reference it like this: ${.requires-args}
+			$arg3 float
+			$arg4 foo
+			$arg5 bar
+		use-args Now we can reference it like this: #{.requires-args arg1={literal string} arg2={\0} arg3=-2.76 arg4=myarg arg5={before ${myarg2} after}}
+				| Any number of spaces, tabs, commas and line breaks are allowed between arguments, like this: #{.requires-args
+					arg1={literal}
+								arg2={another literal}, arg3=-3.14
+					arg4={if you want to go crazy} ,,,,,,   ,,,  ,,,, arg5={this is also possible}
+				,,, } Or have nothing between them: #{.requires-args}
+			$myarg
+			$myarg2
+
+	spans
+		styles %{info This is an info message.} %{success This is a success message.} %{notice This is a notice message.}
+			| %{warn This is a warning message.} %{error This is an error message.}
+		highlight You can %{hl1 highlight %{hl2 certain %{hl3 certain %{hl4 words}} in a} %{hl3 sentence}}.
+		decoration Or %{b bold, %{i italic, %{u underline and %{s strikethrough}}}} them.

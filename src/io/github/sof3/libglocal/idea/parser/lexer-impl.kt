@@ -272,6 +272,10 @@ internal enum class LexerState {
 				}
 
 				if (buffer[0] == '}') {
+					if(lexer.literalBraceStack.isNotEmpty()){
+						lexer.nextState = lexer.literalBraceStack.last()
+						lexer.literalBraceStack.removeAt(lexer.literalBraceStack.lastIndex)
+					}
 					return listOf(FutureToken(LibglocalElements.T_CLOSE_BRACE, 1))
 				}
 			}
@@ -342,6 +346,7 @@ internal enum class LexerState {
 			}
 
 			if (buffer[0] == '{') {
+				lexer.literalBraceStack.add(ARG_LIST_RESET)
 				lexer.nextState = LITERAL
 				return listOf(FutureToken(LibglocalElements.T_OPEN_BRACE, 1))
 			}
@@ -358,6 +363,7 @@ internal enum class LexerState {
 			val (list, read, _) = LibglocalLexer.readIdentifier(buffer, LibglocalElements.T_SPAN_TYPE)
 			if (read) {
 				lexer.expectedIdentifiers = 0
+				lexer.literalBraceStack.add(LITERAL)
 				lexer.nextState = SEPARATOR
 			}
 			return list
