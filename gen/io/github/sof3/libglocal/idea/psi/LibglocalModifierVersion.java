@@ -7,10 +7,12 @@ import com.intellij.psi.PsiElement;
 
 public interface LibglocalModifierVersion extends LibglocalModifierBlock {
 
-  @NotNull
-  List<LibglocalConstraintBlock> getConstraints();
+  //WARNING: getConstraints(...) is skipped
+  //matching getConstraints(LibglocalModifierVersion, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  List<LibglocalBlockElement> getChildBlocks();
+  //WARNING: getChildBlocks(...) is skipped
+  //matching getChildBlocks(LibglocalModifierVersion, ...)
+  //methods are not found in Utils
 
 }

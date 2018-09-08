@@ -1,9 +1,9 @@
 // This is a generated file. Not intended for manual editing.
-package io.github.sof3.libglocal.idea.psi;
+package io.github.sof3.libglocal.idea.parser;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
-import static io.github.sof3.libglocal.idea.psi.LibglocalElements.*;
+import static io.github.sof3.libglocal.idea.parser.LibglocalElements.*;
 import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
@@ -135,41 +135,40 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // T_MODIFIER_ARG element_arg_name [element_arg_type [element_arg_default]] line_delim
+  // element_arg_name [element_arg_type [element_arg_default]] line_delim
   static boolean arg_template(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "arg_template")) return false;
-    if (!nextTokenIs(b, T_MODIFIER_ARG)) return false;
+    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, T_MODIFIER_ARG);
-    r = r && element_arg_name(b, l + 1);
-    r = r && arg_template_2(b, l + 1);
+    r = element_arg_name(b, l + 1);
+    r = r && arg_template_1(b, l + 1);
     r = r && line_delim(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // [element_arg_type [element_arg_default]]
-  private static boolean arg_template_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "arg_template_2")) return false;
-    arg_template_2_0(b, l + 1);
+  private static boolean arg_template_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arg_template_1")) return false;
+    arg_template_1_0(b, l + 1);
     return true;
   }
 
   // element_arg_type [element_arg_default]
-  private static boolean arg_template_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "arg_template_2_0")) return false;
+  private static boolean arg_template_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arg_template_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = element_arg_type(b, l + 1);
-    r = r && arg_template_2_0_1(b, l + 1);
+    r = r && arg_template_1_0_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // [element_arg_default]
-  private static boolean arg_template_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "arg_template_2_0_1")) return false;
+  private static boolean arg_template_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "arg_template_1_0_1")) return false;
     element_arg_default(b, l + 1);
     return true;
   }
@@ -371,44 +370,45 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent]
+  // T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent]
   public static boolean constraint_field(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "constraint_field")) return false;
     if (!nextTokenIs(b, T_MODIFIER_ARG)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = arg_template(b, l + 1);
-    r = r && constraint_field_1(b, l + 1);
+    r = consumeToken(b, T_MODIFIER_ARG);
+    r = r && arg_template(b, l + 1);
+    r = r && constraint_field_2(b, l + 1);
     exit_section_(b, m, CONSTRAINT_FIELD, r);
     return r;
   }
 
   // [T_INDENT_INDENT arg_constraints* pseudo_dedent]
-  private static boolean constraint_field_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "constraint_field_1")) return false;
-    constraint_field_1_0(b, l + 1);
+  private static boolean constraint_field_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "constraint_field_2")) return false;
+    constraint_field_2_0(b, l + 1);
     return true;
   }
 
   // T_INDENT_INDENT arg_constraints* pseudo_dedent
-  private static boolean constraint_field_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "constraint_field_1_0")) return false;
+  private static boolean constraint_field_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "constraint_field_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, T_INDENT_INDENT);
-    r = r && constraint_field_1_0_1(b, l + 1);
+    r = r && constraint_field_2_0_1(b, l + 1);
     r = r && pseudo_dedent(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // arg_constraints*
-  private static boolean constraint_field_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "constraint_field_1_0_1")) return false;
+  private static boolean constraint_field_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "constraint_field_2_0_1")) return false;
     while (true) {
       int c = current_position_(b);
       if (!arg_constraints(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "constraint_field_1_0_1", c)) break;
+      if (!empty_element_parsed_guard_(b, "constraint_field_2_0_1", c)) break;
     }
     return true;
   }
@@ -797,44 +797,45 @@ public class LibglocalParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent]
+  // T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent]
   public static boolean modifier_arg(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "modifier_arg")) return false;
     if (!nextTokenIs(b, T_MODIFIER_ARG)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = arg_template(b, l + 1);
-    r = r && modifier_arg_1(b, l + 1);
+    r = consumeToken(b, T_MODIFIER_ARG);
+    r = r && arg_template(b, l + 1);
+    r = r && modifier_arg_2(b, l + 1);
     exit_section_(b, m, MODIFIER_ARG, r);
     return r;
   }
 
   // [T_INDENT_INDENT arg_constraints* pseudo_dedent]
-  private static boolean modifier_arg_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "modifier_arg_1")) return false;
-    modifier_arg_1_0(b, l + 1);
+  private static boolean modifier_arg_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifier_arg_2")) return false;
+    modifier_arg_2_0(b, l + 1);
     return true;
   }
 
   // T_INDENT_INDENT arg_constraints* pseudo_dedent
-  private static boolean modifier_arg_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "modifier_arg_1_0")) return false;
+  private static boolean modifier_arg_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifier_arg_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, T_INDENT_INDENT);
-    r = r && modifier_arg_1_0_1(b, l + 1);
+    r = r && modifier_arg_2_0_1(b, l + 1);
     r = r && pseudo_dedent(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // arg_constraints*
-  private static boolean modifier_arg_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "modifier_arg_1_0_1")) return false;
+  private static boolean modifier_arg_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "modifier_arg_2_0_1")) return false;
     while (true) {
       int c = current_position_(b);
       if (!arg_constraints(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "modifier_arg_1_0_1", c)) break;
+      if (!empty_element_parsed_guard_(b, "modifier_arg_2_0_1", c)) break;
     }
     return true;
   }

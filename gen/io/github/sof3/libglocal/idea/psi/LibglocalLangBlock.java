@@ -13,10 +13,12 @@ public interface LibglocalLangBlock extends LibglocalBlockElement {
   @NotNull
   LibglocalElementLangName getElementLangName();
 
-  @NotNull
-  List<LibglocalBlockElement> getChildBlocks();
+  //WARNING: getChildBlocks(...) is skipped
+  //matching getChildBlocks(LibglocalLangBlock, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  String getName();
+  //WARNING: getName(...) is skipped
+  //matching getName(LibglocalLangBlock, ...)
+  //methods are not found in Utils
 
 }

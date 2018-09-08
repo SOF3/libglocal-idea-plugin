@@ -1,11 +1,9 @@
 // This is a generated file. Not intended for manual editing.
-package io.github.sof3.libglocal.idea.psi;
+package io.github.sof3.libglocal.idea.parser;
 
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.PsiElement;
 import com.intellij.lang.ASTNode;
-import io.github.sof3.libglocal.idea.LibglocalElementType;
-import io.github.sof3.libglocal.idea.LibglocalTokenType;
 import io.github.sof3.libglocal.idea.psi.impl.*;
 
 public interface LibglocalElements {

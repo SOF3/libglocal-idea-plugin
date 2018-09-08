@@ -4,7 +4,6 @@ package io.github.sof3.libglocal.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.navigation.ItemPresentation;
 
 public interface LibglocalModifierArg extends LibglocalModifierBlock {
 
@@ -26,18 +25,24 @@ public interface LibglocalModifierArg extends LibglocalModifierBlock {
   @Nullable
   LibglocalElementArgType getElementArgType();
 
-  @NotNull
-  List<LibglocalConstraintBlock> getConstraints();
+  //WARNING: getConstraints(...) is skipped
+  //matching getConstraints(LibglocalModifierArg, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  List<LibglocalBlockElement> getChildBlocks();
+  //WARNING: getChildBlocks(...) is skipped
+  //matching getChildBlocks(LibglocalModifierArg, ...)
+  //methods are not found in Utils
 
-  String getName();
+  //WARNING: getName(...) is skipped
+  //matching getName(LibglocalModifierArg, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  String getType();
+  //WARNING: getType(...) is skipped
+  //matching getType(LibglocalModifierArg, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  ItemPresentation getPresentation();
+  //WARNING: getPresentation(...) is skipped
+  //matching getPresentation(LibglocalModifierArg, ...)
+  //methods are not found in Utils
 
 }

@@ -1,6 +1,7 @@
-package io.github.sof3.libglocal.idea
+package io.github.sof3.libglocal.idea.parser
 
 import com.intellij.psi.tree.IElementType
+import io.github.sof3.libglocal.idea.LibglocalLanguage
 
 /*
  * libglocal-idea-plugin

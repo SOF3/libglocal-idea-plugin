@@ -1,10 +1,11 @@
-package io.github.sof3.libglocal.idea
+package io.github.sof3.libglocal.idea.psi
 
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.util.PsiTreeUtil
-import io.github.sof3.libglocal.idea.psi.*
+import io.github.sof3.libglocal.idea.LibglocalFileType
+import io.github.sof3.libglocal.idea.LibglocalLanguage
 
 /*
  * libglocal-idea-plugin

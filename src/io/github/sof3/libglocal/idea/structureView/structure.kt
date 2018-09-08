@@ -1,4 +1,4 @@
-package io.github.sof3.libglocal.idea
+package io.github.sof3.libglocal.idea.structureView
 
 import com.intellij.ide.projectView.PresentationData
 import com.intellij.ide.structureView.*

@@ -1,10 +1,10 @@
-package io.github.sof3.libglocal.idea
+package io.github.sof3.libglocal.idea.braces
 
 import com.intellij.lang.BracePair
 import com.intellij.lang.PairedBraceMatcher
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IElementType
-import io.github.sof3.libglocal.idea.psi.LibglocalElements
+import io.github.sof3.libglocal.idea.parser.LibglocalElements
 
 /*
  * libglocal-idea-plugin

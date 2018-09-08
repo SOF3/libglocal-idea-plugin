@@ -7,7 +7,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
-import static io.github.sof3.libglocal.idea.psi.LibglocalElements.*;
+import static io.github.sof3.libglocal.idea.parser.LibglocalElements.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.sof3.libglocal.idea.psi.*;
 
@@ -60,20 +60,6 @@ public class LibglocalConstraintFieldImpl extends ASTWrapperPsiElement implement
   @Nullable
   public LibglocalElementArgType getElementArgType() {
     return findChildByClass(LibglocalElementArgType.class);
-  }
-
-  @NotNull
-  public List<LibglocalBlockElement> getChildBlocks() {
-    return Utils.getChildBlocks(this);
-  }
-
-  public String getName() {
-    return Utils.getName(this);
-  }
-
-  @NotNull
-  public String getType() {
-    return Utils.getType(this);
   }
 
 }

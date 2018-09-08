@@ -10,10 +10,12 @@ public interface LibglocalAuthorBlock extends LibglocalBlockElement {
   @NotNull
   LibglocalElementLiteralStatic getElementLiteralStatic();
 
-  @NotNull
-  List<LibglocalBlockElement> getChildBlocks();
+  //WARNING: getChildBlocks(...) is skipped
+  //matching getChildBlocks(LibglocalAuthorBlock, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  String getName();
+  //WARNING: getName(...) is skipped
+  //matching getName(LibglocalAuthorBlock, ...)
+  //methods are not found in Utils
 
 }

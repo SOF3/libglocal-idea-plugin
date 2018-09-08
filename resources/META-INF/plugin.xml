@@ -45,10 +45,10 @@
 		<!--implementationClass="io.github.sof3.libglocal.idea.ref.LibglocalCompletionContributor"/>-->
 		<lang.braceMatcher
 				language="libglocal"
-				implementationClass="io.github.sof3.libglocal.idea.LibglocalPairedBraceMatcher"/>
+				implementationClass="io.github.sof3.libglocal.idea.braces.LibglocalPairedBraceMatcher"/>
 		<lang.psiStructureViewFactory
 				language="libglocal"
-				implementationClass="io.github.sof3.libglocal.idea.LibglocalSVFactory"/>
+				implementationClass="io.github.sof3.libglocal.idea.structureView.LibglocalSVFactory"/>
 	</extensions>
 
 	<actions>

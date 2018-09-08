@@ -17,7 +17,7 @@
  */
 
 {
-	parserClass="io.github.sof3.libglocal.idea.psi.LibglocalParser"
+	parserClass="io.github.sof3.libglocal.idea.parser.LibglocalParser"
 	extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
 	psiClassPrefix="Libglocal"
@@ -25,9 +25,9 @@
 	psiPackage="io.github.sof3.libglocal.idea.psi"
 	psiImplPackage="io.github.sof3.libglocal.idea.psi.impl"
 
-	elementTypeHolderClass="io.github.sof3.libglocal.idea.psi.LibglocalElements"
-	elementTypeClass="io.github.sof3.libglocal.idea.LibglocalElementType"
-	tokenTypeClass="io.github.sof3.libglocal.idea.LibglocalTokenType"
+	elementTypeHolderClass="io.github.sof3.libglocal.idea.parser.LibglocalElements"
+	elementTypeClass="io.github.sof3.libglocal.idea.parser.LibglocalElementType"
+	tokenTypeClass="io.github.sof3.libglocal.idea.parser.LibglocalTokenType"
 
 	tokens=[
 		T_EMPTY_LINE="empty line"

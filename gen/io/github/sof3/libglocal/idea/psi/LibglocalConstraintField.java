@@ -25,13 +25,17 @@ public interface LibglocalConstraintField extends LibglocalConstraintBlock {
   @Nullable
   LibglocalElementArgType getElementArgType();
 
-  @NotNull
-  List<LibglocalBlockElement> getChildBlocks();
+  //WARNING: getChildBlocks(...) is skipped
+  //matching getChildBlocks(LibglocalConstraintField, ...)
+  //methods are not found in Utils
 
-  String getName();
+  //WARNING: getName(...) is skipped
+  //matching getName(LibglocalConstraintField, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  String getType();
+  //WARNING: getType(...) is skipped
+  //matching getType(LibglocalConstraintField, ...)
+  //methods are not found in Utils
 
   //WARNING: getPresentation(...) is skipped
   //matching getPresentation(LibglocalConstraintField, ...)

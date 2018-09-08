@@ -4,7 +4,6 @@ package io.github.sof3.libglocal.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.ide.projectView.PresentationData;
 
 public interface LibglocalBlockMessages extends LibglocalBlockElement, LibglocalMessageParentElement {
 
@@ -17,16 +16,20 @@ public interface LibglocalBlockMessages extends LibglocalBlockElement, Libglocal
   @NotNull
   LibglocalElementMessageId getElementMessageId();
 
-  @NotNull
-  List<LibglocalBlockElement> getChildBlocks();
+  //WARNING: getChildBlocks(...) is skipped
+  //matching getChildBlocks(LibglocalBlockMessages, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  List<LibglocalBlockMessage> getMessages();
+  //WARNING: getMessages(...) is skipped
+  //matching getMessages(LibglocalBlockMessages, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  String getName();
+  //WARNING: getName(...) is skipped
+  //matching getName(LibglocalBlockMessages, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  PresentationData getPresentation();
+  //WARNING: getPresentation(...) is skipped
+  //matching getPresentation(LibglocalBlockMessages, ...)
+  //methods are not found in Utils
 
 }

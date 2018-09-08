@@ -3,7 +3,6 @@ package io.github.sof3.libglocal.idea.parser
 import com.intellij.lexer.LexerBase
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
-import io.github.sof3.libglocal.idea.psi.LibglocalElements
 
 /*
  * libglocal-idea-plugin

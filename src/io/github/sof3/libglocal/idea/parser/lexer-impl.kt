@@ -1,7 +1,6 @@
 package io.github.sof3.libglocal.idea.parser
 
 import com.intellij.psi.TokenType
-import io.github.sof3.libglocal.idea.psi.LibglocalElements
 
 /*
  * libglocal-idea-plugin

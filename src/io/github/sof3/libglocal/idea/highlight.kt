@@ -10,6 +10,7 @@ import com.intellij.openapi.options.colors.ColorSettingsPage
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.tree.IElementType
+import io.github.sof3.libglocal.idea.attr.Attributes
 import io.github.sof3.libglocal.idea.parser.LibglocalLexer
 import java.io.BufferedReader
 import java.io.InputStreamReader

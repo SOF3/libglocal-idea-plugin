@@ -10,10 +10,12 @@ public interface LibglocalRequireBlock extends LibglocalBlockElement {
   @NotNull
   LibglocalElementRequireTarget getElementRequireTarget();
 
-  @NotNull
-  List<LibglocalBlockElement> getChildBlocks();
+  //WARNING: getChildBlocks(...) is skipped
+  //matching getChildBlocks(LibglocalRequireBlock, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  String getName();
+  //WARNING: getName(...) is skipped
+  //matching getName(LibglocalRequireBlock, ...)
+  //methods are not found in Utils
 
 }

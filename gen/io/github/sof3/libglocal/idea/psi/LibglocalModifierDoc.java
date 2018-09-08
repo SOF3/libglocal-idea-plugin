@@ -10,10 +10,12 @@ public interface LibglocalModifierDoc extends LibglocalModifierBlock {
   @Nullable
   LibglocalElementLiteralStatic getElementLiteralStatic();
 
-  @NotNull
-  List<LibglocalConstraintBlock> getConstraints();
+  //WARNING: getConstraints(...) is skipped
+  //matching getConstraints(LibglocalModifierDoc, ...)
+  //methods are not found in Utils
 
-  @NotNull
-  List<LibglocalBlockElement> getChildBlocks();
+  //WARNING: getChildBlocks(...) is skipped
+  //matching getChildBlocks(LibglocalModifierDoc, ...)
+  //methods are not found in Utils
 
 }

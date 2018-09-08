@@ -1,10 +1,10 @@
-package io.github.sof3.libglocal.idea
+package io.github.sof3.libglocal.idea.attr
 
 import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.options.colors.AttributesDescriptor
 import com.intellij.psi.tree.IElementType
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors as D
-import io.github.sof3.libglocal.idea.psi.LibglocalElements as E
+import io.github.sof3.libglocal.idea.parser.LibglocalElements as E
 
 /*
  * libglocal-idea-plugin
