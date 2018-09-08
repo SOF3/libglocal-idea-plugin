@@ -30,10 +30,15 @@
 		<lang.parserDefinition
 				language="libglocal"
 				implementationClass="io.github.sof3.libglocal.idea.parser.LibglocalParserDefinition"/>
+
+		<stubElementTypeHolder
+				class="io.github.sof3.libglocal.idea.parser.LgcElements"/>
+
 		<lang.syntaxHighlighterFactory
 				language="libglocal"
 				implementationClass="io.github.sof3.libglocal.idea.LibglocalHlFactory"/>
 		<colorSettingsPage implementation="io.github.sof3.libglocal.idea.LibglocalColorSettingsPage"/>
+
 		<!--<annotator-->
 		<!--language="libglocal"-->
 		<!--implementationClass="io.github.sof3.libglocal.idea.annotator.SpanAnnotator"/>-->
@@ -43,9 +48,11 @@
 		<!--<completion.contributor-->
 		<!--language="libglocal"-->
 		<!--implementationClass="io.github.sof3.libglocal.idea.ref.LibglocalCompletionContributor"/>-->
+
 		<lang.braceMatcher
 				language="libglocal"
 				implementationClass="io.github.sof3.libglocal.idea.braces.LibglocalPairedBraceMatcher"/>
+
 		<lang.psiStructureViewFactory
 				language="libglocal"
 				implementationClass="io.github.sof3.libglocal.idea.structureView.LibglocalSVFactory"/>

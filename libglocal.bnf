@@ -17,7 +17,7 @@
  */
 
 {
-	parserClass="io.github.sof3.libglocal.idea.parser.LibglocalParser"
+	parserClass="io.github.sof3.libglocal.idea.parser.LgcParser"
 	extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
 
 	psiClassPrefix="Lgc"

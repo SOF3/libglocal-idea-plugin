@@ -3,6 +3,7 @@ package io.github.sof3.libglocal.idea.psi
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.FileViewProvider
+import com.intellij.psi.stubs.PsiFileStubImpl
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.sof3.libglocal.idea.LibglocalFileType
 import io.github.sof3.libglocal.idea.LibglocalLanguage
@@ -42,3 +43,5 @@ class LgcFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, Libglo
 
 	override fun getFileType(): FileType = LibglocalFileType
 }
+
+class LgcFileStub(file: LgcFile): PsiFileStubImpl<LgcFile>(file)

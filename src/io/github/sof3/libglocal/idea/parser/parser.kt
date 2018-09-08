@@ -7,10 +7,11 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
-import com.intellij.psi.tree.IFileElementType
+import com.intellij.psi.tree.IStubFileElementType
 import com.intellij.psi.tree.TokenSet
 import io.github.sof3.libglocal.idea.LibglocalLanguage
 import io.github.sof3.libglocal.idea.psi.LgcFile
+import io.github.sof3.libglocal.idea.psi.LgcFileStub
 
 /*
  * libglocal-idea-plugin
@@ -38,7 +39,7 @@ class LibglocalParserDefinition : ParserDefinition {
 	)
 	private val myCommentTokens = TokenSet.create(LgcElements.T_COMMENT)
 	private val myLiteralElements = TokenSet.create(LgcElements.LITERAL, LgcElements.LITERAL_STATIC)
-	private val myFileNodeType = IFileElementType(LibglocalLanguage)
+	private val myFileNodeType = LgcFileElementType()
 
 	override fun createLexer(project: Project?): Lexer = LibglocalLexer(false)
 
@@ -48,7 +49,7 @@ class LibglocalParserDefinition : ParserDefinition {
 
 	override fun getStringLiteralElements() = myLiteralElements
 
-	override fun createParser(project: Project?) = LibglocalParser()
+	override fun createParser(project: Project?) = LgcParser()
 
 	override fun getFileNodeType() = myFileNodeType
 
@@ -58,3 +59,5 @@ class LibglocalParserDefinition : ParserDefinition {
 
 	override fun createElement(node: ASTNode?): PsiElement = LgcElements.Factory.createElement(node)
 }
+
+class LgcFileElementType : IStubFileElementType<LgcFileStub>(LibglocalLanguage)
