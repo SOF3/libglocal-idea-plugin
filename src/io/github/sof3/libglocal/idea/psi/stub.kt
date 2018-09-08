@@ -1,6 +1,7 @@
 package io.github.sof3.libglocal.idea.psi
 
 import com.intellij.psi.stubs.StubElement
+import com.intellij.psi.stubs.StubIndexKey
 import io.github.sof3.libglocal.idea.MessageVisibility
 
 /*
@@ -21,7 +22,20 @@ import io.github.sof3.libglocal.idea.MessageVisibility
  * limitations under the License.
  */
 
-interface MessageStub: StubElement<LibglocalBlockMessage> {
+interface MessageStub : StubElement<LibglocalBlockMessage> {
 	val fullName: String
 	val visibility: MessageVisibility
+	val lang: String
+}
+
+object StubKeys {
+	val MESSAGE = StubIndexKey.createIndexKey<String, LibglocalBlockMessage>("libglocal.message")
+}
+
+class StubElementTypeFactory {
+	@Suppress("UNUSED_PARAMETER")
+	companion object {
+		@JvmStatic
+		fun forMessage(name: String) = StubElementTypes.MESSAGE
+	}
 }

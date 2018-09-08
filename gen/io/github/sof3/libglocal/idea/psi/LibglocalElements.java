@@ -11,7 +11,7 @@ import io.github.sof3.libglocal.idea.psi.impl.*;
 public interface LibglocalElements {
 
   IElementType AUTHOR_BLOCK = new LibglocalElementType("AUTHOR_BLOCK");
-  IElementType BLOCK_MESSAGE = new LibglocalElementType("BLOCK_MESSAGE");
+  IElementType BLOCK_MESSAGE = StubElementTypeFactory.forMessage("BLOCK_MESSAGE");
   IElementType BLOCK_MESSAGES = new LibglocalElementType("BLOCK_MESSAGES");
   IElementType BLOCK_MESSAGE_GROUP = new LibglocalElementType("BLOCK_MESSAGE_GROUP");
   IElementType CONSTRAINT_DELIM = new LibglocalElementType("CONSTRAINT_DELIM");

@@ -1,4 +1,6 @@
-package io.github.sof3.libglocal.idea.psi.impl;/*
+package io.github.sof3.libglocal.idea.psi;
+
+/*
  * libglocal-idea-plugin
  *
  * Copyright 2018 SOFe
@@ -16,8 +18,9 @@ package io.github.sof3.libglocal.idea.psi.impl;/*
  * limitations under the License.
  */
 
-import com.intellij.psi.stubs.IStubElementType;
+import io.github.sof3.libglocal.idea.psi.impl.MessageStubElementType;
+import org.jetbrains.annotations.NotNull;
 
 public interface StubElementTypes{
-	IStubElementType MESSAGE = MessageStubElementType.INSTANCE;
+	@NotNull MessageStubElementType MESSAGE = MessageStubElementType.INSTANCE;
 }

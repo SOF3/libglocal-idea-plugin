@@ -34,7 +34,7 @@
 				language="libglocal"
 				implementationClass="io.github.sof3.libglocal.idea.LibglocalHlFactory"/>
 		<colorSettingsPage implementation="io.github.sof3.libglocal.idea.LibglocalColorSettingsPage"/>
-		<stubElementTypeHolder class="io.github.sof3.libglocal.idea.psi.impl.StubElementTypes"/>
+		<stubElementTypeHolder class="io.github.sof3.libglocal.idea.psi.StubElementTypes"/>
 		<!--<annotator-->
 		<!--language="libglocal"-->
 		<!--implementationClass="io.github.sof3.libglocal.idea.annotator.SpanAnnotator"/>-->
@@ -53,5 +53,6 @@
 	</extensions>
 
 	<actions>
+		<action class="io.github.sof3.libglocal.idea.actions.SearchMessageAction" id="libglocal.searchMessage"/>
 	</actions>
 </idea-plugin>

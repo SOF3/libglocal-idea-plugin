@@ -5,7 +5,9 @@ import com.intellij.psi.stubs.*
 import io.github.sof3.libglocal.idea.LibglocalLanguage
 import io.github.sof3.libglocal.idea.MessageVisibility
 import io.github.sof3.libglocal.idea.psi.LibglocalBlockMessage
+import io.github.sof3.libglocal.idea.psi.LibglocalFile
 import io.github.sof3.libglocal.idea.psi.MessageStub
+import io.github.sof3.libglocal.idea.psi.StubKeys
 
 /*
  * libglocal-idea-plugin
@@ -27,39 +29,39 @@ import io.github.sof3.libglocal.idea.psi.MessageStub
 
 object MessageStubElementType :
 		IStubElementType<MessageStub, LibglocalBlockMessage>("LIBGLOCAL_MESSAGE", LibglocalLanguage) {
-	override fun createPsi(stub: MessageStub): LibglocalBlockMessage {
-		return LibglocalBlockMessageImpl(stub, this)
-	}
+	override fun createPsi(stub: MessageStub): LibglocalBlockMessage = LibglocalBlockMessageImpl(stub, this)
 
-	override fun createStub(psi: LibglocalBlockMessage, parent: StubElement<PsiElement?>): MessageStub {
+	override fun createStub(e: LibglocalBlockMessage, parent: StubElement<PsiElement?>): MessageStub {
 		// this is where the AST is read into stub values
-		return MessageStubImpl(parent, psi.fullName, psi.visibility)
+		return MessageStubImpl(parent, e.fullName, e.visibility, (e.containingFile as LibglocalFile).langBlock!!.elementLangId.text)
 	}
 
-	override fun getExternalId(): String {
-		return "libglocal.stub.message";
-	}
+	override fun getExternalId() = "libglocal.stub.message"
 
 	override fun serialize(stub: MessageStub, stream: StubOutputStream) {
 		stream.writeName(stub.fullName)
 		stream.writeName(stub.visibility.name)
+		stream.writeName(stub.lang)
 	}
 
 	override fun deserialize(stream: StubInputStream, parent: StubElement<PsiElement?>): MessageStub {
 		return MessageStubImpl(parent,
 				stream.readNameString()!!,
-				MessageVisibility.valueOf(stream.readNameString()!!))
+				MessageVisibility.valueOf(stream.readNameString()!!),
+				stream.readNameString()!!
+				)
 	}
 
 	override fun indexStub(stub: MessageStub, sink: IndexSink) {
-
+		sink.occurrence(StubKeys.MESSAGE, stub.fullName)
 	}
 }
 
 class MessageStubImpl(
 		parent: StubElement<PsiElement?>,
 		override val fullName: String,
-		override val visibility: MessageVisibility
+		override val visibility: MessageVisibility,
+		override val lang: String
 ) : StubBase<LibglocalBlockMessage>(parent, MessageStubElementType),
 		MessageStub {
 }

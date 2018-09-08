@@ -120,6 +120,7 @@ block_message ::= element_message_id element_literal line_delim
 	[T_INDENT_INDENT message_modifiers* pseudo_dedent] {
 	methods=[getModifiers getChildBlocks getName getFullName getVisibility getPresentation]
 	stubClass="io.github.sof3.libglocal.idea.psi.MessageStub"
+	elementTypeFactory="io.github.sof3.libglocal.idea.psi.StubElementTypeFactory.forMessage"
 }
 
 private message_modifiers ::= (modifier_arg | modifier_doc | modifier_version)

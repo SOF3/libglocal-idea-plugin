@@ -7,11 +7,13 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.TokenType
+import com.intellij.psi.stubs.PsiFileStub
 import com.intellij.psi.tree.IFileElementType
+import com.intellij.psi.tree.IStubFileElementType
 import com.intellij.psi.tree.TokenSet
-import io.github.sof3.libglocal.idea.psi.LibglocalFile
 import io.github.sof3.libglocal.idea.LibglocalLanguage
 import io.github.sof3.libglocal.idea.psi.LibglocalElements
+import io.github.sof3.libglocal.idea.psi.LibglocalFile
 import io.github.sof3.libglocal.idea.psi.LibglocalParser
 
 /*
@@ -40,7 +42,7 @@ class LibglocalParserDefinition : ParserDefinition {
 	)
 	private val myCommentTokens = TokenSet.create(LibglocalElements.T_COMMENT)
 	private val myLiteralElements = TokenSet.create(LibglocalElements.ELEMENT_LITERAL)
-	private val myFileNodeType = IFileElementType(LibglocalLanguage)
+	private val myFileNodeType = IStubFileElementType<PsiFileStub<LibglocalFile>>(LibglocalLanguage)
 
 	override fun createLexer(project: Project?): Lexer = LibglocalLexer(false)
 
@@ -52,7 +54,7 @@ class LibglocalParserDefinition : ParserDefinition {
 
 	override fun createParser(project: Project?) = LibglocalParser()
 
-	override fun getFileNodeType() = myFileNodeType
+	override fun getFileNodeType(): IFileElementType = myFileNodeType
 
 	override fun createFile(viewProvider: FileViewProvider?) = LibglocalFile(viewProvider!!)
 
