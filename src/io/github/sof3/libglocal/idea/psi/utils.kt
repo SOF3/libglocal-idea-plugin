@@ -5,8 +5,10 @@ package io.github.sof3.libglocal.idea.psi
 
 import com.intellij.ide.projectView.PresentationData
 import com.intellij.navigation.ItemPresentation
+import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.sof3.libglocal.idea.Icons
+import io.github.sof3.libglocal.idea.libglocal.MessageVisibility
 
 /*
  * libglocal-idea-plugin
@@ -25,6 +27,8 @@ import io.github.sof3.libglocal.idea.Icons
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+internal fun getFile(e: PsiElement): LgcFile = e.containingFile as LgcFile
 
 internal fun getMessages(e: LgcMessages): List<LgcMessage> = PsiTreeUtil.getChildrenOfTypeAsList(e, LgcMessage::class.java)
 
@@ -61,23 +65,23 @@ internal fun getChildBlocks(e: LgcModifierBlock): List<LgcBlockElement> = e.cons
 internal fun getChildBlocks(e: LgcConstraintBlock): List<LgcBlockElement> = emptyList()
 
 
-internal fun getName(e: LgcLang) = e.langId.text!!
-internal fun getName(e: LgcAuthor) = e.authorName.text!!
-internal fun getName(e: LgcVersion) = e.versionValue.text!!
-internal fun getName(e: LgcRequire) = e.requireTarget.text!!
+internal fun getName(e: LgcLang) = e.langId.text
+internal fun getName(e: LgcAuthor) = e.authorName.text
+internal fun getName(e: LgcVersion) = e.versionValue.text
+internal fun getName(e: LgcRequire) = e.requireTarget.text
 
-internal fun getName(e: LgcMessages) = e.messageId.text!!
-internal fun getName(e: LgcMessageGroup) = e.messageId.text!!
-internal fun getName(e: LgcMessage) = e.messageId.text!!
+internal fun getName(e: LgcMessages) = e.messageId.text
+internal fun getName(e: LgcMessageGroup) = e.messageId.text
+internal fun getName(e: LgcMessage) = e.messageId.text
 
 internal fun getFullName(e: LgcBlockElement): String {
 	val names = mutableListOf(e.name ?: "???")
 	var element = e.parent
 	while (element is LgcMessageGroup || element is LgcMessages) {
 		if (element is LgcMessageGroup) {
-			names.add(element.messageId.text!!)
+			names.add(element.messageId.text)
 		} else {
-			names.add((element as LgcMessages).messageId.text!!)
+			names.add((element as LgcMessages).messageId.text)
 		}
 		element = element.parent
 	}
@@ -95,3 +99,18 @@ internal fun getPresentation(e: LgcMessageGroup) = PresentationData(e.name, e.fu
 internal fun getPresentation(e: LgcMessage): ItemPresentation = PresentationData(e.name, e.fullName, Icons.MESSAGE.px16, null)
 internal fun getPresentation(e: LgcArgModifier): ItemPresentation = PresentationData(e.name, e.type, Icons.ARG.px16, null)
 internal fun getPresentation(e: LgcFieldConstraint): ItemPresentation = PresentationData(e.name, e.type, Icons.ARG.px16, null)
+
+internal fun getVisibility(e: LgcMessage): MessageVisibility {
+	val stub = e.stub
+	if(stub != null){
+		return stub.visibility
+	}
+
+	for (flag in e.messageFlagList) {
+		try{
+			return MessageVisibility.valueOf(flag.text.substring(0, flag.text.length - 1).toUpperCase())
+		}catch(e: IllegalArgumentException){
+		}
+	}
+	return MessageVisibility.DEFAULT
+}

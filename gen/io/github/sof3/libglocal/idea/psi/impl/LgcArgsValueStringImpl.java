@@ -29,7 +29,7 @@ public class LgcArgsValueStringImpl extends ASTWrapperPsiElement implements LgcA
   @Override
   @NotNull
   public LgcLiteral getLiteral() {
-    return findNotNullChildByClass(LgcLiteral.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcLiteral.class));
   }
 
 }

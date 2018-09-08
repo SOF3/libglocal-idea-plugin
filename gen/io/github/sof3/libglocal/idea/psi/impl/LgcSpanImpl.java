@@ -29,7 +29,7 @@ public class LgcSpanImpl extends ASTWrapperPsiElement implements LgcSpan {
   @Override
   @NotNull
   public LgcLiteral getLiteral() {
-    return findNotNullChildByClass(LgcLiteral.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcLiteral.class));
   }
 
 }

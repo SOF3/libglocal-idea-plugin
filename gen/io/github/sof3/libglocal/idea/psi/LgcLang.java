@@ -14,6 +14,9 @@ public interface LgcLang extends LgcBlockElement {
   LgcLangName getLangName();
 
   @NotNull
+  LgcFile getFile();
+
+  @NotNull
   List<LgcBlockElement> getChildBlocks();
 
   @NotNull

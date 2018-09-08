@@ -27,6 +27,9 @@ public interface LgcArgModifier extends LgcModifierBlock {
   List<LgcFieldConstraint> getFieldConstraintList();
 
   @NotNull
+  LgcFile getFile();
+
+  @NotNull
   List<LgcConstraintBlock> getConstraints();
 
   @NotNull

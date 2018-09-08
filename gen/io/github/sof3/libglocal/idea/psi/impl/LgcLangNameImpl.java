@@ -29,7 +29,7 @@ public class LgcLangNameImpl extends ASTWrapperPsiElement implements LgcLangName
   @Override
   @NotNull
   public LgcLiteralStatic getLiteralStatic() {
-    return findNotNullChildByClass(LgcLiteralStatic.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcLiteralStatic.class));
   }
 
 }

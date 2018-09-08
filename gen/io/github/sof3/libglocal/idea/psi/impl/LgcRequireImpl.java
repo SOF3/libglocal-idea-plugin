@@ -29,7 +29,12 @@ public class LgcRequireImpl extends ASTWrapperPsiElement implements LgcRequire {
   @Override
   @NotNull
   public LgcRequireTarget getRequireTarget() {
-    return findNotNullChildByClass(LgcRequireTarget.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcRequireTarget.class));
+  }
+
+  @NotNull
+  public LgcFile getFile() {
+    return Utils.getFile(this);
   }
 
   @NotNull

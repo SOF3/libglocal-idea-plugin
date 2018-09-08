@@ -42,7 +42,12 @@ public class LgcMessageGroupImpl extends ASTWrapperPsiElement implements LgcMess
   @Override
   @NotNull
   public LgcMessageId getMessageId() {
-    return findNotNullChildByClass(LgcMessageId.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcMessageId.class));
+  }
+
+  @NotNull
+  public LgcFile getFile() {
+    return Utils.getFile(this);
   }
 
   @NotNull

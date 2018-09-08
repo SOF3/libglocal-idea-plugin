@@ -11,6 +11,9 @@ public interface LgcDocModifier extends LgcModifierBlock {
   LgcDocContent getDocContent();
 
   @NotNull
+  LgcFile getFile();
+
+  @NotNull
   List<LgcConstraintBlock> getConstraints();
 
   @NotNull

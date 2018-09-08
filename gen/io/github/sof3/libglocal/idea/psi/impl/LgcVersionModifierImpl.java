@@ -27,6 +27,11 @@ public class LgcVersionModifierImpl extends ASTWrapperPsiElement implements LgcV
   }
 
   @NotNull
+  public LgcFile getFile() {
+    return Utils.getFile(this);
+  }
+
+  @NotNull
   public List<LgcConstraintBlock> getConstraints() {
     return Utils.getConstraints(this);
   }

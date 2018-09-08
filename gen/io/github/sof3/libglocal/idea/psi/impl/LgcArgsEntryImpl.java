@@ -29,7 +29,7 @@ public class LgcArgsEntryImpl extends ASTWrapperPsiElement implements LgcArgsEnt
   @Override
   @NotNull
   public LgcArgsValue getArgsValue() {
-    return findNotNullChildByClass(LgcArgsValue.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcArgsValue.class));
   }
 
 }

@@ -8,14 +8,26 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.sof3.libglocal.idea.parser.LgcElements.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.intellij.extapi.psi.StubBasedPsiElementBase;
+import io.github.sof3.libglocal.idea.psi.LgcMessageStub;
 import io.github.sof3.libglocal.idea.psi.*;
 import com.intellij.navigation.ItemPresentation;
+import io.github.sof3.libglocal.idea.libglocal.MessageVisibility;
+import com.intellij.psi.stubs.IStubElementType;
+import com.intellij.psi.tree.IElementType;
 
-public class LgcMessageImpl extends ASTWrapperPsiElement implements LgcMessage {
+public class LgcMessageImpl extends StubBasedPsiElementBase<LgcMessageStub> implements LgcMessage {
+
+  public LgcMessageImpl(@NotNull LgcMessageStub stub, @NotNull IStubElementType type) {
+    super(stub, type);
+  }
 
   public LgcMessageImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  public LgcMessageImpl(LgcMessageStub stub, IElementType type, ASTNode node) {
+    super(stub, type, node);
   }
 
   public void accept(@NotNull LgcVisitor visitor) {
@@ -42,19 +54,30 @@ public class LgcMessageImpl extends ASTWrapperPsiElement implements LgcMessage {
   @Override
   @NotNull
   public LgcLiteral getLiteral() {
-    return findNotNullChildByClass(LgcLiteral.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcLiteral.class));
+  }
+
+  @Override
+  @NotNull
+  public List<LgcMessageFlag> getMessageFlagList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LgcMessageFlag.class);
   }
 
   @Override
   @NotNull
   public LgcMessageId getMessageId() {
-    return findNotNullChildByClass(LgcMessageId.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcMessageId.class));
   }
 
   @Override
   @NotNull
   public List<LgcVersionModifier> getVersionModifierList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, LgcVersionModifier.class);
+  }
+
+  @NotNull
+  public LgcFile getFile() {
+    return Utils.getFile(this);
   }
 
   @NotNull
@@ -75,6 +98,11 @@ public class LgcMessageImpl extends ASTWrapperPsiElement implements LgcMessage {
   @NotNull
   public String getFullName() {
     return Utils.getFullName(this);
+  }
+
+  @NotNull
+  public MessageVisibility getVisibility() {
+    return Utils.getVisibility(this);
   }
 
   @NotNull

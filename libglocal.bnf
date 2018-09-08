@@ -81,43 +81,92 @@ private pseudo_dedent ::= T_INDENT_DEDENT | <<eof>>
 private line_delim ::= T_EOL | <<eof>>
 
 lang ::= (K_BASE_LANG | K_LANG) lang_id lang_name line_delim {
-	methods=[getChildBlocks getName]
+	methods=[
+		getFile
+		getChildBlocks
+		getName
+	]
 }
 lang_id ::= T_IDENTIFIER
 lang_name ::= literal_static
 
 author ::= K_AUTHOR author_name line_delim {
-	methods=[getChildBlocks getName]
+	methods=[
+		getFile
+		getChildBlocks
+		getName
+	]
 }
 author_name ::= literal_static
 
 version ::= K_VERSION version_value line_delim {
-	methods=[getChildBlocks getName]
+	methods=[
+		getFile
+		getChildBlocks
+		getName
+	]
 }
 version_value ::= T_IDENTIFIER
 
 require ::= K_REQUIRE require_target line_delim {
-	methods=[getChildBlocks getName]
+	methods=[
+		getFile
+		getChildBlocks
+		getName
+	]
 }
 require_target ::= T_IDENTIFIER
 
 messages ::= K_MESSAGES message_id line_delim [T_INDENT_INDENT (message_group | message)* pseudo_dedent] {
-	methods=[getChildBlocks getMessages getName getPresentation]
+	methods=[
+		getFile
+		getChildBlocks
+		getMessages
+		getName
+		getPresentation
+	]
 }
-message_group ::= message_id line_delim [T_INDENT_INDENT (message_group | message)* pseudo_dedent] {
-	methods=[getChildBlocks getMessages getName getFullName getPresentation]
-}
-message_id ::= T_FLAG* T_IDENTIFIER
 
-message ::= message_id literal line_delim
-	[T_INDENT_INDENT message_modifiers* pseudo_dedent] {
-	methods=[getModifiers getChildBlocks getName getFullName getPresentation]
+message_group ::= message_id line_delim [T_INDENT_INDENT (message_group | message)* pseudo_dedent] {
+	methods=[
+		getFile
+		getChildBlocks
+		getMessages
+		getName
+		getFullName
+		getPresentation
+	]
 }
+
+message ::= message_flag* message_id literal line_delim
+	[T_INDENT_INDENT message_modifiers* pseudo_dedent] {
+	methods=[
+		getFile
+		getModifiers
+		getChildBlocks
+		getName
+		getFullName
+		getVisibility
+		getPresentation
+	]
+
+	stubClass="io.github.sof3.libglocal.idea.psi.LgcMessageStub"
+	elementTypeFactory="io.github.sof3.libglocal.idea.parser.StubTypeFactory.message"
+}
+message_flag ::= T_FLAG
+message_id ::= T_IDENTIFIER
 
 private message_modifiers ::= (arg_modifier | doc_modifier | version_modifier)
 arg_modifier ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
 	implements=["LgcModifierBlock"]
-	methods=[getConstraints getChildBlocks getName getType getPresentation]
+	methods=[
+		getFile
+		getConstraints
+		getChildBlocks
+		getName
+		getType
+		getPresentation
+	]
 }
 private arg_template ::= arg_name [arg_type [arg_default]] line_delim
 arg_name ::= T_IDENTIFIER
@@ -126,19 +175,33 @@ arg_default ::= literal
 
 doc_modifier ::= T_MODIFIER_DOC doc_content? line_delim {
 	implements=["LgcModifierBlock"]
-	methods=[getConstraints getChildBlocks]
+	methods=[
+		getFile
+		getConstraints
+		getChildBlocks
+	]
 }
 doc_content ::= literal_static
 
 version_modifier ::= T_MODIFIER_VERSION T_IDENTIFIER line_delim {
 	implements=["LgcModifierBlock"]
-	methods=[getConstraints getChildBlocks]
+	methods=[
+		getFile
+		getConstraints
+		getChildBlocks
+	]
 }
 
 private arg_constraints ::= field_constraint | delim_constraint | doc_constraint
 field_constraint ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
 	implements=["LgcConstraintBlock"]
-	methods=[getChildBlocks getName getType getPresentation]
+	methods=[
+		getFile
+		getChildBlocks
+		getName
+		getType
+		getPresentation
+	]
 }
 delim_constraint ::= T_INSTRUCTION "delim" T_IDENTIFIER line_delim
 doc_constraint ::= T_MODIFIER_DOC literal_static line_delim

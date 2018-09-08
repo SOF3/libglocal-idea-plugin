@@ -29,7 +29,7 @@ public class LgcMessageRefImpl extends ASTWrapperPsiElement implements LgcMessag
   @Override
   @NotNull
   public LgcArgsSupplier getArgsSupplier() {
-    return findNotNullChildByClass(LgcArgsSupplier.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcArgsSupplier.class));
   }
 
 }

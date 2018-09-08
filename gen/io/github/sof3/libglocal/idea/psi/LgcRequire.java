@@ -11,6 +11,9 @@ public interface LgcRequire extends LgcBlockElement {
   LgcRequireTarget getRequireTarget();
 
   @NotNull
+  LgcFile getFile();
+
+  @NotNull
   List<LgcBlockElement> getChildBlocks();
 
   @NotNull

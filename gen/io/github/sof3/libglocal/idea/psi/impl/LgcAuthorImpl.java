@@ -29,7 +29,12 @@ public class LgcAuthorImpl extends ASTWrapperPsiElement implements LgcAuthor {
   @Override
   @NotNull
   public LgcAuthorName getAuthorName() {
-    return findNotNullChildByClass(LgcAuthorName.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcAuthorName.class));
+  }
+
+  @NotNull
+  public LgcFile getFile() {
+    return Utils.getFile(this);
   }
 
   @NotNull

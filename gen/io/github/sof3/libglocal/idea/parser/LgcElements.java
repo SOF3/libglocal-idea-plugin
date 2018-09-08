@@ -29,8 +29,9 @@ public interface LgcElements {
   IElementType LANG_NAME = new LgcElementType("LANG_NAME");
   IElementType LITERAL = new LgcElementType("LITERAL");
   IElementType LITERAL_STATIC = new LgcElementType("LITERAL_STATIC");
-  IElementType MESSAGE = new LgcElementType("MESSAGE");
+  IElementType MESSAGE = StubTypeFactory.message("MESSAGE");
   IElementType MESSAGES = new LgcElementType("MESSAGES");
+  IElementType MESSAGE_FLAG = new LgcElementType("MESSAGE_FLAG");
   IElementType MESSAGE_GROUP = new LgcElementType("MESSAGE_GROUP");
   IElementType MESSAGE_ID = new LgcElementType("MESSAGE_ID");
   IElementType MESSAGE_REF = new LgcElementType("MESSAGE_REF");
@@ -147,6 +148,9 @@ public interface LgcElements {
       }
       else if (type == MESSAGES) {
         return new LgcMessagesImpl(node);
+      }
+      else if (type == MESSAGE_FLAG) {
+        return new LgcMessageFlagImpl(node);
       }
       else if (type == MESSAGE_GROUP) {
         return new LgcMessageGroupImpl(node);

@@ -18,6 +18,9 @@ public interface LgcMessages extends LgcBlockElement, LgcMessageParentElement {
   LgcMessageId getMessageId();
 
   @NotNull
+  LgcFile getFile();
+
+  @NotNull
   List<LgcBlockElement> getChildBlocks();
 
   @NotNull

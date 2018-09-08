@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface LgcVersionModifier extends LgcModifierBlock {
 
   @NotNull
+  LgcFile getFile();
+
+  @NotNull
   List<LgcConstraintBlock> getConstraints();
 
   @NotNull

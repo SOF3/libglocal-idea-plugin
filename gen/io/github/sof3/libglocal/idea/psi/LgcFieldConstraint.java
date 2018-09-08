@@ -27,6 +27,9 @@ public interface LgcFieldConstraint extends LgcConstraintBlock {
   List<LgcFieldConstraint> getFieldConstraintList();
 
   @NotNull
+  LgcFile getFile();
+
+  @NotNull
   List<LgcBlockElement> getChildBlocks();
 
   String getName();

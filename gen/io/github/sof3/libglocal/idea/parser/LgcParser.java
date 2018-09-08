@@ -89,6 +89,9 @@ public class LgcParser implements PsiParser, LightPsiParser {
     else if (t == MESSAGE) {
       r = message(b, 0);
     }
+    else if (t == MESSAGE_FLAG) {
+      r = message_flag(b, 0);
+    }
     else if (t == MESSAGE_GROUP) {
       r = message_group(b, 0);
     }
@@ -641,62 +644,86 @@ public class LgcParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // message_id literal line_delim
+  // message_flag* message_id literal line_delim
   // 	[T_INDENT_INDENT message_modifiers* pseudo_dedent]
   public static boolean message(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "message")) return false;
     if (!nextTokenIs(b, "<message>", T_FLAG, T_IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, MESSAGE, "<message>");
-    r = message_id(b, l + 1);
+    r = message_0(b, l + 1);
+    r = r && message_id(b, l + 1);
     r = r && literal(b, l + 1);
     r = r && line_delim(b, l + 1);
-    r = r && message_3(b, l + 1);
+    r = r && message_4(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
+  // message_flag*
+  private static boolean message_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "message_0")) return false;
+    while (true) {
+      int c = current_position_(b);
+      if (!message_flag(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "message_0", c)) break;
+    }
+    return true;
+  }
+
   // [T_INDENT_INDENT message_modifiers* pseudo_dedent]
-  private static boolean message_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "message_3")) return false;
-    message_3_0(b, l + 1);
+  private static boolean message_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "message_4")) return false;
+    message_4_0(b, l + 1);
     return true;
   }
 
   // T_INDENT_INDENT message_modifiers* pseudo_dedent
-  private static boolean message_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "message_3_0")) return false;
+  private static boolean message_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "message_4_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, T_INDENT_INDENT);
-    r = r && message_3_0_1(b, l + 1);
+    r = r && message_4_0_1(b, l + 1);
     r = r && pseudo_dedent(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // message_modifiers*
-  private static boolean message_3_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "message_3_0_1")) return false;
+  private static boolean message_4_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "message_4_0_1")) return false;
     while (true) {
       int c = current_position_(b);
       if (!message_modifiers(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "message_3_0_1", c)) break;
+      if (!empty_element_parsed_guard_(b, "message_4_0_1", c)) break;
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // T_FLAG
+  public static boolean message_flag(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "message_flag")) return false;
+    if (!nextTokenIs(b, T_FLAG)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, T_FLAG);
+    exit_section_(b, m, MESSAGE_FLAG, r);
+    return r;
   }
 
   /* ********************************************************** */
   // message_id line_delim [T_INDENT_INDENT (message_group | message)* pseudo_dedent]
   public static boolean message_group(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "message_group")) return false;
-    if (!nextTokenIs(b, "<message group>", T_FLAG, T_IDENTIFIER)) return false;
+    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, MESSAGE_GROUP, "<message group>");
+    Marker m = enter_section_(b);
     r = message_id(b, l + 1);
     r = r && line_delim(b, l + 1);
     r = r && message_group_2(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
+    exit_section_(b, m, MESSAGE_GROUP, r);
     return r;
   }
 
@@ -740,27 +767,15 @@ public class LgcParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // T_FLAG* T_IDENTIFIER
+  // T_IDENTIFIER
   public static boolean message_id(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "message_id")) return false;
-    if (!nextTokenIs(b, "<message id>", T_FLAG, T_IDENTIFIER)) return false;
+    if (!nextTokenIs(b, T_IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, MESSAGE_ID, "<message id>");
-    r = message_id_0(b, l + 1);
-    r = r && consumeToken(b, T_IDENTIFIER);
-    exit_section_(b, l, m, r, false, null);
+    Marker m = enter_section_(b);
+    r = consumeToken(b, T_IDENTIFIER);
+    exit_section_(b, m, MESSAGE_ID, r);
     return r;
-  }
-
-  // T_FLAG*
-  private static boolean message_id_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "message_id_0")) return false;
-    while (true) {
-      int c = current_position_(b);
-      if (!consumeToken(b, T_FLAG)) break;
-      if (!empty_element_parsed_guard_(b, "message_id_0", c)) break;
-    }
-    return true;
   }
 
   /* ********************************************************** */

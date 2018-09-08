@@ -29,7 +29,12 @@ public class LgcDocModifierImpl extends ASTWrapperPsiElement implements LgcDocMo
   @Override
   @Nullable
   public LgcDocContent getDocContent() {
-    return findChildByClass(LgcDocContent.class);
+    return PsiTreeUtil.getChildOfType(this, LgcDocContent.class);
+  }
+
+  @NotNull
+  public LgcFile getFile() {
+    return Utils.getFile(this);
   }
 
   @NotNull

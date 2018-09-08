@@ -11,6 +11,9 @@ public interface LgcVersion extends LgcBlockElement {
   LgcVersionValue getVersionValue();
 
   @NotNull
+  LgcFile getFile();
+
+  @NotNull
   List<LgcBlockElement> getChildBlocks();
 
   @NotNull

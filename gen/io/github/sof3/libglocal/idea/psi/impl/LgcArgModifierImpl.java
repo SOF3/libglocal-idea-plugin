@@ -30,19 +30,19 @@ public class LgcArgModifierImpl extends ASTWrapperPsiElement implements LgcArgMo
   @Override
   @Nullable
   public LgcArgDefault getArgDefault() {
-    return findChildByClass(LgcArgDefault.class);
+    return PsiTreeUtil.getChildOfType(this, LgcArgDefault.class);
   }
 
   @Override
   @NotNull
   public LgcArgName getArgName() {
-    return findNotNullChildByClass(LgcArgName.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcArgName.class));
   }
 
   @Override
   @Nullable
   public LgcArgType getArgType() {
-    return findChildByClass(LgcArgType.class);
+    return PsiTreeUtil.getChildOfType(this, LgcArgType.class);
   }
 
   @Override
@@ -61,6 +61,11 @@ public class LgcArgModifierImpl extends ASTWrapperPsiElement implements LgcArgMo
   @NotNull
   public List<LgcFieldConstraint> getFieldConstraintList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, LgcFieldConstraint.class);
+  }
+
+  @NotNull
+  public LgcFile getFile() {
+    return Utils.getFile(this);
   }
 
   @NotNull

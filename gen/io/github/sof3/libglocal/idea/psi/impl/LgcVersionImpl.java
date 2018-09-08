@@ -29,7 +29,12 @@ public class LgcVersionImpl extends ASTWrapperPsiElement implements LgcVersion {
   @Override
   @NotNull
   public LgcVersionValue getVersionValue() {
-    return findNotNullChildByClass(LgcVersionValue.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcVersionValue.class));
+  }
+
+  @NotNull
+  public LgcFile getFile() {
+    return Utils.getFile(this);
   }
 
   @NotNull

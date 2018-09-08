@@ -29,13 +29,18 @@ public class LgcLangImpl extends ASTWrapperPsiElement implements LgcLang {
   @Override
   @NotNull
   public LgcLangId getLangId() {
-    return findNotNullChildByClass(LgcLangId.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcLangId.class));
   }
 
   @Override
   @NotNull
   public LgcLangName getLangName() {
-    return findNotNullChildByClass(LgcLangName.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcLangName.class));
+  }
+
+  @NotNull
+  public LgcFile getFile() {
+    return Utils.getFile(this);
   }
 
   @NotNull

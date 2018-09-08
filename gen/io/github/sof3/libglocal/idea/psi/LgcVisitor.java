@@ -95,6 +95,10 @@ public class LgcVisitor extends PsiElementVisitor {
     visitBlockElement(o);
   }
 
+  public void visitMessageFlag(@NotNull LgcMessageFlag o) {
+    visitPsiElement(o);
+  }
+
   public void visitMessageGroup(@NotNull LgcMessageGroup o) {
     visitBlockElement(o);
     // visitMessageParentElement(o);

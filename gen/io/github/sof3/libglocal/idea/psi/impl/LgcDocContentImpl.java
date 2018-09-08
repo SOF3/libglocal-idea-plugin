@@ -29,7 +29,7 @@ public class LgcDocContentImpl extends ASTWrapperPsiElement implements LgcDocCon
   @Override
   @NotNull
   public LgcLiteralStatic getLiteralStatic() {
-    return findNotNullChildByClass(LgcLiteralStatic.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcLiteralStatic.class));
   }
 
 }

@@ -29,7 +29,7 @@ public class LgcArgsValueImpl extends ASTWrapperPsiElement implements LgcArgsVal
   @Override
   @Nullable
   public LgcArgsValueString getArgsValueString() {
-    return findChildByClass(LgcArgsValueString.class);
+    return PsiTreeUtil.getChildOfType(this, LgcArgsValueString.class);
   }
 
 }
