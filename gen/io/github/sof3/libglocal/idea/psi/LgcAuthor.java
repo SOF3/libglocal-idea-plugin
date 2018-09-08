@@ -16,7 +16,6 @@ public interface LgcAuthor extends LgcBlockElement {
   @NotNull
   List<LgcBlockElement> getChildBlocks();
 
-  @NotNull
   String getName();
 
 }

@@ -13,7 +13,7 @@ public interface LgcElements {
   IElementType ARGS_VALUE = new LgcElementType("ARGS_VALUE");
   IElementType ARGS_VALUE_STRING = new LgcElementType("ARGS_VALUE_STRING");
   IElementType ARG_DEFAULT = new LgcElementType("ARG_DEFAULT");
-  IElementType ARG_MODIFIER = new LgcElementType("ARG_MODIFIER");
+  IElementType ARG_MODIFIER = StubTypeFactory.argModifier("ARG_MODIFIER");
   IElementType ARG_NAME = new LgcElementType("ARG_NAME");
   IElementType ARG_REF = new LgcElementType("ARG_REF");
   IElementType ARG_TYPE = new LgcElementType("ARG_TYPE");
@@ -24,6 +24,8 @@ public interface LgcElements {
   IElementType DOC_CONTENT = new LgcElementType("DOC_CONTENT");
   IElementType DOC_MODIFIER = new LgcElementType("DOC_MODIFIER");
   IElementType FIELD_CONSTRAINT = new LgcElementType("FIELD_CONSTRAINT");
+  IElementType FLAG = new LgcElementType("FLAG");
+  IElementType ID = new LgcElementType("ID");
   IElementType LANG = new LgcElementType("LANG");
   IElementType LANG_ID = new LgcElementType("LANG_ID");
   IElementType LANG_NAME = new LgcElementType("LANG_NAME");
@@ -31,7 +33,6 @@ public interface LgcElements {
   IElementType LITERAL_STATIC = new LgcElementType("LITERAL_STATIC");
   IElementType MESSAGE = StubTypeFactory.message("MESSAGE");
   IElementType MESSAGES = new LgcElementType("MESSAGES");
-  IElementType MESSAGE_FLAG = new LgcElementType("MESSAGE_FLAG");
   IElementType MESSAGE_GROUP = new LgcElementType("MESSAGE_GROUP");
   IElementType MESSAGE_ID = new LgcElementType("MESSAGE_ID");
   IElementType MESSAGE_REF = new LgcElementType("MESSAGE_REF");
@@ -128,6 +129,12 @@ public interface LgcElements {
       else if (type == FIELD_CONSTRAINT) {
         return new LgcFieldConstraintImpl(node);
       }
+      else if (type == FLAG) {
+        return new LgcFlagImpl(node);
+      }
+      else if (type == ID) {
+        return new LgcIdImpl(node);
+      }
       else if (type == LANG) {
         return new LgcLangImpl(node);
       }
@@ -148,9 +155,6 @@ public interface LgcElements {
       }
       else if (type == MESSAGES) {
         return new LgcMessagesImpl(node);
-      }
-      else if (type == MESSAGE_FLAG) {
-        return new LgcMessageFlagImpl(node);
       }
       else if (type == MESSAGE_GROUP) {
         return new LgcMessageGroupImpl(node);

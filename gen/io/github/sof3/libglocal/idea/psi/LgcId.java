@@ -5,12 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LgcMessageId extends PsiElement {
-
-  @NotNull
-  List<LgcFlag> getFlagList();
-
-  @NotNull
-  LgcId getId();
+public interface LgcId extends PsiElement {
 
 }

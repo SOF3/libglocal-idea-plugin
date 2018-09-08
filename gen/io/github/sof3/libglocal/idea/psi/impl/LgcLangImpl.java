@@ -48,7 +48,6 @@ public class LgcLangImpl extends ASTWrapperPsiElement implements LgcLang {
     return Utils.getChildBlocks(this);
   }
 
-  @NotNull
   public String getName() {
     return Utils.getName(this);
   }

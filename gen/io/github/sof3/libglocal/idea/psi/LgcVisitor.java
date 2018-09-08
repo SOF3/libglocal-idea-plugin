@@ -71,6 +71,14 @@ public class LgcVisitor extends PsiElementVisitor {
     visitConstraintBlock(o);
   }
 
+  public void visitFlag(@NotNull LgcFlag o) {
+    visitPsiElement(o);
+  }
+
+  public void visitId(@NotNull LgcId o) {
+    visitPsiElement(o);
+  }
+
   public void visitLang(@NotNull LgcLang o) {
     visitBlockElement(o);
   }
@@ -93,10 +101,6 @@ public class LgcVisitor extends PsiElementVisitor {
 
   public void visitMessage(@NotNull LgcMessage o) {
     visitBlockElement(o);
-  }
-
-  public void visitMessageFlag(@NotNull LgcMessageFlag o) {
-    visitPsiElement(o);
   }
 
   public void visitMessageGroup(@NotNull LgcMessageGroup o) {

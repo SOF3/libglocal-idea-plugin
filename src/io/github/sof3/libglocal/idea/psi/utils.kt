@@ -106,7 +106,7 @@ internal fun getVisibility(e: LgcMessage): MessageVisibility {
 		return stub.visibility
 	}
 
-	for (flag in e.messageFlagList) {
+	for (flag in e.messageId.flagList) {
 		try{
 			return MessageVisibility.valueOf(flag.text.substring(0, flag.text.length - 1).toUpperCase())
 		}catch(e: IllegalArgumentException){

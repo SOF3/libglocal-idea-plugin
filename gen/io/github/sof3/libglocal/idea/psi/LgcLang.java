@@ -19,7 +19,6 @@ public interface LgcLang extends LgcBlockElement {
   @NotNull
   List<LgcBlockElement> getChildBlocks();
 
-  @NotNull
   String getName();
 
 }

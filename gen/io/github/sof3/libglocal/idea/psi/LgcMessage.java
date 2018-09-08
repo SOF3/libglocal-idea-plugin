@@ -20,9 +20,6 @@ public interface LgcMessage extends LgcBlockElement, StubBasedPsiElement<LgcMess
   LgcLiteral getLiteral();
 
   @NotNull
-  List<LgcMessageFlag> getMessageFlagList();
-
-  @NotNull
   LgcMessageId getMessageId();
 
   @NotNull
@@ -37,7 +34,6 @@ public interface LgcMessage extends LgcBlockElement, StubBasedPsiElement<LgcMess
   @NotNull
   List<LgcBlockElement> getChildBlocks();
 
-  @NotNull
   String getName();
 
   @NotNull

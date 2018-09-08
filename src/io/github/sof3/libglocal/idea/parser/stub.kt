@@ -1,6 +1,8 @@
 package io.github.sof3.libglocal.idea.parser
 
+import com.intellij.psi.PsiElement
 import com.intellij.psi.stubs.StubIndexKey
+import io.github.sof3.libglocal.idea.psi.LgcArgStubElementType
 import io.github.sof3.libglocal.idea.psi.LgcMessage
 import io.github.sof3.libglocal.idea.psi.LgcMessageStubElementType
 
@@ -29,9 +31,19 @@ class StubTypeFactory {
 		fun message(name: String): LgcMessageStubElementType {
 			return LgcMessageStubElementType
 		}
+		@Suppress("UNUSED_PARAMETER")
+		@JvmStatic
+		fun argModifier(name: String): LgcArgStubElementType {
+			return LgcArgStubElementType
+		}
 	}
 }
 
 object StubKeys {
-	val MESSAGE_BY_NAME = StubIndexKey.createIndexKey<String, LgcMessage>("libglocal.stub.message.name")
+	val MESSAGE_MODULE = create<LgcMessage>("libglocal.stub.message.module")
+	val MESSAGE_CANONICAL = create<LgcMessage>("libglocal.stub.message.canonical")
+	val ARG_PARENT = create<LgcMessage>("libglocal.stub.arg.paernt")
+	val ARG_CANONICAL = create<LgcMessage>("libglocal.stub.arg.canonical")
+
+	private fun <T : PsiElement> create(name: String): StubIndexKey<String, T> = StubIndexKey.createIndexKey(name)
 }

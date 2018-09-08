@@ -8,14 +8,25 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static io.github.sof3.libglocal.idea.parser.LgcElements.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.intellij.extapi.psi.StubBasedPsiElementBase;
+import io.github.sof3.libglocal.idea.psi.LgcArgStub;
 import io.github.sof3.libglocal.idea.psi.*;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.stubs.IStubElementType;
+import com.intellij.psi.tree.IElementType;
 
-public class LgcArgModifierImpl extends ASTWrapperPsiElement implements LgcArgModifier {
+public class LgcArgModifierImpl extends StubBasedPsiElementBase<LgcArgStub> implements LgcArgModifier {
+
+  public LgcArgModifierImpl(@NotNull LgcArgStub stub, @NotNull IStubElementType type) {
+    super(stub, type);
+  }
 
   public LgcArgModifierImpl(@NotNull ASTNode node) {
     super(node);
+  }
+
+  public LgcArgModifierImpl(LgcArgStub stub, IElementType type, ASTNode node) {
+    super(stub, type, node);
   }
 
   public void accept(@NotNull LgcVisitor visitor) {

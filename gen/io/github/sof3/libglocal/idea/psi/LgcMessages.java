@@ -26,7 +26,6 @@ public interface LgcMessages extends LgcBlockElement, LgcMessageParentElement {
   @NotNull
   List<LgcMessage> getMessages();
 
-  @NotNull
   String getName();
 
   @NotNull

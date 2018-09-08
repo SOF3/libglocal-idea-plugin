@@ -26,4 +26,16 @@ public class LgcMessageIdImpl extends ASTWrapperPsiElement implements LgcMessage
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public List<LgcFlag> getFlagList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, LgcFlag.class);
+  }
+
+  @Override
+  @NotNull
+  public LgcId getId() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcId.class));
+  }
+
 }

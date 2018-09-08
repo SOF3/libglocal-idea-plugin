@@ -60,7 +60,6 @@ public class LgcMessagesImpl extends ASTWrapperPsiElement implements LgcMessages
     return Utils.getMessages(this);
   }
 
-  @NotNull
   public String getName() {
     return Utils.getName(this);
   }

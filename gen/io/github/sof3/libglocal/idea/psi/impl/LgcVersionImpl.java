@@ -42,7 +42,6 @@ public class LgcVersionImpl extends ASTWrapperPsiElement implements LgcVersion {
     return Utils.getChildBlocks(this);
   }
 
-  @NotNull
   public String getName() {
     return Utils.getName(this);
   }

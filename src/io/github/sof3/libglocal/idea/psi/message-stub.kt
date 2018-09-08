@@ -41,11 +41,11 @@ class LgcMessageStubImpl(
 ) :
 		StubBase<LgcMessage>(parent, LgcMessageStubElementType), LgcMessageStub {
 
-	constructor(parent: StubElement<PsiElement?>, psi: LgcMessage) : this(parent,
-			psi.file.messages!!.messageId.text!!,
-			psi.file.lang!!.langId.text!!,
-			psi.fullName,
-			psi.visibility
+	constructor(parent: StubElement<PsiElement?>, e: LgcMessage) : this(parent,
+			e.file.messages!!.messageId.text!!,
+			e.file.lang!!.langId.text!!,
+			e.fullName,
+			e.visibility
 	)
 }
 
@@ -64,7 +64,7 @@ object LgcMessageStubElementType :
 		output.writeName(stub.visibility.name)
 	}
 
-	override fun deserialize(input: StubInputStream, parentStub: StubElement<PsiElement?>): LgcMessageStub = LgcMessageStubImpl(
+	override fun deserialize(input: StubInputStream, parentStub: StubElement<PsiElement?>)= LgcMessageStubImpl(
 			parentStub,
 			input.readNameString()!!,
 			input.readNameString()!!,
@@ -73,7 +73,7 @@ object LgcMessageStubElementType :
 	)
 
 	override fun indexStub(stub: LgcMessageStub, sink: IndexSink) {
-		sink.occurrence(StubKeys.MESSAGE_BY_NAME, stub.fullName)
+		sink.occurrence(StubKeys.MESSAGE_MODULE, stub.module)
+		sink.occurrence(StubKeys.MESSAGE_CANONICAL, stub.fullName)
 	}
-
 }

@@ -4,9 +4,10 @@ package io.github.sof3.libglocal.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
 import com.intellij.navigation.ItemPresentation;
 
-public interface LgcArgModifier extends LgcModifierBlock {
+public interface LgcArgModifier extends LgcModifierBlock, StubBasedPsiElement<LgcArgStub> {
 
   @Nullable
   LgcArgDefault getArgDefault();

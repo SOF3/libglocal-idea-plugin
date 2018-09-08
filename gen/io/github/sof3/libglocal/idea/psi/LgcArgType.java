@@ -7,4 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface LgcArgType extends PsiElement {
 
+  @NotNull
+  List<LgcFlag> getFlagList();
+
+  @NotNull
+  LgcId getId();
+
 }

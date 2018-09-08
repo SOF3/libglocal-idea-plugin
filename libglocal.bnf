@@ -39,7 +39,7 @@
 		T_LITERAL_INVALID_ESCAPE="invalid literal escape"
 		T_EOL="newline"
 
-		T_FLAG="identifier flag"
+		T_FLAG="flag"
 		T_IDENTIFIER="identifier"
 		T_MODIFIER_ARG="$"
 		T_MODIFIER_DOC="*"
@@ -138,7 +138,7 @@ message_group ::= message_id line_delim [T_INDENT_INDENT (message_group | messag
 	]
 }
 
-message ::= message_flag* message_id literal line_delim
+message ::= message_id literal line_delim
 	[T_INDENT_INDENT message_modifiers* pseudo_dedent] {
 	methods=[
 		getFile
@@ -153,8 +153,8 @@ message ::= message_flag* message_id literal line_delim
 	stubClass="io.github.sof3.libglocal.idea.psi.LgcMessageStub"
 	elementTypeFactory="io.github.sof3.libglocal.idea.parser.StubTypeFactory.message"
 }
-message_flag ::= T_FLAG
-message_id ::= T_IDENTIFIER
+
+message_id ::= identifier
 
 private message_modifiers ::= (arg_modifier | doc_modifier | version_modifier)
 arg_modifier ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
@@ -167,10 +167,13 @@ arg_modifier ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* p
 		getType
 		getPresentation
 	]
+
+	stubClass="io.github.sof3.libglocal.idea.psi.LgcArgStub"
+	elementTypeFactory="io.github.sof3.libglocal.idea.parser.StubTypeFactory.argModifier"
 }
 private arg_template ::= arg_name [arg_type [arg_default]] line_delim
 arg_name ::= T_IDENTIFIER
-arg_type ::= T_FLAG* T_IDENTIFIER
+arg_type ::= identifier
 arg_default ::= literal
 
 doc_modifier ::= T_MODIFIER_DOC doc_content? line_delim {
@@ -206,11 +209,6 @@ field_constraint ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraint
 delim_constraint ::= T_INSTRUCTION "delim" T_IDENTIFIER line_delim
 doc_constraint ::= T_MODIFIER_DOC literal_static line_delim
 
-literal ::= (literal_token)+
-private literal_token ::= literal_token_static | arg_ref | message_ref | span
-literal_static ::= (literal_token_static)+
-private literal_token_static ::= T_LITERAL_STRING | T_LITERAL_ESCAPE | T_CONT_NEWLINE | T_CONT_SPACE | T_CONT_CONCAT
-
 arg_ref ::= T_ARG_REF_START T_IDENTIFIER T_CLOSE_BRACE
 message_ref ::= T_MESSAGE_REF_START T_DYNAMIC? T_IDENTIFIER args_supplier T_CLOSE_BRACE
 args_supplier ::= args_entry*
@@ -218,3 +216,12 @@ args_entry ::= T_IDENTIFIER T_EQUALS args_value
 args_value ::= T_NUMBER | T_IDENTIFIER | args_value_string
 args_value_string ::= T_OPEN_BRACE literal T_CLOSE_BRACE
 span ::= T_SPAN_START T_SPAN_TYPE literal T_CLOSE_BRACE
+
+literal ::= (literal_token)+
+private literal_token ::= literal_token_static | arg_ref | message_ref | span
+literal_static ::= (literal_token_static)+
+private literal_token_static ::= T_LITERAL_STRING | T_LITERAL_ESCAPE | T_CONT_NEWLINE | T_CONT_SPACE | T_CONT_CONCAT
+
+private identifier ::= flag* id
+flag ::= T_FLAG
+id ::= T_IDENTIFIER

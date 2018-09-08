@@ -16,7 +16,6 @@ public interface LgcVersion extends LgcBlockElement {
   @NotNull
   List<LgcBlockElement> getChildBlocks();
 
-  @NotNull
   String getName();
 
 }

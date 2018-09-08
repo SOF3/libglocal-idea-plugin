@@ -42,7 +42,6 @@ public class LgcRequireImpl extends ASTWrapperPsiElement implements LgcRequire {
     return Utils.getChildBlocks(this);
   }
 
-  @NotNull
   public String getName() {
     return Utils.getName(this);
   }

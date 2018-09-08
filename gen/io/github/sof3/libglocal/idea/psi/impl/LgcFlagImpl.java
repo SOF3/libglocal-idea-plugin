@@ -11,39 +11,19 @@ import static io.github.sof3.libglocal.idea.parser.LgcElements.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.sof3.libglocal.idea.psi.*;
 
-public class LgcAuthorImpl extends ASTWrapperPsiElement implements LgcAuthor {
+public class LgcFlagImpl extends ASTWrapperPsiElement implements LgcFlag {
 
-  public LgcAuthorImpl(@NotNull ASTNode node) {
+  public LgcFlagImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull LgcVisitor visitor) {
-    visitor.visitAuthor(this);
+    visitor.visitFlag(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof LgcVisitor) accept((LgcVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public LgcAuthorName getAuthorName() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcAuthorName.class));
-  }
-
-  @NotNull
-  public LgcFile getFile() {
-    return Utils.getFile(this);
-  }
-
-  @NotNull
-  public List<LgcBlockElement> getChildBlocks() {
-    return Utils.getChildBlocks(this);
-  }
-
-  public String getName() {
-    return Utils.getName(this);
   }
 
 }

@@ -42,7 +42,7 @@ public class LgcMessageImpl extends StubBasedPsiElementBase<LgcMessageStub> impl
   @Override
   @NotNull
   public List<LgcArgModifier> getArgModifierList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LgcArgModifier.class);
+    return PsiTreeUtil.getStubChildrenOfTypeAsList(this, LgcArgModifier.class);
   }
 
   @Override
@@ -55,12 +55,6 @@ public class LgcMessageImpl extends StubBasedPsiElementBase<LgcMessageStub> impl
   @NotNull
   public LgcLiteral getLiteral() {
     return notNullChild(PsiTreeUtil.getChildOfType(this, LgcLiteral.class));
-  }
-
-  @Override
-  @NotNull
-  public List<LgcMessageFlag> getMessageFlagList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, LgcMessageFlag.class);
   }
 
   @Override
@@ -90,7 +84,6 @@ public class LgcMessageImpl extends StubBasedPsiElementBase<LgcMessageStub> impl
     return Utils.getChildBlocks(this);
   }
 
-  @NotNull
   public String getName() {
     return Utils.getName(this);
   }
