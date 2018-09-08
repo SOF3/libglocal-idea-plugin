@@ -4,7 +4,7 @@ import com.intellij.lang.BracePair
 import com.intellij.lang.PairedBraceMatcher
 import com.intellij.psi.PsiFile
 import com.intellij.psi.tree.IElementType
-import io.github.sof3.libglocal.idea.parser.LibglocalElements
+import io.github.sof3.libglocal.idea.parser.LgcElements
 
 /*
  * libglocal-idea-plugin
@@ -27,10 +27,10 @@ import io.github.sof3.libglocal.idea.parser.LibglocalElements
 class LibglocalPairedBraceMatcher : PairedBraceMatcher {
 	companion object {
 		val PAIRS = arrayOf(
-				BracePair(LibglocalElements.T_OPEN_BRACE, LibglocalElements.T_CLOSE_BRACE, false),
-				BracePair(LibglocalElements.T_ARG_REF_START, LibglocalElements.T_CLOSE_BRACE, false),
-				BracePair(LibglocalElements.T_MESSAGE_REF_START, LibglocalElements.T_CLOSE_BRACE, false),
-				BracePair(LibglocalElements.T_SPAN_START, LibglocalElements.T_CLOSE_BRACE, false)
+				BracePair(LgcElements.T_OPEN_BRACE, LgcElements.T_CLOSE_BRACE, false),
+				BracePair(LgcElements.T_ARG_REF_START, LgcElements.T_CLOSE_BRACE, false),
+				BracePair(LgcElements.T_MESSAGE_REF_START, LgcElements.T_CLOSE_BRACE, false),
+				BracePair(LgcElements.T_SPAN_START, LgcElements.T_CLOSE_BRACE, false)
 		)
 	}
 

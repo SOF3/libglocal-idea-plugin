@@ -26,71 +26,72 @@ import io.github.sof3.libglocal.idea.Icons
  * limitations under the License.
  */
 
-internal fun getMessages(e: LibglocalBlockMessages): List<LibglocalBlockMessage> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalBlockMessage::class.java)
+internal fun getMessages(e: LgcMessages): List<LgcMessage> = PsiTreeUtil.getChildrenOfTypeAsList(e, LgcMessage::class.java)
 
-internal fun getMessages(e: LibglocalBlockMessageGroup): List<LibglocalBlockMessage> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalBlockMessage::class.java)
+internal fun getMessages(e: LgcMessageGroup): List<LgcMessage> = PsiTreeUtil.getChildrenOfTypeAsList(e, LgcMessage::class.java)
 
-internal fun getModifiers(e: LibglocalBlockMessage): List<LibglocalModifierBlock> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalModifierBlock::class.java)
+internal fun getModifiers(e: LgcMessage): List<LgcModifierBlock> = PsiTreeUtil.getChildrenOfTypeAsList(e, LgcModifierBlock::class.java)
 
-internal fun getConstraints(e: LibglocalModifierBlock): List<LibglocalConstraintBlock> = PsiTreeUtil.getChildrenOfTypeAsList(e, LibglocalConstraintBlock::class.java)
+internal fun getConstraints(e: LgcModifierBlock): List<LgcConstraintBlock> = PsiTreeUtil.getChildrenOfTypeAsList(e, LgcConstraintBlock::class.java)
 
 
-internal fun getChildBlocks(e: LibglocalLangBlock): List<LibglocalBlockElement> = emptyList()
-internal fun getChildBlocks(e: LibglocalAuthorBlock): List<LibglocalBlockElement> = emptyList()
-internal fun getChildBlocks(e: LibglocalVersionBlock): List<LibglocalBlockElement> = emptyList()
-internal fun getChildBlocks(e: LibglocalRequireBlock): List<LibglocalBlockElement> = emptyList()
+internal fun getChildBlocks(e: LgcLang): List<LgcBlockElement> = emptyList()
+internal fun getChildBlocks(e: LgcAuthor): List<LgcBlockElement> = emptyList()
+internal fun getChildBlocks(e: LgcVersion): List<LgcBlockElement> = emptyList()
+internal fun getChildBlocks(e: LgcRequire): List<LgcBlockElement> = emptyList()
 
-internal fun getChildBlocks(e: LibglocalBlockMessages): List<LibglocalBlockElement> = getChildBlocksMessageParentImpl(e)
-internal fun getChildBlocks(e: LibglocalBlockMessageGroup): List<LibglocalBlockElement> = getChildBlocksMessageParentImpl(e)
-private fun getChildBlocksMessageParentImpl(e: LibglocalMessageParentElement): List<LibglocalBlockElement> {
-	val ret = mutableListOf<LibglocalBlockElement>()
+internal fun getChildBlocks(e: LgcMessages): List<LgcBlockElement> = getChildBlocksMessageParentImpl(e)
+internal fun getChildBlocks(e: LgcMessageGroup): List<LgcBlockElement> = getChildBlocksMessageParentImpl(e)
+private fun getChildBlocksMessageParentImpl(e: LgcMessageParentElement): List<LgcBlockElement> {
+	val ret = mutableListOf<LgcBlockElement>()
 	for (child in e.children) {
-		if (child is LibglocalBlockMessageGroup) {
+		if (child is LgcMessageGroup) {
 			ret.add(child)
-		} else if (child is LibglocalBlockMessage) {
+		} else if (child is LgcMessage) {
 			ret.add(child)
 		}
 	}
 	return ret
 }
 
-internal fun getChildBlocks(e: LibglocalBlockMessage): List<LibglocalBlockElement> = e.modifierArgList
+internal fun getChildBlocks(e: LgcMessage): List<LgcBlockElement> = e.argModifierList
 
-internal fun getChildBlocks(e: LibglocalModifierBlock): List<LibglocalBlockElement> = e.constraints
+internal fun getChildBlocks(e: LgcModifierBlock): List<LgcBlockElement> = e.constraints
 
-internal fun getChildBlocks(e: LibglocalConstraintBlock): List<LibglocalBlockElement> = emptyList()
+internal fun getChildBlocks(e: LgcConstraintBlock): List<LgcBlockElement> = emptyList()
 
 
-internal fun getName(e: LibglocalLangBlock) = e.elementLangId.text!!
-internal fun getName(e: LibglocalAuthorBlock) = e.elementLiteralStatic.text!!
-internal fun getName(e: LibglocalVersionBlock) = e.elementVersionValue.text!!
-internal fun getName(e: LibglocalRequireBlock) = e.elementRequireTarget.text!!
+internal fun getName(e: LgcLang) = e.langId.text!!
+internal fun getName(e: LgcAuthor) = e.authorName.text!!
+internal fun getName(e: LgcVersion) = e.versionValue.text!!
+internal fun getName(e: LgcRequire) = e.requireTarget.text!!
 
-internal fun getName(e: LibglocalBlockMessages) = e.elementMessageId.text!!
-internal fun getName(e: LibglocalBlockMessageGroup) = e.elementMessageId.text!!
-internal fun getName(e: LibglocalBlockMessage) = e.elementMessageId.text!!
+internal fun getName(e: LgcMessages) = e.messageId.text!!
+internal fun getName(e: LgcMessageGroup) = e.messageId.text!!
+internal fun getName(e: LgcMessage) = e.messageId.text!!
 
-internal fun getFullName(e: LibglocalBlockElement): String {
+internal fun getFullName(e: LgcBlockElement): String {
 	val names = mutableListOf(e.name ?: "???")
 	var element = e.parent
-	while (element is LibglocalBlockMessageGroup || element is LibglocalBlockMessages) {
-		if (element is LibglocalBlockMessageGroup) {
-			names.add(element.name)
+	while (element is LgcMessageGroup || element is LgcMessages) {
+		if (element is LgcMessageGroup) {
+			names.add(element.messageId.text!!)
 		} else {
-			names.add((element as LibglocalBlockMessages).name)
+			names.add((element as LgcMessages).messageId.text!!)
 		}
 		element = element.parent
 	}
 	return names.reversed().joinToString(separator = ".")
 }
 
-internal fun getName(e: LibglocalModifierArg) = e.elementArgName.text
-internal fun getType(e: LibglocalModifierArg) = e.elementArgType?.text ?: "string"
+internal fun getName(e: LgcArgModifier) = e.argName.text
+internal fun getType(e: LgcArgModifier) = e.argType?.text ?: "string"
 
-internal fun getName(e: LibglocalConstraintField) = e.elementArgName.text
-internal fun getType(e: LibglocalConstraintField) = e.elementArgType?.text ?: "string"
+internal fun getName(e: LgcFieldConstraint) = e.argName.text
+internal fun getType(e: LgcFieldConstraint) = e.argType?.text ?: "string"
 
-internal fun getPresentation(e: LibglocalBlockMessages) = PresentationData(e.name, e.name, Icons.MODULE.px16, null)
-internal fun getPresentation(e: LibglocalBlockMessageGroup) = PresentationData(e.name, e.fullName, Icons.GROUP.px16, null)
-internal fun getPresentation(e: LibglocalBlockMessage): ItemPresentation = PresentationData(e.name, e.fullName, Icons.MESSAGE.px16, null)
-internal fun getPresentation(e: LibglocalModifierArg): ItemPresentation = PresentationData(e.name, e.type, Icons.ARG.px16, null)
+internal fun getPresentation(e: LgcMessages) = PresentationData(e.name, e.name, Icons.MODULE.px16, null)
+internal fun getPresentation(e: LgcMessageGroup) = PresentationData(e.name, e.fullName, Icons.GROUP.px16, null)
+internal fun getPresentation(e: LgcMessage): ItemPresentation = PresentationData(e.name, e.fullName, Icons.MESSAGE.px16, null)
+internal fun getPresentation(e: LgcArgModifier): ItemPresentation = PresentationData(e.name, e.type, Icons.ARG.px16, null)
+internal fun getPresentation(e: LgcFieldConstraint): ItemPresentation = PresentationData(e.name, e.type, Icons.ARG.px16, null)

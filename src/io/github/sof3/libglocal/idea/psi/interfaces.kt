@@ -21,16 +21,16 @@ import com.intellij.psi.PsiElement
  * limitations under the License.
  */
 
-interface LibglocalBlockElement : NavigatablePsiElement {
-	val childBlocks: List<LibglocalBlockElement>
+interface LgcBlockElement : NavigatablePsiElement {
+	val childBlocks: List<LgcBlockElement>
 }
 
-interface LibglocalMessageParentElement : PsiElement {
-	val messages: List<LibglocalBlockMessage>
+interface LgcMessageParentElement : PsiElement {
+	val messages: List<LgcMessage>
 }
 
-interface LibglocalModifierBlock : LibglocalBlockElement {
-	val constraints: List<LibglocalConstraintBlock>
+interface LgcModifierBlock : LgcBlockElement {
+	val constraints: List<LgcConstraintBlock>
 }
 
-interface LibglocalConstraintBlock : LibglocalBlockElement
+interface LgcConstraintBlock : LgcBlockElement

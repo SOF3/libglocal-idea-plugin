@@ -38,44 +38,44 @@ internal enum class LexerState {
 					if (line[until] == '\r') until++
 					if (line[until] == '\n') until++
 				}
-				return listOf(FutureToken(LibglocalElements.T_COMMENT, indent.length + until))
+				return listOf(FutureToken(LgcElements.T_COMMENT, indent.length + until))
 			}
 			if (line.startsWith("\r\n") || line.isNotEmpty() && line[0] == '\n') {
-				return listOf(FutureToken(LibglocalElements.T_EMPTY_LINE, indent.length + (if (line[0] == '\r') 2 else 1)))
+				return listOf(FutureToken(LgcElements.T_EMPTY_LINE, indent.length + (if (line[0] == '\r') 2 else 1)))
 			}
 
 			// is an indent
 			lexer.nextState = COMMAND
 
 			if (indentStack.isNotEmpty() && indent.toString() == indentStack.last().toString()) {
-				return listOf(FutureToken(LibglocalElements.T_INDENT_INHERIT, indent.length))
+				return listOf(FutureToken(LgcElements.T_INDENT_INHERIT, indent.length))
 			}
 
 			if (indentStack.isEmpty() && indent.isEmpty()) {
-				return listOf(FutureToken(LibglocalElements.T_INDENT_INHERIT, 0))
+				return listOf(FutureToken(LgcElements.T_INDENT_INHERIT, 0))
 			}
 
 			if (indentStack.isEmpty() || indent.startsWith(indentStack.last())) {
 				indentStack.add(indent)
-				return listOf(FutureToken(LibglocalElements.T_INDENT_INDENT, 0),
-						FutureToken(LibglocalElements.T_INDENT_INHERIT, indent.length)
+				return listOf(FutureToken(LgcElements.T_INDENT_INDENT, 0),
+						FutureToken(LgcElements.T_INDENT_INHERIT, indent.length)
 				)
 			}
 
 			var dedents = 0
 			while (indentStack.isNotEmpty()) {
 				if (indent.toString() == indentStack.last().toString()) {
-					return List(dedents) { FutureToken(LibglocalElements.T_INDENT_DEDENT, 0) } +
-							listOf(FutureToken(LibglocalElements.T_INDENT_INHERIT, indent.length))
+					return List(dedents) { FutureToken(LgcElements.T_INDENT_DEDENT, 0) } +
+							listOf(FutureToken(LgcElements.T_INDENT_INHERIT, indent.length))
 				}
 				indentStack.removeAt(indentStack.lastIndex)
 				dedents++
 			}
 			if (indent.isEmpty()) {
-				return List(dedents) { FutureToken(LibglocalElements.T_INDENT_DEDENT, 0) } +
-						listOf(FutureToken(LibglocalElements.T_INDENT_INHERIT, indent.length))
+				return List(dedents) { FutureToken(LgcElements.T_INDENT_DEDENT, 0) } +
+						listOf(FutureToken(LgcElements.T_INDENT_INHERIT, indent.length))
 			}
-			return listOf(FutureToken(LibglocalElements.T_INDENT_INVALID, indent.length))
+			return listOf(FutureToken(LgcElements.T_INDENT_INVALID, indent.length))
 		}
 	},
 
@@ -90,37 +90,37 @@ internal enum class LexerState {
 				if (match != null) {
 					lexer.expectedIdentifiers = 1
 					lexer.nextState = SEPARATOR
-					return listOf(FutureToken(LibglocalElements.K_BASE_LANG, match.value.length))
+					return listOf(FutureToken(LgcElements.K_BASE_LANG, match.value.length))
 				}
 				match = LexerPatterns.LANG.find(buffer)
 				if (match != null) {
 					lexer.expectedIdentifiers = 1
 					lexer.nextState = SEPARATOR
-					return listOf(FutureToken(LibglocalElements.K_LANG, match.value.length))
+					return listOf(FutureToken(LgcElements.K_LANG, match.value.length))
 				}
 				match = LexerPatterns.AUTHOR.find(buffer)
 				if (match != null) {
 					lexer.nextState = SEPARATOR
-					return listOf(FutureToken(LibglocalElements.K_AUTHOR, match.value.length))
+					return listOf(FutureToken(LgcElements.K_AUTHOR, match.value.length))
 				}
 				match = LexerPatterns.VERSION.find(buffer)
 				if (match != null) {
 					lexer.expectedIdentifiers = 1
 					lexer.nextState = SEPARATOR
-					return listOf(FutureToken(LibglocalElements.K_VERSION, match.value.length))
+					return listOf(FutureToken(LgcElements.K_VERSION, match.value.length))
 				}
 				match = LexerPatterns.REQUIRE.find(buffer)
 				if (match != null) {
 					lexer.expectedIdentifiers = 1
 					lexer.nextState = SEPARATOR
-					return listOf(FutureToken(LibglocalElements.K_REQUIRE, match.value.length))
+					return listOf(FutureToken(LgcElements.K_REQUIRE, match.value.length))
 				}
 				match = LexerPatterns.MESSAGES.find(buffer)
 				if (match != null) {
 					lexer.expectedIdentifiers = 1
 					lexer.nextState = SEPARATOR
 					lexer.reachedMessages = true
-					return listOf(FutureToken(LibglocalElements.K_MESSAGES, match.value.length))
+					return listOf(FutureToken(LgcElements.K_MESSAGES, match.value.length))
 				}
 
 				return LibglocalLexer.badToken()
@@ -128,14 +128,14 @@ internal enum class LexerState {
 				var token: FutureToken? = null
 				if (buffer[0] == '$') {
 					lexer.expectedIdentifiers = 2
-					token = FutureToken(LibglocalElements.T_MODIFIER_ARG, 1)
+					token = FutureToken(LgcElements.T_MODIFIER_ARG, 1)
 				} else if (buffer[0] == '*') {
-					token = FutureToken(LibglocalElements.T_MODIFIER_DOC, 1)
+					token = FutureToken(LgcElements.T_MODIFIER_DOC, 1)
 				} else if (buffer[0] == '~') {
-					token = FutureToken(LibglocalElements.T_MODIFIER_VERSION, 1)
+					token = FutureToken(LgcElements.T_MODIFIER_VERSION, 1)
 					lexer.expectedIdentifiers = 1
 				} else if (buffer[0] == '#') {
-					token = FutureToken(LibglocalElements.T_INSTRUCTION, 1)
+					token = FutureToken(LgcElements.T_INSTRUCTION, 1)
 					lexer.instructionMode = true
 				}
 
@@ -158,7 +158,7 @@ internal enum class LexerState {
 
 			if (rem.startsWith("\r\n") || rem.isNotEmpty() && rem[0] == '\n') {
 				lexer.nextState = LINE_START
-				return listOf(FutureToken(LibglocalElements.T_EOL, white.length + (if (rem[0] == '\r') 2 else 1)))
+				return listOf(FutureToken(LgcElements.T_EOL, white.length + (if (rem[0] == '\r') 2 else 1)))
 			}
 
 			lexer.nextState = if (lexer.instructionMode || lexer.expectedIdentifiers > 0) IDENTIFIER else LITERAL
@@ -181,7 +181,7 @@ internal enum class LexerState {
 				lexer.instructionMode = false
 				lexer.optionalSeparator = true
 				lexer.nextState = SEPARATOR
-				return listOf(FutureToken(LibglocalElements.T_EQUALS, 1))
+				return listOf(FutureToken(LgcElements.T_EQUALS, 1))
 			}
 			val (list, read, _) = LibglocalLexer.readIdentifier(buffer)
 			if (read) {
@@ -208,24 +208,24 @@ internal enum class LexerState {
 				if (buffer[0] == '\r' || buffer[0] == '\n') {
 					var match = LexerPatterns.CONT_NEWLINE.find(buffer)
 					if (match != null) {
-						return listOf(FutureToken(LibglocalElements.T_CONT_NEWLINE, match.value.length))
+						return listOf(FutureToken(LgcElements.T_CONT_NEWLINE, match.value.length))
 					}
 					match = LexerPatterns.CONT_SPACE.find(buffer)
 					if (match != null) {
-						return listOf(FutureToken(LibglocalElements.T_CONT_SPACE, match.value.length))
+						return listOf(FutureToken(LgcElements.T_CONT_SPACE, match.value.length))
 					}
 					match = LexerPatterns.CONT_CONCAT.find(buffer)
 					if (match != null) {
-						return listOf(FutureToken(LibglocalElements.T_CONT_CONCAT, match.value.length))
+						return listOf(FutureToken(LgcElements.T_CONT_CONCAT, match.value.length))
 					}
 
 					lexer.nextState = LINE_START
-					return listOf(FutureToken(LibglocalElements.T_EOL, if (buffer[0] == '\r') 2 else 1))
+					return listOf(FutureToken(LgcElements.T_EOL, if (buffer[0] == '\r') 2 else 1))
 				}
 
 				if (buffer[0] == '\\') {
 					if (buffer.length == 1) {
-						return listOf(FutureToken(LibglocalElements.T_LITERAL_INVALID_ESCAPE, 1))
+						return listOf(FutureToken(LgcElements.T_LITERAL_INVALID_ESCAPE, 1))
 					}
 					val valid = charArrayOf(
 							'\\',
@@ -239,35 +239,35 @@ internal enum class LexerState {
 							'.'
 					).contains(buffer[1])
 					return listOf(FutureToken(
-							if (valid) LibglocalElements.T_LITERAL_ESCAPE
-							else LibglocalElements.T_LITERAL_INVALID_ESCAPE, 2))
+							if (valid) LgcElements.T_LITERAL_ESCAPE
+							else LgcElements.T_LITERAL_INVALID_ESCAPE, 2))
 				}
 
 				if (buffer[0] == '$') {
 					if (buffer.length == 1 || buffer[1] != '{') {
-						return listOf(FutureToken(LibglocalElements.T_LITERAL_STRING, 1))
+						return listOf(FutureToken(LgcElements.T_LITERAL_STRING, 1))
 					}
 
 					lexer.nextState = ARG_REF_NAME
-					return listOf(FutureToken(LibglocalElements.T_ARG_REF_START, 2))
+					return listOf(FutureToken(LgcElements.T_ARG_REF_START, 2))
 				}
 
 				if (buffer[0] == '#') {
 					if (buffer.length == 1 || buffer[1] != '{') {
-						return listOf(FutureToken(LibglocalElements.T_LITERAL_STRING, 1))
+						return listOf(FutureToken(LgcElements.T_LITERAL_STRING, 1))
 					}
 
 					lexer.nextState = MESSAGE_REF_NAME
-					return listOf(FutureToken(LibglocalElements.T_MESSAGE_REF_START, 2))
+					return listOf(FutureToken(LgcElements.T_MESSAGE_REF_START, 2))
 				}
 
 				if (buffer[0] == '%') {
 					if (buffer.length == 1 || buffer[1] != '{') {
-						return listOf(FutureToken(LibglocalElements.T_LITERAL_STRING, 1))
+						return listOf(FutureToken(LgcElements.T_LITERAL_STRING, 1))
 					}
 
 					lexer.nextState = SPAN_NAME
-					return listOf(FutureToken(LibglocalElements.T_SPAN_START, 2))
+					return listOf(FutureToken(LgcElements.T_SPAN_START, 2))
 				}
 
 				if (buffer[0] == '}') {
@@ -275,10 +275,10 @@ internal enum class LexerState {
 						lexer.nextState = lexer.literalBraceStack.last()
 						lexer.literalBraceStack.removeAt(lexer.literalBraceStack.lastIndex)
 					}
-					return listOf(FutureToken(LibglocalElements.T_CLOSE_BRACE, 1))
+					return listOf(FutureToken(LgcElements.T_CLOSE_BRACE, 1))
 				}
 			}
-			return listOf(FutureToken(LibglocalElements.T_LITERAL_STRING, strLen))
+			return listOf(FutureToken(LgcElements.T_LITERAL_STRING, strLen))
 		}
 	},
 
@@ -300,7 +300,7 @@ internal enum class LexerState {
 			val (white, _) = LibglocalLexer.readWhitespace(buffer)
 			if (white.isNotEmpty()) return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 
-			if (buffer[0] == '$') return listOf(FutureToken(LibglocalElements.T_DYNAMIC, 1))
+			if (buffer[0] == '$') return listOf(FutureToken(LgcElements.T_DYNAMIC, 1))
 
 			val (list, read, _) = LibglocalLexer.readIdentifier(buffer)
 			if (read) lexer.nextState = ARG_LIST_RESET
@@ -315,11 +315,11 @@ internal enum class LexerState {
 
 			if (buffer[0] == '}') {
 				lexer.nextState = LITERAL
-				return listOf(FutureToken(LibglocalElements.T_CLOSE_BRACE, 1))
+				return listOf(FutureToken(LgcElements.T_CLOSE_BRACE, 1))
 			}
 			if (buffer[0] == '=') {
 				lexer.nextState = ARG_LIST_VALUE
-				return listOf(FutureToken(LibglocalElements.T_EQUALS, 1))
+				return listOf(FutureToken(LgcElements.T_EQUALS, 1))
 			}
 
 			return LibglocalLexer.readIdentifier(buffer).list
@@ -333,7 +333,7 @@ internal enum class LexerState {
 			val match = LexerPatterns.NUMBER.find(buffer)
 			if (match != null) {
 				lexer.nextState = ARG_LIST_RESET
-				return listOf(FutureToken(LibglocalElements.T_NUMBER, match.value.length))
+				return listOf(FutureToken(LgcElements.T_NUMBER, match.value.length))
 			}
 
 			if (true) {
@@ -347,7 +347,7 @@ internal enum class LexerState {
 			if (buffer[0] == '{') {
 				lexer.literalBraceStack.add(ARG_LIST_RESET)
 				lexer.nextState = LITERAL
-				return listOf(FutureToken(LibglocalElements.T_OPEN_BRACE, 1))
+				return listOf(FutureToken(LgcElements.T_OPEN_BRACE, 1))
 			}
 
 			return LibglocalLexer.badToken()
@@ -359,7 +359,7 @@ internal enum class LexerState {
 			val (white, _) = LibglocalLexer.readWhitespace(buffer)
 			if (white.isNotEmpty()) return listOf(FutureToken(TokenType.WHITE_SPACE, white.length))
 
-			val (list, read, _) = LibglocalLexer.readIdentifier(buffer, LibglocalElements.T_SPAN_TYPE)
+			val (list, read, _) = LibglocalLexer.readIdentifier(buffer, LgcElements.T_SPAN_TYPE)
 			if (read) {
 				lexer.expectedIdentifiers = 0
 				lexer.literalBraceStack.add(LITERAL)
@@ -379,7 +379,7 @@ internal enum class LexerState {
 			}
 
 			lexer.nextState = LITERAL
-			return listOf(FutureToken(LibglocalElements.T_CLOSE_BRACE, 1))
+			return listOf(FutureToken(LgcElements.T_CLOSE_BRACE, 1))
 		}
 	},
 	;

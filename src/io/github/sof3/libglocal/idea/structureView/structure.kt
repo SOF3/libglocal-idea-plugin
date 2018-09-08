@@ -9,7 +9,7 @@ import com.intellij.navigation.ItemPresentation
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.NavigatablePsiElement
 import com.intellij.psi.PsiFile
-import io.github.sof3.libglocal.idea.psi.LibglocalBlockElement
+import io.github.sof3.libglocal.idea.psi.LgcBlockElement
 import java.lang.Integer.min
 
 /*
@@ -55,7 +55,7 @@ class LibglocalSVElement(private val element: NavigatablePsiElement) : Structure
 			?: PresentationData(element.text.substring(0, min(element.text.length, 30)), "", null, null)
 
 	override fun getChildren(): Array<TreeElement> {
-		if (element is LibglocalBlockElement) {
+		if (element is LgcBlockElement) {
 			return element.childBlocks.map { LibglocalSVElement(it) }.toTypedArray()
 		}
 		return emptyArray()

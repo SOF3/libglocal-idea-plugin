@@ -25,20 +25,20 @@ import io.github.sof3.libglocal.idea.LibglocalLanguage
  * limitations under the License.
  */
 
-class LibglocalFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, LibglocalLanguage), LibglocalBlockElement {
-	override val childBlocks: List<LibglocalBlockElement>
-		get() = listOfNotNull(messagesBlock)
+class LgcFile(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, LibglocalLanguage), LgcBlockElement {
+	override val childBlocks: List<LgcBlockElement>
+		get() = listOfNotNull(messages)
 
-	val langBlock: LibglocalLangBlock?
-		get() = PsiTreeUtil.getChildOfType(this, LibglocalLangBlock::class.java)
-	val authorBlocks: List<LibglocalAuthorBlock>
-		get() = PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalAuthorBlock::class.java)
-	val versionBlock: LibglocalVersionBlock?
-		get() = PsiTreeUtil.getChildOfType(this, LibglocalVersionBlock::class.java)
-	val requireBlocks: List<LibglocalRequireBlock>
-		get() = PsiTreeUtil.getChildrenOfTypeAsList(this, LibglocalRequireBlock::class.java)
-	val messagesBlock: LibglocalBlockMessages?
-		get() = PsiTreeUtil.getChildOfType(this, LibglocalBlockMessages::class.java)
+	val lang: LgcLang?
+		get() = PsiTreeUtil.getChildOfType(this, LgcLang::class.java)
+	val authors: List<LgcAuthor>
+		get() = PsiTreeUtil.getChildrenOfTypeAsList(this, LgcAuthor::class.java)
+	val version: LgcVersion?
+		get() = PsiTreeUtil.getChildOfType(this, LgcVersion::class.java)
+	val requires: List<LgcRequire>
+		get() = PsiTreeUtil.getChildrenOfTypeAsList(this, LgcRequire::class.java)
+	val messages: LgcMessages?
+		get() = PsiTreeUtil.getChildOfType(this, LgcMessages::class.java)
 
 	override fun getFileType(): FileType = LibglocalFileType
 }

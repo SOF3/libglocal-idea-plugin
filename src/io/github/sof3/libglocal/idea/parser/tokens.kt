@@ -21,11 +21,11 @@ import io.github.sof3.libglocal.idea.LibglocalLanguage
  * limitations under the License.
  */
 
-class LibglocalTokenType(name: String) : IElementType(
+class LgcTokenType(name: String) : IElementType(
 		if (name.startsWith("K_"))
 			"\"${name.substring(2).toLowerCase().replace("_", " ")}\""
 		else
 			name,
 		LibglocalLanguage)
 
-class LibglocalElementType(name: String) : IElementType(name, LibglocalLanguage)
+class LgcElementType(name: String) : IElementType(name, LibglocalLanguage)
