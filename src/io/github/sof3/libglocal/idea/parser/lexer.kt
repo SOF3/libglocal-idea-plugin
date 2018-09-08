@@ -41,7 +41,14 @@ class LibglocalLexer(val highlighting: Boolean) : LexerBase() {
 		internal fun readIdentifier(buffer: CharSequence, tokenType: IElementType = LgcElements.T_IDENTIFIER): IdentifierRead {
 			val match = LexerPatterns.IDENTIFIER.find(buffer) ?: return IdentifierRead(badToken(), false, true)
 			if (buffer.length > match.value.length && buffer[match.value.length] == ':') {
-				return IdentifierRead(listOf(FutureToken(LgcElements.T_FLAG, match.value.length + 1)), false, false)
+				val token = when (match.value.toLowerCase()) {
+					"public" -> LgcElements.T_FLAG_PUBLIC
+					"lib" -> LgcElements.T_FLAG_LIB
+					"local" -> LgcElements.T_FLAG_LOCAL
+					"list" -> LgcElements.T_FLAG_LIST
+					else -> LgcElements.T_FLAG_UNKNOWN
+				}
+				return IdentifierRead(listOf(FutureToken(token, match.value.length + 1)), false, false)
 			}
 			return IdentifierRead(listOf(FutureToken(tokenType, match.value.length)), true, false)
 		}

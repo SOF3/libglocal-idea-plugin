@@ -8,9 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface LgcMessageId extends PsiElement {
 
   @NotNull
-  List<LgcFlag> getFlagList();
-
-  @NotNull
   LgcId getId();
+
+  @Nullable
+  LgcMessageFlag getMessageFlag();
 
 }

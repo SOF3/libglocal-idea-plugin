@@ -11,31 +11,19 @@ import static io.github.sof3.libglocal.idea.parser.LgcElements.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import io.github.sof3.libglocal.idea.psi.*;
 
-public class LgcArgTypeImpl extends ASTWrapperPsiElement implements LgcArgType {
+public class LgcMessageFlagImpl extends ASTWrapperPsiElement implements LgcMessageFlag {
 
-  public LgcArgTypeImpl(@NotNull ASTNode node) {
+  public LgcMessageFlagImpl(@NotNull ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull LgcVisitor visitor) {
-    visitor.visitArgType(this);
+    visitor.visitMessageFlag(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof LgcVisitor) accept((LgcVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public LgcArgTypeFlag getArgTypeFlag() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcArgTypeFlag.class));
-  }
-
-  @Override
-  @NotNull
-  public LgcId getId() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, LgcId.class));
   }
 
 }

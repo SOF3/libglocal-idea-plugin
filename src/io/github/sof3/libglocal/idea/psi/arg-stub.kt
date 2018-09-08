@@ -38,7 +38,7 @@ class LgcArgStubImpl(parentStub: StubElement<*>,
                      override val field: ValueField) : StubBase<LgcArgModifier>(parentStub, LgcArgStubElementType), LgcArgStub {
 	constructor(parentStub: StubElement<*>, e: LgcArgModifier) : this(parentStub,
 			(PsiTreeUtil.findFirstParent(e) { it is LgcMessage } as LgcMessage).fullName,
-			valueFieldFromModifier(e) ?: ValueField.unknown(e.argName.text)
+			valueFieldFromModifier(e)
 	)
 }
 

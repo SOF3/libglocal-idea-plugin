@@ -6,7 +6,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.navigation.ItemPresentation;
 
-public interface LgcFieldConstraint extends LgcConstraintBlock {
+public interface LgcFieldConstraint extends LgcConstraintBlock, LgcArgLike {
 
   @Nullable
   LgcArgDefault getArgDefault();

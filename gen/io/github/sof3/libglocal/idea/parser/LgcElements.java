@@ -17,6 +17,7 @@ public interface LgcElements {
   IElementType ARG_NAME = new LgcElementType("ARG_NAME");
   IElementType ARG_REF = new LgcElementType("ARG_REF");
   IElementType ARG_TYPE = new LgcElementType("ARG_TYPE");
+  IElementType ARG_TYPE_FLAG = new LgcElementType("ARG_TYPE_FLAG");
   IElementType AUTHOR = new LgcElementType("AUTHOR");
   IElementType AUTHOR_NAME = new LgcElementType("AUTHOR_NAME");
   IElementType DELIM_CONSTRAINT = new LgcElementType("DELIM_CONSTRAINT");
@@ -24,7 +25,6 @@ public interface LgcElements {
   IElementType DOC_CONTENT = new LgcElementType("DOC_CONTENT");
   IElementType DOC_MODIFIER = new LgcElementType("DOC_MODIFIER");
   IElementType FIELD_CONSTRAINT = new LgcElementType("FIELD_CONSTRAINT");
-  IElementType FLAG = new LgcElementType("FLAG");
   IElementType ID = new LgcElementType("ID");
   IElementType LANG = new LgcElementType("LANG");
   IElementType LANG_ID = new LgcElementType("LANG_ID");
@@ -33,6 +33,7 @@ public interface LgcElements {
   IElementType LITERAL_STATIC = new LgcElementType("LITERAL_STATIC");
   IElementType MESSAGE = StubTypeFactory.message("MESSAGE");
   IElementType MESSAGES = new LgcElementType("MESSAGES");
+  IElementType MESSAGE_FLAG = new LgcElementType("MESSAGE_FLAG");
   IElementType MESSAGE_GROUP = new LgcElementType("MESSAGE_GROUP");
   IElementType MESSAGE_ID = new LgcElementType("MESSAGE_ID");
   IElementType MESSAGE_REF = new LgcElementType("MESSAGE_REF");
@@ -59,7 +60,11 @@ public interface LgcElements {
   IElementType T_EMPTY_LINE = new LgcTokenType("empty line");
   IElementType T_EOL = new LgcTokenType("newline");
   IElementType T_EQUALS = new LgcTokenType("=");
-  IElementType T_FLAG = new LgcTokenType("identifier flag");
+  IElementType T_FLAG_LIB = new LgcTokenType("lib:");
+  IElementType T_FLAG_LIST = new LgcTokenType("list:");
+  IElementType T_FLAG_LOCAL = new LgcTokenType("local:");
+  IElementType T_FLAG_PUBLIC = new LgcTokenType("public:");
+  IElementType T_FLAG_UNKNOWN = new LgcTokenType("unknown flag");
   IElementType T_IDENTIFIER = new LgcTokenType("identifier");
   IElementType T_INDENT_DEDENT = new LgcTokenType("decrease indent");
   IElementType T_INDENT_INDENT = new LgcTokenType("increase indent");
@@ -108,6 +113,9 @@ public interface LgcElements {
       else if (type == ARG_TYPE) {
         return new LgcArgTypeImpl(node);
       }
+      else if (type == ARG_TYPE_FLAG) {
+        return new LgcArgTypeFlagImpl(node);
+      }
       else if (type == AUTHOR) {
         return new LgcAuthorImpl(node);
       }
@@ -128,9 +136,6 @@ public interface LgcElements {
       }
       else if (type == FIELD_CONSTRAINT) {
         return new LgcFieldConstraintImpl(node);
-      }
-      else if (type == FLAG) {
-        return new LgcFlagImpl(node);
       }
       else if (type == ID) {
         return new LgcIdImpl(node);
@@ -155,6 +160,9 @@ public interface LgcElements {
       }
       else if (type == MESSAGES) {
         return new LgcMessagesImpl(node);
+      }
+      else if (type == MESSAGE_FLAG) {
+        return new LgcMessageFlagImpl(node);
       }
       else if (type == MESSAGE_GROUP) {
         return new LgcMessageGroupImpl(node);

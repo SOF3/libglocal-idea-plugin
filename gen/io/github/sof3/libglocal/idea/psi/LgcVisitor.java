@@ -13,6 +13,7 @@ public class LgcVisitor extends PsiElementVisitor {
 
   public void visitArgModifier(@NotNull LgcArgModifier o) {
     visitModifierBlock(o);
+    // visitArgLike(o);
   }
 
   public void visitArgName(@NotNull LgcArgName o) {
@@ -24,6 +25,10 @@ public class LgcVisitor extends PsiElementVisitor {
   }
 
   public void visitArgType(@NotNull LgcArgType o) {
+    visitPsiElement(o);
+  }
+
+  public void visitArgTypeFlag(@NotNull LgcArgTypeFlag o) {
     visitPsiElement(o);
   }
 
@@ -69,10 +74,7 @@ public class LgcVisitor extends PsiElementVisitor {
 
   public void visitFieldConstraint(@NotNull LgcFieldConstraint o) {
     visitConstraintBlock(o);
-  }
-
-  public void visitFlag(@NotNull LgcFlag o) {
-    visitPsiElement(o);
+    // visitArgLike(o);
   }
 
   public void visitId(@NotNull LgcId o) {
@@ -101,6 +103,10 @@ public class LgcVisitor extends PsiElementVisitor {
 
   public void visitMessage(@NotNull LgcMessage o) {
     visitBlockElement(o);
+  }
+
+  public void visitMessageFlag(@NotNull LgcMessageFlag o) {
+    visitPsiElement(o);
   }
 
   public void visitMessageGroup(@NotNull LgcMessageGroup o) {

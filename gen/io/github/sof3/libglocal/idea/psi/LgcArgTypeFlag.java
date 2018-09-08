@@ -5,6 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface LgcFlag extends PsiElement {
+public interface LgcArgTypeFlag extends PsiElement {
 
 }

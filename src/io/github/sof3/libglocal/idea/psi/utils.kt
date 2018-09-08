@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import io.github.sof3.libglocal.idea.Icons
 import io.github.sof3.libglocal.idea.libglocal.MessageVisibility
+import io.github.sof3.libglocal.idea.parser.LgcElements
 
 /*
  * libglocal-idea-plugin
@@ -102,15 +103,16 @@ internal fun getPresentation(e: LgcFieldConstraint): ItemPresentation = Presenta
 
 internal fun getVisibility(e: LgcMessage): MessageVisibility {
 	val stub = e.stub
-	if(stub != null){
+	if (stub != null) {
 		return stub.visibility
 	}
 
-	for (flag in e.messageId.flagList) {
-		try{
-			return MessageVisibility.valueOf(flag.text.substring(0, flag.text.length - 1).toUpperCase())
-		}catch(e: IllegalArgumentException){
-		}
+	val flag = e.messageId.messageFlag ?: return MessageVisibility.DEFAULT
+
+	return when (flag.node.firstChildNode.elementType) {
+		LgcElements.T_FLAG_PUBLIC -> MessageVisibility.PUBLIC
+		LgcElements.T_FLAG_LIB -> MessageVisibility.LIB
+		LgcElements.T_FLAG_LOCAL -> MessageVisibility.LOCAL
+		else -> MessageVisibility.DEFAULT
 	}
-	return MessageVisibility.DEFAULT
 }

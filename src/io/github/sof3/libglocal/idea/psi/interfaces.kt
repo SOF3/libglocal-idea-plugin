@@ -34,3 +34,9 @@ interface LgcModifierBlock : LgcBlockElement {
 }
 
 interface LgcConstraintBlock : LgcBlockElement
+
+interface LgcArgLike {
+	val argName: LgcArgName
+	val argType: LgcArgType?
+	val fieldConstraintList: List<LgcFieldConstraint>
+}

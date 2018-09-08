@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import com.intellij.navigation.ItemPresentation;
 
-public interface LgcArgModifier extends LgcModifierBlock, StubBasedPsiElement<LgcArgStub> {
+public interface LgcArgModifier extends LgcModifierBlock, LgcArgLike, StubBasedPsiElement<LgcArgStub> {
 
   @Nullable
   LgcArgDefault getArgDefault();

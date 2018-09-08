@@ -39,7 +39,12 @@
 		T_LITERAL_INVALID_ESCAPE="invalid literal escape"
 		T_EOL="newline"
 
-		T_FLAG="flag"
+		T_FLAG_UNKNOWN="unknown flag"
+		T_FLAG_PUBLIC="public:"
+		T_FLAG_LIB="lib:"
+		T_FLAG_LOCAL="local:"
+		T_FLAG_LIST="list:"
+
 		T_IDENTIFIER="identifier"
 		T_MODIFIER_ARG="$"
 		T_MODIFIER_DOC="*"
@@ -154,11 +159,12 @@ message ::= message_id literal line_delim
 	elementTypeFactory="io.github.sof3.libglocal.idea.parser.StubTypeFactory.message"
 }
 
-message_id ::= identifier
+message_id ::= message_flag? id
+message_flag ::= T_FLAG_PUBLIC | T_FLAG_LIB | T_FLAG_LOCAL
 
 private message_modifiers ::= (arg_modifier | doc_modifier | version_modifier)
 arg_modifier ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
-	implements=["LgcModifierBlock"]
+	implements=["LgcModifierBlock" "LgcArgLike"]
 	methods=[
 		getFile
 		getConstraints
@@ -173,7 +179,8 @@ arg_modifier ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* p
 }
 private arg_template ::= arg_name [arg_type [arg_default]] line_delim
 arg_name ::= T_IDENTIFIER
-arg_type ::= identifier
+arg_type ::= arg_type_flag id
+arg_type_flag ::= T_FLAG_LIST*
 arg_default ::= literal
 
 doc_modifier ::= T_MODIFIER_DOC doc_content? line_delim {
@@ -197,7 +204,7 @@ version_modifier ::= T_MODIFIER_VERSION T_IDENTIFIER line_delim {
 
 private arg_constraints ::= field_constraint | delim_constraint | doc_constraint
 field_constraint ::= T_MODIFIER_ARG arg_template [T_INDENT_INDENT arg_constraints* pseudo_dedent] {
-	implements=["LgcConstraintBlock"]
+	implements=["LgcConstraintBlock" "LgcArgLike"]
 	methods=[
 		getFile
 		getChildBlocks
@@ -222,6 +229,4 @@ private literal_token ::= literal_token_static | arg_ref | message_ref | span
 literal_static ::= (literal_token_static)+
 private literal_token_static ::= T_LITERAL_STRING | T_LITERAL_ESCAPE | T_CONT_NEWLINE | T_CONT_SPACE | T_CONT_CONCAT
 
-private identifier ::= flag* id
-flag ::= T_FLAG
 id ::= T_IDENTIFIER

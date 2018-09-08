@@ -2,8 +2,10 @@ package io.github.sof3.libglocal.idea.libglocal
 
 import com.intellij.psi.stubs.StubInputStream
 import com.intellij.psi.stubs.StubOutputStream
+import com.intellij.psi.tree.TokenSet
 import io.github.sof3.libglocal.idea.catchNull
-import io.github.sof3.libglocal.idea.psi.LgcArgModifier
+import io.github.sof3.libglocal.idea.parser.LgcElements
+import io.github.sof3.libglocal.idea.psi.LgcArgLike
 
 /*
  * libglocal-idea-plugin
@@ -28,6 +30,7 @@ enum class ValueKind {
 	BOOL,
 	INT,
 	FLOAT,
+	STRING,
 	OBJECT,
 	LIST;
 }
@@ -53,20 +56,18 @@ class ValueField(
 	}
 }
 
-fun valueFieldFromModifier(arg: LgcArgModifier): ValueField? {
-	val argType = arg.argType
+fun valueFieldFromModifier(arg: LgcArgLike): ValueField {
+	val argType = arg.argType ?: return ValueField(arg.argName.text, ValueKind.STRING, 0)
+
 	val kind = catchNull(IllegalArgumentException::class) {
-		ValueKind.valueOf(argType?.id?.text?.toUpperCase() ?: "string")
-	} ?: return null
-	val listLevels = argType?.flagList?.count { it.text.toLowerCase() == "list:" } ?: 0
+		ValueKind.valueOf(argType.id.text.toUpperCase())
+	} ?: return ValueField.unknown(arg.argName.text)
 
-	val type = ValueField(arg.argName.text, kind, listLevels)
+	val listLevels = argType.argTypeFlag.node.getChildren(TokenSet.create(LgcElements.T_FLAG_LIST)).size
 
-	for (field in arg.fieldConstraintList) {
+	val fields = arg.fieldConstraintList.map { valueFieldFromModifier(it) }
 
-	}
-
-	return type
+	return ValueField(arg.argName.text, kind, listLevels, fields)
 }
 
 fun serializeField(field: ValueField, output: StubOutputStream) {
